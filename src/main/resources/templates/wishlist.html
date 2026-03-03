@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>My Wishlist | I-SPICE</title>
+    <link rel="stylesheet" href="/fontawesome/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+        }
+
+        :root {
+            --gold: #D4AF37;
+            --gold2: #b8941f;
+            --green: #2e7d32;
+            --bg: #f9f7f0;
+            --dark: #333;
+            --gray: #666;
+            --lgray: #e8e3d5;
+            --danger: #dc3545;
+            --ok: #28a745;
+            --sh: 0 5px 15px rgba(0, 0, 0, .08);
+            --tr: all .3s ease
+        }
+
+        body {
+            background: linear-gradient(135deg, #f9f7f0, #fffef9, #f9f7f0);
+            min-height: 100vh;
+            color: #333
+        }
+
+        .wrap {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh
+        }
+
+        #app {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(212, 175, 55, .1);
+            margin: 20px auto;
+            border: 1px solid #f0e6d3
+        }
+
+        header {
+            background: linear-gradient(to right, var(--green), var(--gold));
+            color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--sh)
+        }
+
+        .ht {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--gold);
+            overflow: hidden;
+            padding: 2px
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff
+        }
+
+        .ua {
+            display: flex;
+            align-items: center;
+            gap: 20px
+        }
+
+        .ci {
+            position: relative;
+            cursor: pointer
+        }
+
+        .cc {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--green);
+            color: #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700
+        }
+
+        .av {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(to right, var(--gold), var(--gold2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 18px
+        }
+
+        .up {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer
+        }
+
+        nav {
+            background: rgba(255, 255, 255, .1);
+            padding: 10px 20px
+        }
+
+        .nl {
+            display: flex;
+            list-style: none;
+            gap: 25px
+        }
+
+        .nl a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 0;
+            position: relative;
+            transition: var(--tr)
+        }
+
+        .nl a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #fff;
+            transition: var(--tr)
+        }
+
+        .nl a:hover::after,
+        .nl a.active::after {
+            width: 100%
+        }
+
+        .nl a.active {
+            font-weight: 700
+        }
+
+        .pc {
+            padding: 40px 20px;
+            flex: 1
+        }
+
+        .ph {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px
+        }
+
+        .pt {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark);
+            position: relative;
+            display: inline-block
+        }
+
+        .pt::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(to right, var(--green), var(--gold));
+            border-radius: 2px
+        }
+
+        .ps {
+            color: var(--gray);
+            font-size: 15px;
+            margin-top: 15px
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px
+        }
+
+        .btn-outline {
+            padding: 10px 20px;
+            border: 2px solid var(--lgray);
+            border-radius: 8px;
+            background: #fff;
+            color: var(--gray);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--tr);
+            display: flex;
+            align-items: center;
+            gap: 6px
+        }
+
+        .btn-outline:hover {
+            border-color: var(--gold);
+            color: var(--gold)
+        }
+
+        .btn-primary {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(to right, var(--green), var(--gold));
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--tr);
+            display: flex;
+            align-items: center;
+            gap: 6px
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(46, 125, 50, .3)
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 25px
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--sh);
+            transition: var(--tr);
+            border: 1px solid #f0e6d3;
+            position: relative
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(212, 175, 55, .2)
+        }
+
+        .img-box {
+            height: 200px;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative
+        }
+
+        .img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--tr)
+        }
+
+        .card:hover .img-box img {
+            transform: scale(1.05)
+        }
+
+        .wish-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #fff;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
+            transition: var(--tr);
+            z-index: 2;
+            font-size: 16px;
+            color: var(--danger)
+        }
+
+        .wish-btn:hover {
+            transform: scale(1.1);
+            background: var(--danger);
+            color: #fff
+        }
+
+        .stock-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            z-index: 2
+        }
+
+        .in-stock {
+            background: rgba(40, 167, 69, .15);
+            color: #185a2a;
+            border: 1px solid rgba(40, 167, 69, .3)
+        }
+
+        .out-stock {
+            background: rgba(220, 53, 69, .15);
+            color: #842029;
+            border: 1px solid rgba(220, 53, 69, .3)
+        }
+
+        .body {
+            padding: 18px
+        }
+
+        .cat {
+            color: var(--green);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            margin-bottom: 6px
+        }
+
+        .pname {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 8px
+        }
+
+        .pdesc {
+            color: var(--gray);
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 12px;
+            min-height: 38px
+        }
+
+        .price-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 14px
+        }
+
+        .cur {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark)
+        }
+
+        .orig {
+            font-size: 14px;
+            color: var(--gray);
+            text-decoration: line-through
+        }
+
+        .disc {
+            background: var(--danger);
+            color: #fff;
+            border-radius: 4px;
+            padding: 2px 7px;
+            font-size: 11px;
+            font-weight: 600
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px
+        }
+
+        .atc {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(to right, var(--green), var(--gold));
+            color: #fff;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--tr)
+        }
+
+        .atc:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(46, 125, 50, .3)
+        }
+
+        .atc:disabled {
+            opacity: .6;
+            cursor: not-allowed
+        }
+
+        .removebtn {
+            padding: 10px 12px;
+            border: 2px solid var(--lgray);
+            border-radius: 8px;
+            background: #fff;
+            color: var(--gray);
+            cursor: pointer;
+            transition: var(--tr);
+            font-size: 13px
+        }
+
+        .removebtn:hover {
+            border-color: var(--danger);
+            color: var(--danger)
+        }
+
+        .empty {
+            text-align: center;
+            padding: 80px 20px;
+            grid-column: 1/-1
+        }
+
+        .ei {
+            font-size: 64px;
+            color: var(--lgray);
+            margin-bottom: 20px
+        }
+
+        .et {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 10px
+        }
+
+        .es {
+            color: var(--gray);
+            margin-bottom: 30px
+        }
+
+        .footer-logout {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            border-top: 1px solid var(--lgray)
+        }
+
+        .logout-link {
+            color: var(--green);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .logout-link:hover {
+            color: var(--gold);
+            text-decoration: underline
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--green);
+            color: #fff;
+            padding: 15px 25px;
+            border-radius: 10px;
+            z-index: 9999;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .2);
+            animation: si .3s ease
+        }
+
+        @keyframes si {
+            from {
+                transform: translateX(100%);
+                opacity: 0
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1
+            }
+        }
+
+        /* ===== HAMBURGER MENU ===== */
+        .hbg {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .hbg:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .hbg span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: white;
+            border-radius: 2px;
+            transition: all .3s ease;
+        }
+
+        .hbg.open span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .hbg.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hbg.open span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        .mnav {
+            display: none;
+            flex-direction: column;
+            background: rgba(0, 0, 0, 0.18);
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.35s ease;
+        }
+
+        .mnav.open {
+            max-height: 400px;
+        }
+
+        .mnav ul {
+            list-style: none;
+            padding: 10px 16px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mnav ul li a {
+            display: block;
+            padding: 12px 16px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .mnav ul li a:hover,
+        .mnav ul li a.active {
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        /* ===== TABLET (≤768px) ===== */
+        @media(max-width:768px) {
+            .ht {
+                flex-direction: row;
+                gap: 0;
+                padding: 12px 16px;
+                flex-wrap: nowrap;
+                align-items: center;
+                position: relative;
+                justify-content: space-between;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .hbg {
+                display: flex;
+                order: -1;
+            }
+
+            .mnav {
+                display: flex;
+            }
+
+            .logo {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                gap: 0;
+            }
+
+            .logo-icon {
+                display: none;
+            }
+
+            .ua {
+                order: 1;
+                gap: 14px;
+            }
+
+            .logo-text {
+                font-size: 20px;
+            }
+
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .ph {
+                flex-direction: column;
+                gap: 14px;
+                align-items: flex-start;
+            }
+        }
+
+        /* ===== PHONE (≤480px) ===== */
+        @media(max-width:480px) {
+            body {
+                background: #f9f7f0;
+            }
+
+            #app {
+                margin: 10px;
+                border-radius: 14px;
+            }
+
+            .ht {
+                padding: 10px 14px;
+            }
+
+            .logo-icon {
+                width: 40px;
+                height: 40px;
+            }
+
+            .logo-text {
+                font-size: 18px;
+            }
+
+            .pc {
+                padding: 14px;
+            }
+
+            .pt {
+                font-size: 20px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .ph {
+                padding: 14px;
+            }
+
+            .header-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn-outline,
+            .btn-primary {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .atc {
+                font-size: 14px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div id="app">
+            <header>
+                <div class="ht">
+                    <div class="logo" onclick="location.href='/dashboard'">
+                        <div class="logo-icon"><img src="/I-SPICE/logo/logo.png" alt="I-SPICE Logo"
+                                style="width:100%;height:100%;object-fit:cover;border-radius:50%"></div>
+                        <span class="logo-text">I-SPICE</span>
+                    </div>
+                    <div class="ua">
+                        <div class="ci" onclick="location.href='/cart'">
+                            <i class="fa-solid fa-shopping-cart" style="font-size:24px;color:#fff"></i>
+                            <span class="cc" id="cartCount" th:text="${cartCount?:0}">0</span>
+                        </div>
+                        <div class="up" onclick="location.href='/profile'">
+                            <div class="av" th:text="${#strings.substring(user.username,0,1).toUpperCase()}">U</div>
+                            <span style="color:#fff" th:text="${user.username}">User</span>
+                        </div>
+                    </div>
+                    <button class="hbg" id="hamburgerBtn" aria-label="Toggle menu" onclick="toggleMobileNav()">
+                        <span></span><span></span><span></span>
+                    </button>
+                </div>
+                <nav>
+                    <ul class="nl">
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li><a href="/shop">Shop</a></li>
+                        <li><a href="/orders">My Orders</a></li>
+                        <li><a href="/subscriptions">Subscriptions</a></li>
+                        <li><a href="/wishlist" class="active">Wishlist</a></li>
+                        <li><a href="/profile">Profile</a></li>
+                        <li><a href="/support">Support</a></li>
+                    </ul>
+                </nav>
+                <div class="mnav" id="mobileNav">
+                    <ul>
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li><a href="/shop">Shop</a></li>
+                        <li><a href="/orders">My Orders</a></li>
+                        <li><a href="/subscriptions">Subscriptions</a></li>
+                        <li><a href="/wishlist" class="active">Wishlist</a></li>
+                        <li><a href="/profile">Profile</a></li>
+                        <li><a href="/support">Support</a></li>
+                    </ul>
+                </div>
+            </header>
+
+            <div class="pc">
+                <div class="ph">
+                    <div>
+                        <h1 class="pt">My Wishlist</h1>
+                        <p class="ps" th:if="${wishlist!=null and !wishlist.isEmpty()}"
+                            th:text="${wishlist.size()}+' items saved'">0 items saved</p>
+                    </div>
+                    <div class="header-actions" th:if="${wishlist!=null and !wishlist.isEmpty()}">
+                        <button class="btn-outline" onclick="addAllToCart()"><i class="fas fa-cart-plus"></i> Add All to
+                            Cart</button>
+                        <button class="btn-primary" onclick="location.href='/shop'"><i class="fas fa-store"></i>
+                            Continue Shopping</button>
+                    </div>
+                </div>
+
+                <!-- CSRF -->
+                <input type="hidden" id="csrfToken" th:value="${_csrf.token}">
+                <input type="hidden" id="csrfHeader" th:value="${_csrf.headerName}">
+
+                <div class="grid" id="wishlistGrid">
+                    <div th:each="product : ${wishlist}" th:id="'item-'+${product.id}" class="card"
+                        th:data-id="${product.id}"
+                        onclick="window.location.href='/product/' + this.getAttribute('data-id')"
+                        style="cursor: pointer;">
+                        <div class="img-box">
+                            <span class="stock-badge"
+                                th:classappend="${product.stock!=null and product.stock<=0}?'out-stock':'in-stock'"
+                                th:text="${product.stock!=null and product.stock<=0}?'Out of Stock':'In Stock'">In
+                                Stock</span>
+                            <button class="wish-btn" th:data-id="${product.id}"
+                                onclick="removeWishlist(this.getAttribute('data-id'))" title="Remove from wishlist">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                            <th:block th:if="${product.imageUrl!=null and !product.imageUrl.isEmpty()}">
+                                <img th:src="${product.imageUrl}" th:alt="${product.name}"
+                                    onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-seedling\' style=\'font-size:50px;color:var(--gold);padding:35px;\'></i>'">
+                            </th:block>
+                            <th:block th:unless="${product.imageUrl!=null and !product.imageUrl.isEmpty()}">
+                                <i class="fa-solid fa-seedling"
+                                    style="font-size:50px;color:var(--gold);padding:35px;"></i>
+                            </th:block>
+                        </div>
+                        <div class="body">
+                            <div class="cat" th:text="${product.category?:'Other'}">Category</div>
+                            <div class="pname" th:text="${product.name}">Product Name</div>
+                            <div class="pdesc"
+                                th:text="${product.description!=null?#strings.abbreviate(product.description,90):''}">
+                                Desc</div>
+                            <div class="price-row">
+                                <span class="cur"
+                                    th:text="'₹'+${#numbers.formatDecimal(product.discountedPrice!=null?product.discountedPrice:product.price,0,'COMMA',2,'POINT')}">₹0</span>
+                                <th:block th:if="${product.discount!=null and product.discount>0}">
+                                    <span class="orig"
+                                        th:text="'₹'+${#numbers.formatDecimal(product.price,0,'COMMA',2,'POINT')}">₹0</span>
+                                    <span class="disc" th:text="'-'+${product.discount}+'%'">-10%</span>
+                                </th:block>
+                            </div>
+                            <div class="actions">
+                                <button class="atc" th:disabled="${product.stock!=null and product.stock<=0}"
+                                    th:attr="data-id=${product.id},data-name=${product.name}"
+                                    th:text="${product.stock!=null and product.stock<=0}?'Out of Stock':'Add to Cart'"
+                                    onclick="addToCart(event,this)">Add to Cart</button>
+                                <button class="removebtn" th:data-id="${product.id}"
+                                    onclick="removeWishlist(this.getAttribute('data-id'))"><i
+                                        class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:if="${wishlist==null or wishlist.isEmpty()}" class="empty">
+                        <div class="ei">❤️</div>
+                        <h3 class="et">Your wishlist is empty</h3>
+                        <p class="es">Save products you love and come back to them anytime.<br>Start exploring our
+                            premium collection!</p>
+                        <button class="btn-primary" onclick="location.href='/shop'"
+                            style="margin:0 auto;padding:14px 30px;font-size:15px"><i class="fas fa-store"></i> Browse
+                            Products</button>
+                    </div>
+                </div>
+
+                <div class="footer-logout">
+                    <form th:action="@{/logout}" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <button type="submit" class="logout-link"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const csrf = {
+            token: (document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]+)/) || [])[1]
+                ? decodeURIComponent((document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]+)/) || [])[1])
+                : document.getElementById('csrfToken').value,
+            header: 'X-XSRF-TOKEN'
+        };
+
+        function showToast(msg, type = 'success') {
+            const t = document.createElement('div'); t.className = 'toast';
+            t.style.background = type === 'error' ? '#dc3545' : type === 'info' ? '#ffc107' : '#28a745';
+            if (type === 'info') t.style.color = '#333';
+            t.innerHTML = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 3000);
+        }
+        async function addToCart(e, btn) {
+            e.stopPropagation();
+            const id = btn.getAttribute('data-id'), name = btn.getAttribute('data-name');
+            btn.disabled = true; btn.textContent = 'Adding...';
+            try {
+                const r = await fetch('/api/cart/add', { method: 'POST', headers: { 'Content-Type': 'application/json', [csrf.header]: csrf.token }, body: JSON.stringify({ productId: id, quantity: 1 }), credentials: 'include' });
+                const d = await r.json();
+                if (d.success) {
+                    document.getElementById('cartCount').textContent = d.data?.cartCount || d.cartCount || 0;
+                    showToast(`"${name}" added to cart! 🛒`);
+                    btn.textContent = 'Added ✓';
+                    setTimeout(() => { btn.textContent = 'Add to Cart'; btn.disabled = false; }, 1500);
+                } else throw new Error(d.message);
+            } catch (err) { showToast('Failed to add to cart', 'error'); btn.textContent = 'Add to Cart'; btn.disabled = false; }
+        }
+        async function removeWishlist(id) {
+            if (!confirm('Remove from wishlist?')) return;
+            try {
+                const r = await fetch('/api/wishlist/remove', { method: 'POST', headers: { 'Content-Type': 'application/json', [csrf.header]: csrf.token }, body: JSON.stringify({ productId: id }), credentials: 'include' });
+                const d = await r.json();
+                if (d.success) { document.getElementById('item-' + id)?.remove(); showToast('Removed from wishlist'); }
+                else { const el = document.getElementById('item-' + id); if (el) { el.style.opacity = '.4'; el.querySelector('.wish-btn').innerHTML = '<i class="fas fa-heart-broken"></i>'; } }
+            } catch { const el = document.getElementById('item-' + id); if (el) el.remove(); showToast('Removed from wishlist'); }
+        }
+        function addAllToCart() {
+            const btns = document.querySelectorAll('.atc:not(:disabled)');
+            if (!btns.length) return showToast('No in-stock items to add', 'info');
+            btns.forEach(b => b.click());
+        }
+    </script>
+    <script>
+        function toggleMobileNav() {
+            document.getElementById('hamburgerBtn').classList.toggle('open');
+            document.getElementById('mobileNav').classList.toggle('open');
+        }
+    </script>
+</body>
+
+</html>

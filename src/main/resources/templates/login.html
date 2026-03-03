@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I-SPICE - Login</title>
+    <link rel="stylesheet" href="/fontawesome/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --gold-primary: #D4AF37;
+            --gold-secondary: #b8941f;
+            --gold-light: rgba(212, 175, 55, 0.1);
+            --white: #fff;
+            --light-bg: #f9f7f0;
+            --dark: #333;
+            --gray: #666;
+            --light-gray: #e8e3d5;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --success: #28a745;
+            --eco-green: #2e7d32;
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f9f7f0, #fffef9, #f9f7f0);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+
+        .login-container {
+            display: flex;
+            max-width: 1000px;
+            width: 100%;
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.1);
+            border: 1px solid #f0e6d3;
+        }
+
+        .left-panel {
+            flex: 1;
+            background: linear-gradient(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95)), url('https://images.unsplash.com/photo-1416879595882-3373a0480b5b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80') center/cover;
+            color: var(--dark);
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .left-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(to right, var(--gold-primary), #FFD700, var(--gold-primary));
+        }
+
+        .right-panel {
+            flex: 1;
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: #fff;
+        }
+
+        .company-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .company-icon {
+            width: 60px;
+            height: 60px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold-primary);
+            font-size: 28px;
+            border: 2px solid var(--eco-green);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+        }
+
+        .company-name {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--eco-green), var(--gold-primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .features {
+            margin-top: 40px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--gold-primary);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .feature-text h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+
+        .feature-text p {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .company-values {
+            background: rgba(212, 175, 55, 0.08);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #5c4a00;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+        }
+
+        .company-values i {
+            color: var(--eco-green);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .login-header h2 {
+            font-size: 32px;
+            color: var(--dark);
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .login-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(to right, var(--eco-green), var(--gold-primary));
+            border-radius: 2px;
+        }
+
+        .login-header p {
+            color: var(--gray);
+            font-size: 16px;
+            margin-top: 15px;
+        }
+
+        .login-form {
+            width: 100%;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 15px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 15px 15px 50px;
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            font-size: 16px;
+            transition: var(--transition);
+            background: #fcfbf8;
+        }
+
+        .input-group input:focus {
+            border-color: var(--eco-green);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2);
+            background: #fff;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 42px;
+            color: var(--eco-green);
+            font-size: 20px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 42px;
+            cursor: pointer;
+            color: var(--gray);
+            background: none;
+            border: none;
+            font-size: 18px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(to right, var(--eco-green), var(--gold-primary));
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 25px;
+            box-shadow: 0 4px 10px rgba(46, 125, 50, 0.3);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(46, 125, 50, 0.4);
+        }
+
+        .login-btn:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        .remember {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remember input {
+            accent-color: var(--eco-green);
+            width: 18px;
+            height: 18px;
+        }
+
+        .forgot-password {
+            color: var(--eco-green);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .divider .line {
+            flex: 1;
+            height: 1px;
+            background: var(--light-gray);
+        }
+
+        .divider .text {
+            padding: 0 15px;
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .social-login {
+            margin-bottom: 24px;
+        }
+
+        .social-btn {
+            width: 100%;
+            height: 48px;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: #ffffff;
+            border: 1.5px solid #dadce0;
+            font-size: 14px;
+            font-weight: 500;
+            color: #3c4043;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            font-family: 'Google Sans', 'Roboto', sans-serif;
+            letter-spacing: 0.25px;
+            padding: 0 16px;
+        }
+
+        .social-btn:hover {
+            background: #f8f9fa;
+            border-color: #c6c6c6;
+            box-shadow: 0 1px 3px rgba(60, 64, 67, 0.15), 0 2px 8px rgba(60, 64, 67, 0.1);
+            text-decoration: none;
+            color: #3c4043;
+        }
+
+        .social-btn:active {
+            background: #f1f3f4;
+        }
+
+        .google-logo {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .register-link {
+            text-align: center;
+            font-size: 15px;
+            color: var(--gray);
+        }
+
+        .register-link a {
+            color: var(--eco-green);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-error {
+            background-color: rgba(220, 53, 69, 0.1);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .alert-success {
+            background-color: rgba(40, 167, 69, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .product-decoration {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 60px;
+            color: rgba(46, 125, 50, 0.15);
+            z-index: 0;
+        }
+
+        @media (max-width: 900px) {
+            .login-container {
+                flex-direction: column;
+            }
+
+            .left-panel {
+                padding: 30px;
+            }
+
+            .right-panel {
+                padding: 40px 30px;
+            }
+
+            .product-decoration {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="left-panel">
+            <div>
+                <div class="company-logo">
+                    <div class="company-icon"><i class="fa-solid fa-leaf"></i></div>
+                    <div class="company-name">I-SPICE</div>
+                </div>
+                <div class="features">
+                    <div class="feature">
+                        <div class="feature-icon"><i class="fas fa-recycle"></i></div>
+                        <div class="feature-text">
+                            <h3>100% Plant-Based</h3>
+                            <p>Premium natural products free from synthetic chemicals</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon"><i class="fas fa-tag"></i></div>
+                        <div class="feature-text">
+                            <h3>Members-Only Benefits</h3>
+                            <p>Exclusive discounts and early access</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon"><i class="fas fa-truck"></i></div>
+                        <div class="feature-text">
+                            <h3>Carbon-Neutral Shipping</h3>
+                            <p>Eco-friendly delivery with sustainable packaging</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="company-values">
+                <i class="fas fa-award"></i>
+                <div>Join our community committed to sustainable living.</div>
+            </div>
+            <div class="product-decoration"><i class="fas fa-spa"></i></div>
+        </div>
+
+        <div class="right-panel">
+            <div class="login-header">
+                <h2>Welcome to I-SPICE</h2>
+                <p>Sign in to access your account</p>
+            </div>
+
+            <!-- Spring Security Error Messages -->
+            <div th:if="${param.error}" class="alert alert-error">
+                <i class="fas fa-exclamation-circle"></i>
+                Invalid username or password.
+            </div>
+
+            <div th:if="${param.logout}" class="alert alert-success">
+                <i class="fas fa-check-circle"></i>
+                You have been logged out successfully.
+            </div>
+
+            <!-- Success Messages -->
+            <div th:if="${param.registered}" class="alert alert-success">
+                <i class="fas fa-check-circle"></i>
+                Registration successful! Please login with your credentials.
+            </div>
+
+            <div th:if="${param.verified}" class="alert alert-success">
+                <i class="fas fa-check-circle"></i>
+                Email verified successfully! You can now login.
+            </div>
+
+            <div th:if="${param.reset}" class="alert alert-success">
+                <i class="fas fa-check-circle"></i>
+                Password reset successful! Please login with your new password.
+            </div>
+
+            <!-- Custom Error/Success Messages -->
+            <div th:if="${error}" class="alert alert-error">
+                <i class="fas fa-exclamation-circle"></i>
+                <span th:text="${error}"></span>
+            </div>
+
+            <div th:if="${success}" class="alert alert-success">
+                <i class="fas fa-check-circle"></i>
+                <span th:text="${success}"></span>
+            </div>
+
+            <!-- Spring Security Login Form -->
+            <form class="login-form" th:action="@{/login}" method="post" id="loginForm">
+                <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}"
+                    th:value="${_csrf.token}" />
+                <div class="input-group">
+                    <label for="username">Email Address</label>
+                    <i class="fas fa-envelope input-icon"></i>
+                    <input type="email" id="username" name="username" placeholder="Enter your email" required
+                        th:value="${#httpServletRequest != null && #httpServletRequest.getParameter('username') != null} ? ${#httpServletRequest.getParameter('username')} : ''">
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    <button type="button" class="password-toggle" id="togglePassword">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+
+                <div class="options">
+                    <div class="remember">
+                        <input type="checkbox" id="remember" name="remember-me">
+                        <label for="remember">Remember me</label>
+                    </div>
+                    <a th:href="@{/forgot-password}" class="forgot-password">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="login-btn" id="submitBtn">
+                    <span id="btnText">Sign In</span>
+                    <i class="fas fa-sign-in-alt" id="btnIcon" style="margin-left: 8px;"></i>
+                    <i class="fas fa-spinner fa-spin" id="btnSpinner" style="display: none; margin-left: 8px;"></i>
+                </button>
+
+                <div class="divider">
+                    <div class="line"></div>
+                    <div class="text">or continue with</div>
+                    <div class="line"></div>
+                </div>
+
+                <div class="social-login">
+                    <a th:href="@{/oauth2/authorization/google}" class="social-btn">
+                        <svg class="google-logo" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                                fill="#4285F4" />
+                            <path
+                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                                fill="#34A853" />
+                            <path
+                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"
+                                fill="#FBBC05" />
+                            <path
+                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                                fill="#EA4335" />
+                        </svg>
+                        <span>Continue with Google</span>
+                    </a>
+                </div>
+
+                <!-- Navigation to Registration Page -->
+                <div class="register-link">
+                    New to our sustainable community? <a th:href="@{/register}">Create an account</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const loginForm = document.getElementById('loginForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnIcon = document.getElementById('btnIcon');
+            const btnSpinner = document.getElementById('btnSpinner');
+            const rememberCheckbox = document.getElementById('remember');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const togglePasswordBtn = document.getElementById('togglePassword');
+
+            // Password Visibility Toggle
+            togglePasswordBtn.addEventListener('click', function () {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                const icon = this.querySelector('i');
+                icon.classList.toggle('fa-eye');
+                icon.classList.toggle('fa-eye-slash');
+            });
+
+            // Auto-fill email if "Remember Me" was used
+            const savedEmail = localStorage.getItem('rememberedEmail');
+            if (savedEmail) {
+                usernameInput.value = savedEmail;
+                rememberCheckbox.checked = true;
+            }
+
+            // Form submission with validation
+            loginForm.addEventListener('submit', function (e) {
+                const email = usernameInput.value;
+                const password = passwordInput.value;
+
+                // Basic validation
+                if (!email || !password) {
+                    e.preventDefault();
+                    showError('Please enter both email and password.');
+                    return;
+                }
+
+                // Email format validation
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    e.preventDefault();
+                    showError('Please enter a valid email address.');
+                    return;
+                }
+
+                // Show loading state
+                btnText.textContent = 'Authenticating...';
+                btnIcon.style.display = 'none';
+                btnSpinner.style.display = 'inline-block';
+                submitBtn.disabled = true;
+
+                // Handle Remember Me
+                if (rememberCheckbox.checked) {
+                    localStorage.setItem('rememberedEmail', email);
+                } else {
+                    localStorage.removeItem('rememberedEmail');
+                }
+
+                // The form will submit normally to Spring Security
+                // Re-enable button after timeout in case submission fails
+                setTimeout(() => {
+                    btnText.textContent = 'Sign In';
+                    btnIcon.style.display = 'inline-block';
+                    btnSpinner.style.display = 'none';
+                    submitBtn.disabled = false;
+                }, 5000);
+            });
+
+            // Auto-focus on username field
+            usernameInput.focus();
+
+            // Add focus effects to inputs
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function () {
+                    this.style.boxShadow = '0 0 0 3px rgba(46, 125, 50, 0.2)';
+                });
+
+                input.addEventListener('blur', function () {
+                    this.style.boxShadow = '';
+                });
+            });
+
+            // Function to show error messages (for client-side validation)
+            function showError(message) {
+                // Create or update error alert
+                let errorAlert = document.querySelector('.alert-error:not([th\\:if])');
+                if (!errorAlert) {
+                    errorAlert = document.createElement('div');
+                    errorAlert.className = 'alert alert-error';
+                    errorAlert.innerHTML = `<i class="fas fa-exclamation-circle"></i> <span>${message}</span>`;
+
+                    // Insert after login header
+                    const loginHeader = document.querySelector('.login-header');
+                    loginHeader.parentNode.insertBefore(errorAlert, loginHeader.nextSibling);
+                } else {
+                    errorAlert.querySelector('span').textContent = message;
+                }
+
+                // Scroll to error
+                errorAlert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+                // Auto-hide after 5 seconds
+                setTimeout(() => {
+                    if (errorAlert && !errorAlert.hasAttribute('th:if')) {
+                        errorAlert.remove();
+                    }
+                }, 5000);
+            }
+
+            // Check URL parameters for messages
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('error') || urlParams.has('logout') ||
+                urlParams.has('registered') || urlParams.has('verified') ||
+                urlParams.has('reset')) {
+                // Messages are already displayed via Thymeleaf
+                // Scroll to the first alert if present
+                const firstAlert = document.querySelector('.alert');
+                if (firstAlert) {
+                    setTimeout(() => {
+                        firstAlert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 100);
+                }
+            }
+
+            // Auto-hide success messages after 5 seconds
+            const successAlerts = document.querySelectorAll('.alert-success');
+            successAlerts.forEach(alert => {
+                setTimeout(() => {
+                    if (alert.style.display !== 'none') {
+                        alert.style.display = 'none';
+                    }
+                }, 5000);
+            });
+        });
+    </script>
+</body>
+
+</html>

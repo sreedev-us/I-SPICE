@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+    <title>Subscriptions | I-SPICE</title>
+    <link rel="stylesheet" href="/fontawesome/css/all.min.css">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+        }
+
+        :root {
+            --gold: #D4AF37;
+            --gold2: #b8941f;
+            --green: #2e7d32;
+            --bg: #f9f7f0;
+            --dark: #333;
+            --gray: #666;
+            --lgray: #e8e3d5;
+            --danger: #dc3545;
+            --ok: #28a745;
+            --sh: 0 5px 15px rgba(0, 0, 0, .08);
+            --tr: all .3s ease
+        }
+
+        body {
+            background: linear-gradient(135deg, #f9f7f0, #fffef9, #f9f7f0);
+            min-height: 100vh;
+            color: #333
+        }
+
+        .wrap {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh
+        }
+
+        #app {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(212, 175, 55, .1);
+            margin: 20px auto;
+            border: 1px solid #f0e6d3
+        }
+
+        header {
+            background: linear-gradient(to right, var(--green), var(--gold));
+            color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--sh)
+        }
+
+        .ht {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--gold);
+            overflow: hidden;
+            padding: 2px
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff
+        }
+
+        .ua {
+            display: flex;
+            align-items: center;
+            gap: 20px
+        }
+
+        .ci {
+            position: relative;
+            cursor: pointer
+        }
+
+        .cc {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--green);
+            color: #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700
+        }
+
+        .av {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(to right, var(--gold), var(--gold2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 18px
+        }
+
+        .up {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer
+        }
+
+        nav {
+            background: rgba(255, 255, 255, .1);
+            padding: 10px 20px
+        }
+
+        .nl {
+            display: flex;
+            list-style: none;
+            gap: 25px
+        }
+
+        .nl a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 0;
+            position: relative;
+            transition: var(--tr)
+        }
+
+        .nl a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #fff;
+            transition: var(--tr)
+        }
+
+        .nl a:hover::after,
+        .nl a.active::after {
+            width: 100%
+        }
+
+        .nl a.active {
+            font-weight: 700
+        }
+
+        .pc {
+            padding: 40px 20px;
+            flex: 1
+        }
+
+        /* Hero Banner */
+        .hero {
+            background: linear-gradient(135deg, var(--green), var(--gold2));
+            border-radius: 20px;
+            padding: 50px 40px;
+            text-align: center;
+            color: #fff;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 60%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, .08) 0%, transparent 70%);
+            pointer-events: none
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, .2)
+        }
+
+        .hero p {
+            font-size: 17px;
+            opacity: .9;
+            max-width: 600px;
+            margin: 0 auto 25px;
+            line-height: 1.6
+        }
+
+        .hero-badges {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap
+        }
+
+        .hb {
+            background: rgba(255, 255, 255, .2);
+            border: 1px solid rgba(255, 255, 255, .4);
+            border-radius: 25px;
+            padding: 8px 18px;
+            font-size: 13px;
+            font-weight: 600;
+            backdrop-filter: blur(10px)
+        }
+
+        .hb i {
+            margin-right: 6px
+        }
+
+        /* Toggle */
+        .toggle-wrap {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 35px
+        }
+
+        .toggle-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--dark)
+        }
+
+        .toggle-track {
+            width: 56px;
+            height: 28px;
+            background: var(--lgray);
+            border-radius: 14px;
+            position: relative;
+            cursor: pointer;
+            transition: var(--tr)
+        }
+
+        .toggle-track.on {
+            background: linear-gradient(to right, var(--green), var(--gold))
+        }
+
+        .toggle-thumb {
+            width: 22px;
+            height: 22px;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            transition: var(--tr);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, .2)
+        }
+
+        .toggle-track.on .toggle-thumb {
+            left: 31px
+        }
+
+        .save-badge {
+            background: linear-gradient(to right, var(--green), var(--gold));
+            color: #fff;
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-weight: 700
+        }
+
+        /* Current Subscription */
+        .current-sub {
+            background: #fff;
+            border-radius: 20px;
+            padding: 25px 30px;
+            margin-bottom: 30px;
+            border: 2px solid var(--gold);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, .15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .current-sub-info h2 {
+            font-size: 22px;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .current-sub-info p {
+            color: var(--gray);
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+
+        .current-sub-badge {
+            background: linear-gradient(to right, var(--green), var(--gold));
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 18px;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(46, 125, 50, .3);
+        }
+
+        /* Plan Cards */
+        .plans {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px
+        }
+
+        .plan-card {
+            border-radius: 20px;
+            border: 2px solid var(--lgray);
+            background: #fff;
+            overflow: hidden;
+            position: relative;
+            transition: var(--tr)
+        }
+
+        .plan-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, .12)
+        }
+
+        .plan-card.popular {
+            border-color: var(--gold);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, .2)
+        }
+
+        .plan-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(to right, var(--gold), var(--gold2));
+            color: #fff;
+            border-radius: 20px;
+            padding: 5px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .5px
+        }
+
+        .plan-header {
+            padding: 35px 30px 25px;
+            text-align: center;
+            border-bottom: 1px solid var(--lgray)
+        }
+
+        .plan-card.popular .plan-header {
+            background: linear-gradient(135deg, rgba(212, 175, 55, .05), rgba(46, 125, 50, .05))
+        }
+
+        .plan-icon {
+            font-size: 42px;
+            margin-bottom: 12px
+        }
+
+        .plan-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 6px
+        }
+
+        .plan-tagline {
+            font-size: 13px;
+            color: var(--gray);
+            margin-bottom: 20px
+        }
+
+        .plan-price {
+            font-size: 44px;
+            font-weight: 800;
+            color: var(--dark)
+        }
+
+        .plan-price sup {
+            font-size: 20px;
+            vertical-align: top;
+            margin-top: 10px
+        }
+
+        .plan-price .pfreq {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray)
+        }
+
+        .plan-price.ann {
+            font-size: 34px
+        }
+
+        .ann-orig {
+            font-size: 15px;
+            color: var(--gray);
+            text-decoration: line-through;
+            margin-top: 4px
+        }
+
+        .plan-body {
+            padding: 30px
+        }
+
+        .plan-limit {
+            background: linear-gradient(135deg, rgba(212, 175, 55, .08), rgba(46, 125, 50, .05));
+            border: 1px solid rgba(212, 175, 55, .2);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 22px
+        }
+
+        .plan-limit-val {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--green);
+            margin-bottom: 4px
+        }
+
+        .plan-limit-label {
+            font-size: 12px;
+            color: var(--gray)
+        }
+
+        .features {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px
+        }
+
+        .features li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: var(--dark)
+        }
+
+        .features li i.fa-check {
+            color: var(--green);
+            font-size: 13px;
+            flex-shrink: 0
+        }
+
+        .features li i.fa-times {
+            color: var(--lgray);
+            font-size: 13px;
+            flex-shrink: 0
+        }
+
+        .features li .feat-text {
+            flex: 1
+        }
+
+        .feat-badge {
+            background: rgba(212, 175, 55, .15);
+            color: var(--gold2);
+            border-radius: 8px;
+            padding: 2px 8px;
+            font-size: 11px;
+            font-weight: 600
+        }
+
+        .plan-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--tr)
+        }
+
+        .plan-btn.primary {
+            background: linear-gradient(to right, var(--green), var(--gold));
+            color: #fff
+        }
+
+        .plan-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46, 125, 50, .35)
+        }
+
+        .plan-btn.outline {
+            background: #fff;
+            border: 2px solid var(--lgray);
+            color: var(--gray)
+        }
+
+        .plan-btn.outline:hover {
+            border-color: var(--green);
+            color: var(--green)
+        }
+
+        /* Perks Section */
+        .perks-section {
+            margin-bottom: 50px
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark);
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(to right, var(--green), var(--gold));
+            margin: 10px auto 0;
+            border-radius: 2px
+        }
+
+        .perks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px
+        }
+
+        .perk-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px 20px;
+            text-align: center;
+            border: 1px solid #f0e6d3;
+            box-shadow: var(--sh);
+            transition: var(--tr)
+        }
+
+        .perk-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, .15)
+        }
+
+        .perk-icon {
+            font-size: 36px;
+            margin-bottom: 12px
+        }
+
+        .perk-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 6px
+        }
+
+        .perk-desc {
+            font-size: 13px;
+            color: var(--gray);
+            line-height: 1.5
+        }
+
+        /* Comparison Table */
+        .compare-section {
+            margin-bottom: 50px;
+            overflow-x: auto
+        }
+
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 12px;
+            overflow: hidden
+        }
+
+        .compare-table th {
+            background: linear-gradient(to right, var(--green), var(--gold));
+            color: #fff;
+            padding: 16px 20px;
+            font-size: 14px;
+            font-weight: 600
+        }
+
+        .compare-table td {
+            padding: 14px 20px;
+            border-bottom: 1px solid #f5f0e8;
+            font-size: 14px;
+            color: var(--dark)
+        }
+
+        .compare-table tr:nth-child(even) td {
+            background: #fafaf5
+        }
+
+        .compare-table .feat-col {
+            font-weight: 500;
+            color: var(--gray)
+        }
+
+        .compare-table .check {
+            color: var(--green);
+            font-size: 16px
+        }
+
+        .compare-table .cross {
+            color: var(--lgray);
+            font-size: 16px
+        }
+
+        .compare-table .highlight {
+            font-weight: 600;
+            color: var(--dark)
+        }
+
+        /* FAQ */
+        .faq-section {
+            margin-bottom: 40px
+        }
+
+        .faq-item {
+            border: 1px solid #f0e6d3;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            overflow: hidden
+        }
+
+        .faq-q {
+            padding: 18px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            transition: var(--tr);
+            font-size: 15px;
+            color: var(--dark)
+        }
+
+        .faq-q:hover {
+            background: #fafaf5
+        }
+
+        .faq-q i {
+            transition: var(--tr);
+            color: var(--gold)
+        }
+
+        .faq-a {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height .35s ease, padding .35s ease;
+            font-size: 14px;
+            color: var(--gray);
+            line-height: 1.7
+        }
+
+        .faq-item.open .faq-a {
+            max-height: 200px;
+            padding: 0 20px 18px
+        }
+
+        .faq-item.open .faq-q i {
+            transform: rotate(180deg)
+        }
+
+        .footer-logout {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            border-top: 1px solid var(--lgray)
+        }
+
+        .logout-link {
+            color: var(--green);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .logout-link:hover {
+            color: var(--gold);
+            text-decoration: underline
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--green);
+            color: #fff;
+            padding: 15px 25px;
+            border-radius: 10px;
+            z-index: 9999;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .2);
+            animation: slideIn .3s ease
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1
+            }
+        }
+
+        /* ===== HAMBURGER MENU ===== */
+        .hbg {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .hbg:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .hbg span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: white;
+            border-radius: 2px;
+            transition: all .3s ease;
+        }
+
+        .hbg.open span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .hbg.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hbg.open span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        .mnav {
+            display: none;
+            flex-direction: column;
+            background: rgba(0, 0, 0, 0.18);
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.35s ease;
+        }
+
+        .mnav.open {
+            max-height: 400px;
+        }
+
+        .mnav ul {
+            list-style: none;
+            padding: 10px 16px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mnav ul li a {
+            display: block;
+            padding: 12px 16px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .mnav ul li a:hover,
+        .mnav ul li a.active {
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        /* ===== TABLET (≤768px) ===== */
+        @media(max-width:768px) {
+            .ht {
+                flex-direction: row;
+                gap: 0;
+                padding: 12px 16px;
+                flex-wrap: nowrap;
+                align-items: center;
+                position: relative;
+                justify-content: space-between;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .hbg {
+                display: flex;
+                order: -1;
+            }
+
+            .mnav {
+                display: flex;
+            }
+
+            .logo {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                gap: 0;
+            }
+
+            .logo-icon {
+                display: none;
+            }
+
+            .ua {
+                order: 1;
+                gap: 14px;
+            }
+
+            .logo-text {
+                font-size: 20px;
+            }
+
+            .ua {
+                gap: 14px;
+            }
+
+            .hero {
+                padding: 30px 20px;
+            }
+
+            .hero h1 {
+                font-size: 26px;
+            }
+
+            .plans {
+                grid-template-columns: 1fr;
+            }
+
+            .plan-price {
+                font-size: 36px;
+            }
+
+            .perks-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* ===== PHONE (≤480px) ===== */
+        @media(max-width:480px) {
+            body {
+                background: #f9f7f0;
+            }
+
+            #app {
+                margin: 10px;
+                border-radius: 14px;
+            }
+
+            .ht {
+                padding: 10px 14px;
+            }
+
+            .logo-icon {
+                width: 40px;
+                height: 40px;
+            }
+
+            .logo-text {
+                font-size: 18px;
+            }
+
+            .pc {
+                padding: 14px;
+            }
+
+            .hero {
+                padding: 20px 14px;
+                border-radius: 14px;
+            }
+
+            .hero h1 {
+                font-size: 22px;
+            }
+
+            .hero p {
+                font-size: 14px;
+            }
+
+            .plans {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .plan-price {
+                font-size: 32px;
+            }
+
+            .perks-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .compare-section {
+                font-size: 13px;
+            }
+
+            .toggle-wrap {
+                gap: 10px;
+            }
+
+            .faq-q {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div id="app">
+            <header>
+                <div class="ht">
+                    <div class="logo" onclick="location.href='/dashboard'">
+                        <div class="logo-icon"><img src="/I-SPICE/logo/logo.png" alt="I-SPICE Logo"
+                                style="width:100%;height:100%;object-fit:cover;border-radius:50%"></div>
+                        <span class="logo-text">I-SPICE</span>
+                    </div>
+                    <div class="ua">
+                        <div class="ci" onclick="location.href='/cart'">
+                            <i class="fa-solid fa-shopping-cart" style="font-size:24px;color:#fff"></i>
+                            <span class="cc" id="cartCount" th:text="${cartCount?:0}">0</span>
+                        </div>
+                        <div class="up" onclick="location.href='/profile'">
+                            <div class="av" th:text="${#strings.substring(user.username,0,1).toUpperCase()}">U</div>
+                            <span style="color:#fff" th:text="${user.username}">User</span>
+                        </div>
+                    </div>
+                    <button class="hbg" id="hamburgerBtn" aria-label="Toggle menu" onclick="toggleMobileNav()">
+                        <span></span><span></span><span></span>
+                    </button>
+                </div>
+                <nav>
+                    <ul class="nl">
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li><a href="/shop">Shop</a></li>
+                        <li><a href="/orders">My Orders</a></li>
+                        <li><a href="/subscriptions" class="active">Subscriptions</a></li>
+                        <li><a href="/wishlist">Wishlist</a></li>
+                        <li><a href="/profile">Profile</a></li>
+                        <li><a href="/support">Support</a></li>
+                    </ul>
+                </nav>
+                <div class="mnav" id="mobileNav">
+                    <ul>
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li><a href="/shop">Shop</a></li>
+                        <li><a href="/orders">My Orders</a></li>
+                        <li><a href="/subscriptions" class="active">Subscriptions</a></li>
+                        <li><a href="/wishlist">Wishlist</a></li>
+                        <li><a href="/profile">Profile</a></li>
+                        <li><a href="/support">Support</a></li>
+                    </ul>
+                </div>
+            </header>
+
+            <div class="pc">
+                <!-- Current Subscription -->
+                <div class="current-sub" th:if="${user.subscriptionStatus == 'ACTIVE'}">
+                    <div class="current-sub-info">
+                        <h2>Your Active Subscription</h2>
+                        <p>Status: <strong style="color:var(--green)">ACTIVE</strong></p>
+                        <p>Valid until: <strong
+                                th:text="${#temporals.format(user.subscriptionEndDate, 'dd MMM yyyy')}"></strong></p>
+                    </div>
+                    <div class="current-sub-badge" th:text="${user.subscriptionPlan}">
+                        PRO
+                    </div>
+                </div>
+
+                <!-- Hero -->
+                <div class="hero">
+                    <h1>🌿 I-SPICE Membership Plans</h1>
+                    <p>Save big, shop freely, and get premium perks every month. Your natural wellness journey,
+                        supercharged.</p>
+                    <div class="hero-badges">
+                        <span class="hb"><i class="fas fa-truck"></i> Free Delivery</span>
+                        <span class="hb"><i class="fas fa-tags"></i> Exclusive Discounts</span>
+                        <span class="hb"><i class="fas fa-gift"></i> Monthly Surprises</span>
+                        <span class="hb"><i class="fas fa-ban"></i> Cancel Anytime</span>
+                    </div>
+                </div>
+
+                <!-- Billing Toggle -->
+                <div class="toggle-wrap">
+                    <span class="toggle-label">Monthly</span>
+                    <div class="toggle-track" id="billingToggle" onclick="toggleBilling()">
+                        <div class="toggle-thumb"></div>
+                    </div>
+                    <span class="toggle-label">Annual <span class="save-badge">Save 20%</span></span>
+                </div>
+
+                <!-- Plans -->
+                <div class="plans">
+
+                    <!-- Starter -->
+                    <div class="plan-card">
+                        <div class="plan-header">
+                            <div class="plan-icon">🌱</div>
+                            <div class="plan-name">Starter</div>
+                            <div class="plan-tagline">Perfect for curious explorers</div>
+                            <div class="plan-price" id="starterPrice"><sup>₹</sup>299<span class="pfreq">/mo</span>
+                            </div>
+                            <div class="ann-orig" id="starterOrig" style="display:none">₹299/mo → ₹2,868/yr</div>
+                        </div>
+                        <div class="plan-body">
+                            <div class="plan-limit">
+                                <div class="plan-limit-val">Up to ₹500</div>
+                                <div class="plan-limit-label">worth of products per month</div>
+                            </div>
+                            <ul class="features">
+                                <li><i class="fas fa-check"></i><span class="feat-text">Free delivery on orders over
+                                        ₹299</span></li>
+                                <li><i class="fas fa-check"></i><span class="feat-text"><b>5% off</b> all
+                                        products</span></li>
+                                <li><i class="fas fa-check"></i><span class="feat-text">Access to member-only
+                                        deals</span></li>
+                                <li><i class="fas fa-check"></i><span class="feat-text">Priority customer support</span>
+                                </li>
+                                <li><i class="fas fa-times"></i><span class="feat-text"
+                                        style="color:var(--lgray)">Always free delivery</span></li>
+                                <li><i class="fas fa-times"></i><span class="feat-text"
+                                        style="color:var(--lgray)">Monthly surprise box</span></li>
+                                <li><i class="fas fa-times"></i><span class="feat-text" style="color:var(--lgray)">Early
+                                        product access</span></li>
+                            </ul>
+                            <button class="plan-btn outline" onclick="subscribe('STARTER')">Choose Starter</button>
+                        </div>
+                    </div>
+
+                    <!-- Spice Pro (Popular) -->
+                    <div class="plan-card popular">
+                        <span class="plan-badge">⭐ Most Popular</span>
+                        <div class="plan-header">
+                            <div class="plan-icon">🌶️</div>
+                            <div class="plan-name">Spice Pro</div>
+                            <div class="plan-tagline">Best value for spice lovers</div>
+                            <div class="plan-price" id="proPrice"><sup>₹</sup>599<span class="pfreq">/mo</span></div>
+                            <div class="ann-orig" id="proOrig" style="display:none">₹599/mo → ₹5,750/yr</div>
+                        </div>
+                        <div class="plan-body">
+                            <div class="plan-limit">
+                                <div class="plan-limit-val">Up to ₹1,200</div>
+                                <div class="plan-limit-label">worth of products per month</div>
+                            </div>
+                            <ul class="features">
+                                <li><i class="fas fa-check"></i><span class="feat-text"><b>Always free delivery</b>
+                                        <span class="feat-badge">UNLIMITED</span></span></li>
+                                <li><i class="fas fa-check"></i><span class="feat-text"><b>10% off</b> all
+                                        products</span></li>
+                                <li><i class="fas fa-check"></i><span class="feat-text">2× loyalty points on every
+                                        order</span></li>
+                                <li><i class="fas fa-check"></i><span class="feat-text">Early access to new
+                                        arrivals</span></li>
+                                <li><i class="fas fa-check"></i><span class="feat-text">Member-only weekly deals</span>
+                                </li>
+                                <li><i class="fas fa-check"></i><span class="feat-text">Priority support (24h
+                                        response)</span></li>
+                                <li><i class="fas fa-times"></i><span class="feat-text"
+                                        style="color:var(--lgray)">Monthly surprise box</span></li>
+                            </ul>
+                            <button class="plan-btn primary" onclick="subscribe('PRO')"><i class="fas fa-fire"></i> Get
+                                Spice Pro</button>
+                        </div>
+                    </div>
+
+                    <!-- Spice Elite -->
+                    <div class="plan-card">
+                        <div class="plan-header">
+                            <div class="plan-icon">👑</div>
+                            <div class="plan-name">Spice Elite</div>
+                            <div class="plan-tagline">The ultimate spice experience</div>
+                            <div class="plan-price" id="elitePrice"><sup>₹</sup>999<span class="pfreq">/mo</span></div>
+                            <div class="ann-orig" id="eliteOrig" style="display:none">₹999/mo → ₹9,590/yr</div>
+                        </div>
+                        <div class="plan-body">
+                            <div class="plan-limit">
+                                <div class="plan-limit-val">Up to ₹2,500</div>
+                                <div class="plan-limit-label">worth of products per month</div>
+                            </div>
+                            <ul class="features">
+                                <li><i class="fas fa-check"></i><span class="feat-text"><b>Always free express
+                                            delivery</b> <span class="feat-badge">PRIORITY</span></span></li>
+                                <li><i class="fas fa-check"></i><span class="feat-text"><b>20% off</b> all
+                                        products</span></li>
+                                <li><i class="fas fa-check"></i><span class="feat-text">Monthly curated spice surprise
+                                        box 🎁</span></li>
+                                <li><i class="fas fa-check"></i><span class="feat-text">3× loyalty points on every
+                                        order</span></li>
+                                <li><i class="fas fa-check"></i><span class="feat-text">Exclusive chef recipes &amp;
+                                        guides</span></li>
+                                <li><i class="fas fa-check"></i><span class="feat-text">VIP priority support (4h
+                                        response)</span></li>
+                                <li><i class="fas fa-check"></i><span class="feat-text">Invite-only product
+                                        launches</span></li>
+                            </ul>
+                            <button class="plan-btn outline" onclick="subscribe('ELITE')"><i class="fas fa-crown"></i>
+                                Go Elite</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Perks -->
+                <div class="perks-section">
+                    <h2 class="section-title">Why Subscribe?</h2>
+                    <div class="perks-grid">
+                        <div class="perk-card">
+                            <div class="perk-icon">🚚</div>
+                            <div class="perk-title">Free Delivery</div>
+                            <div class="perk-desc">No more delivery charges eating into your budget. Ship freely every
+                                time.</div>
+                        </div>
+                        <div class="perk-card">
+                            <div class="perk-icon">💰</div>
+                            <div class="perk-title">Save Every Month</div>
+                            <div class="perk-desc">Stack discounts up to 20% on all products. The more you buy, the more
+                                you save.</div>
+                        </div>
+                        <div class="perk-card">
+                            <div class="perk-icon">🎁</div>
+                            <div class="perk-title">Surprise Boxes</div>
+                            <div class="perk-desc">Elite members receive a curated box of premium spices every month
+                                worth ₹500+.</div>
+                        </div>
+                        <div class="perk-card">
+                            <div class="perk-icon">⚡</div>
+                            <div class="perk-title">Early Access</div>
+                            <div class="perk-desc">Shop new products before anyone else. Never miss the freshest
+                                arrivals.</div>
+                        </div>
+                        <div class="perk-card">
+                            <div class="perk-icon">⭐</div>
+                            <div class="perk-title">Bonus Points</div>
+                            <div class="perk-desc">Earn up to 3× loyalty points and redeem them for free products.</div>
+                        </div>
+                        <div class="perk-card">
+                            <div class="perk-icon">🎧</div>
+                            <div class="perk-title">VIP Support</div>
+                            <div class="perk-desc">Get fast, dedicated customer support with priority response times.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comparison Table -->
+                <div class="compare-section">
+                    <h2 class="section-title">Plan Comparison</h2>
+                    <table class="compare-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align:left">Feature</th>
+                                <th>Starter</th>
+                                <th>Spice Pro</th>
+                                <th>Spice Elite</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="feat-col">Monthly Product Budget</td>
+                                <td>₹500</td>
+                                <td class="highlight">₹1,200</td>
+                                <td class="highlight">₹2,500</td>
+                            </tr>
+                            <tr>
+                                <td class="feat-col">Discount on Products</td>
+                                <td>5%</td>
+                                <td class="highlight">10%</td>
+                                <td class="highlight">20%</td>
+                            </tr>
+                            <tr>
+                                <td class="feat-col">Free Delivery</td>
+                                <td>Orders &gt;₹299</td>
+                                <td class="highlight">Always ✔</td>
+                                <td class="highlight">Always + Express ✔</td>
+                            </tr>
+                            <tr>
+                                <td class="feat-col">Loyalty Points</td>
+                                <td>1×</td>
+                                <td>2×</td>
+                                <td class="highlight">3×</td>
+                            </tr>
+                            <tr>
+                                <td class="feat-col">Early Product Access</td>
+                                <td><i class="fas fa-times cross"></i></td>
+                                <td><i class="fas fa-check check"></i></td>
+                                <td><i class="fas fa-check check"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="feat-col">Monthly Surprise Box</td>
+                                <td><i class="fas fa-times cross"></i></td>
+                                <td><i class="fas fa-times cross"></i></td>
+                                <td><i class="fas fa-check check"></i></td>
+                            </tr>
+                            <tr>
+                                <td class="feat-col">Support Response Time</td>
+                                <td>48h</td>
+                                <td>24h</td>
+                                <td class="highlight">4h (VIP)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- FAQ -->
+                <div class="faq-section">
+                    <h2 class="section-title">Frequently Asked Questions</h2>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)">Can I cancel my subscription anytime?<i
+                                class="fas fa-chevron-down"></i></div>
+                        <div class="faq-a">Yes! You can cancel your subscription anytime from your profile page. There
+                            are no cancellation fees, and you'll continue to enjoy benefits until the end of your
+                            current billing period.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)">How does the monthly product budget work?<i
+                                class="fas fa-chevron-down"></i></div>
+                        <div class="faq-a">Your monthly budget is a spending allowance at discounted rates. For example,
+                            on Spice Pro you can purchase up to ₹1,200 worth of products per month with your 10%
+                            membership discount applied automatically.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)">When will I receive my surprise box?<i
+                                class="fas fa-chevron-down"></i></div>
+                        <div class="faq-a">Elite members receive their curated surprise box within the first 5 business
+                            days of each month. Each box contains handpicked premium spices, teas, and exclusive blends
+                            worth ₹500+.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)">Can I upgrade or downgrade my plan?<i
+                                class="fas fa-chevron-down"></i></div>
+                        <div class="faq-a">Absolutely! You can upgrade anytime and the new plan takes effect
+                            immediately. Downgrades take effect at the start of your next billing cycle.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)">What payment methods are accepted?<i
+                                class="fas fa-chevron-down"></i></div>
+                        <div class="faq-a">We accept all major credit/debit cards, UPI, net banking, and wallets. Your
+                            subscription will auto-renew monthly or annually based on your chosen plan.</div>
+                    </div>
+                </div>
+
+                <div class="footer-logout">
+                    <form th:action="@{/logout}" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <button type="submit" class="logout-link"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let annual = false;
+        const prices = { starter: [299, 239], pro: [599, 479], elite: [999, 799] };
+        function toggleBilling() {
+            annual = !annual;
+            document.getElementById('billingToggle').classList.toggle('on', annual);
+            const freq = annual ? '/yr' : '/mo';
+            const [sm, sa] = prices.starter, [pm, pa] = prices.pro, [em, ea] = prices.elite;
+            document.getElementById('starterPrice').innerHTML = `<sup>₹</sup>${annual ? sm * 12 * 0.8 | 0 : sm}<span class="pfreq">${freq}</span>`;
+            document.getElementById('proPrice').innerHTML = `<sup>₹</sup>${annual ? pm * 12 * 0.8 | 0 : pm}<span class="pfreq">${freq}</span>`;
+            document.getElementById('elitePrice').innerHTML = `<sup>₹</sup>${annual ? em * 12 * 0.8 | 0 : em}<span class="pfreq">${freq}</span>`;
+            document.getElementById('starterOrig').style.display = annual ? 'block' : 'none';
+            document.getElementById('proOrig').style.display = annual ? 'block' : 'none';
+            document.getElementById('eliteOrig').style.display = annual ? 'block' : 'none';
+        }
+        function toggleFaq(el) {
+            const item = el.closest('.faq-item');
+            document.querySelectorAll('.faq-item.open').forEach(i => { if (i !== item) i.classList.remove('open') });
+            item.classList.toggle('open');
+        }
+        function subscribe(plan) {
+            const btn = event.currentTarget;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            btn.disabled = true;
+
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+            fetch('/api/payment/subscription/create-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [csrfHeader]: csrfToken
+                },
+                body: JSON.stringify({ plan: plan, annual: annual })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.error) throw new Error(data.error);
+
+                    const options = {
+                        "key": data.keyId,
+                        "amount": data.amount,
+                        "currency": data.currency,
+                        "name": "I-SPICE Subscription",
+                        "description": plan + " Plan (" + (annual ? "Annual" : "Monthly") + ")",
+                        "order_id": data.orderId,
+                        "handler": function (response) {
+                            verifyPayment(response.razorpay_payment_id, response.razorpay_order_id, response.razorpay_signature, plan);
+                        },
+                        "prefill": data.prefill || {},
+                        "theme": { "color": "#2e7d32" },
+                        "modal": {
+                            "ondismiss": function () {
+                                btn.innerHTML = originalText;
+                                btn.disabled = false;
+                            }
+                        }
+                    };
+
+                    const rzp = new Razorpay(options);
+                    rzp.open();
+
+                })
+                .catch(err => {
+                    alert('Checkout error: ' + err.message);
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                });
+        }
+
+        function verifyPayment(paymentId, orderId, signature, plan) {
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+            fetch('/api/payment/subscription/verify', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [csrfHeader]: csrfToken
+                },
+                body: JSON.stringify({
+                    razorpay_payment_id: paymentId,
+                    razorpay_order_id: orderId,
+                    razorpay_signature: signature,
+                    plan: plan,
+                    annual: annual
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        const toast = document.createElement('div');
+                        toast.className = 'toast';
+                        toast.innerHTML = `<i class="fas fa-check-circle"></i> Subscription activated successfully! Refreshing...`;
+                        document.body.appendChild(toast);
+                        setTimeout(() => window.location.reload(), 2000);
+                    } else {
+                        alert('Payment verification failed: ' + data.error);
+                    }
+                })
+                .catch(err => alert('Verification error: ' + err.message));
+        }
+    </script>
+    <script>
+        function toggleMobileNav() {
+            document.getElementById('hamburgerBtn').classList.toggle('open');
+            document.getElementById('mobileNav').classList.toggle('open');
+        }
+    </script>
+</body>
+
+</html>

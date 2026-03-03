@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>My Profile | I-SPICE</title>
+    <link rel="stylesheet" href="/fontawesome/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+        }
+
+        :root {
+            --gold: #D4AF37;
+            --gold2: #b8941f;
+            --green: #2e7d32;
+            --bg: #f9f7f0;
+            --dark: #333;
+            --gray: #666;
+            --lgray: #e8e3d5;
+            --danger: #dc3545;
+            --ok: #28a745;
+            --sh: 0 5px 15px rgba(0, 0, 0, .08);
+            --tr: all .3s ease
+        }
+
+        body {
+            background: linear-gradient(135deg, #f9f7f0, #fffef9, #f9f7f0);
+            min-height: 100vh;
+            color: #333
+        }
+
+        .wrap {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh
+        }
+
+        #app {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(212, 175, 55, .1);
+            margin: 20px auto;
+            border: 1px solid #f0e6d3
+        }
+
+        header {
+            background: linear-gradient(to right, var(--green), var(--gold));
+            color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--sh)
+        }
+
+        .ht {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--gold);
+            overflow: hidden;
+            padding: 2px
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff
+        }
+
+        .ua {
+            display: flex;
+            align-items: center;
+            gap: 20px
+        }
+
+        .ci {
+            position: relative;
+            cursor: pointer
+        }
+
+        .cc {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--green);
+            color: #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700
+        }
+
+        .av {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(to right, var(--gold), var(--gold2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 18px
+        }
+
+        .up {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer
+        }
+
+        nav {
+            background: rgba(255, 255, 255, .1);
+            padding: 10px 20px
+        }
+
+        .nl {
+            display: flex;
+            list-style: none;
+            gap: 25px
+        }
+
+        .nl a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 0;
+            position: relative;
+            transition: var(--tr)
+        }
+
+        .nl a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #fff;
+            transition: var(--tr)
+        }
+
+        .nl a:hover::after,
+        .nl a.active::after {
+            width: 100%
+        }
+
+        .nl a.active {
+            font-weight: 700
+        }
+
+        .pc {
+            padding: 40px 20px;
+            flex: 1
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            align-items: start
+        }
+
+        /* Left Panel */
+        .profile-card {
+            background: #fff;
+            border-radius: 20px;
+            border: 1px solid #f0e6d3;
+            box-shadow: var(--sh);
+            padding: 30px;
+            text-align: center
+        }
+
+        .big-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--green), var(--gold));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            font-weight: 700;
+            color: #fff;
+            margin: 0 auto 15px;
+            box-shadow: 0 5px 20px rgba(212, 175, 55, .3)
+        }
+
+        .user-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 5px
+        }
+
+        .user-email {
+            font-size: 14px;
+            color: var(--gray);
+            margin-bottom: 20px
+        }
+
+        .role-badge {
+            background: linear-gradient(to right, var(--green), var(--gold));
+            color: #fff;
+            border-radius: 20px;
+            padding: 5px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 25px
+        }
+
+        .stats-mini {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 25px
+        }
+
+        .sm {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            padding: 12px;
+            background: var(--bg);
+            border-radius: 12px;
+            border: 1px solid var(--lgray)
+        }
+
+        .sm-val {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark)
+        }
+
+        .sm-label {
+            font-size: 11px;
+            color: var(--gray);
+            margin-top: 3px
+        }
+
+        /* Loyalty Points */
+        .loyalty-box {
+            background: linear-gradient(135deg, rgba(212, 175, 55, .08), rgba(46, 125, 50, .05));
+            border: 1px solid rgba(212, 175, 55, .2);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 25px
+        }
+
+        .loyalty-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px
+        }
+
+        .loyalty-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark)
+        }
+
+        .loyalty-pts {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            gap: 6px
+        }
+
+        .progress-bar {
+            background: var(--lgray);
+            border-radius: 10px;
+            height: 10px;
+            overflow: hidden;
+            margin-bottom: 8px
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--green), var(--gold));
+            border-radius: 10px;
+            transition: width .6s ease
+        }
+
+        .loyalty-sub {
+            font-size: 12px;
+            color: var(--gray)
+        }
+
+        .tier-badge {
+            background: rgba(212, 175, 55, .15);
+            color: var(--gold2);
+            border-radius: 8px;
+            padding: 3px 10px;
+            font-size: 12px;
+            font-weight: 600
+        }
+
+        /* Quick Links */
+        .quick-links {
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        .ql {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            border-radius: 10px;
+            color: var(--dark);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--tr);
+            border: 1px solid transparent
+        }
+
+        .ql:hover {
+            background: var(--bg);
+            border-color: var(--lgray);
+            color: var(--green)
+        }
+
+        .ql i {
+            width: 20px;
+            color: var(--gold);
+            font-size: 14px
+        }
+
+        .ql-danger:hover {
+            background: rgba(220, 53, 69, .05);
+            border-color: rgba(220, 53, 69, .2);
+            color: var(--danger)
+        }
+
+        .ql-danger i {
+            color: var(--danger)
+        }
+
+        /* Right Panel Sections */
+        .sections {
+            display: flex;
+            flex-direction: column;
+            gap: 25px
+        }
+
+        .section {
+            background: #fff;
+            border-radius: 20px;
+            border: 1px solid #f0e6d3;
+            box-shadow: var(--sh);
+            overflow: hidden
+        }
+
+        .section-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        .section-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--dark)
+        }
+
+        .edit-btn {
+            padding: 7px 16px;
+            border: 2px solid var(--lgray);
+            border-radius: 8px;
+            background: #fff;
+            color: var(--gray);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--tr)
+        }
+
+        .edit-btn:hover {
+            border-color: var(--green);
+            color: var(--green)
+        }
+
+        .edit-btn.save {
+            background: linear-gradient(to right, var(--green), var(--gold));
+            color: #fff;
+            border-color: transparent
+        }
+
+        .section-body {
+            padding: 25px
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-bottom: 18px
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px
+        }
+
+        .form-group.full {
+            grid-column: 1/-1
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: .5px
+        }
+
+        input,
+        select,
+        textarea {
+            padding: 11px 15px;
+            border: 2px solid var(--lgray);
+            border-radius: 8px;
+            font-size: 14px;
+            background: #fff;
+            color: var(--dark);
+            transition: var(--tr)
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, .1)
+        }
+
+        input:disabled {
+            background: var(--bg);
+            color: var(--gray);
+            cursor: not-allowed
+        }
+
+        /* Toggle Switch */
+        .toggle-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f5f5f5
+        }
+
+        .toggle-row:last-child {
+            border-bottom: none
+        }
+
+        .toggle-info {
+            flex: 1
+        }
+
+        .toggle-label {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--dark)
+        }
+
+        .toggle-desc {
+            font-size: 13px;
+            color: var(--gray);
+            margin-top: 3px
+        }
+
+        .switch {
+            width: 48px;
+            height: 26px;
+            background: var(--lgray);
+            border-radius: 13px;
+            position: relative;
+            cursor: pointer;
+            transition: var(--tr)
+        }
+
+        .switch.on {
+            background: linear-gradient(to right, var(--green), var(--gold))
+        }
+
+        .switch-thumb {
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            transition: var(--tr);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, .2)
+        }
+
+        .switch.on .switch-thumb {
+            left: 25px
+        }
+
+        /* Danger Zone */
+        .danger-box {
+            border: 1px solid rgba(220, 53, 69, .3);
+            border-radius: 12px;
+            padding: 20px;
+            background: rgba(220, 53, 69, .03)
+        }
+
+        .danger-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--danger);
+            margin-bottom: 8px
+        }
+
+        .danger-desc {
+            font-size: 13px;
+            color: var(--gray);
+            margin-bottom: 15px
+        }
+
+        .danger-btn {
+            padding: 10px 20px;
+            border: 2px solid var(--danger);
+            border-radius: 8px;
+            background: #fff;
+            color: var(--danger);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--tr)
+        }
+
+        .danger-btn:hover {
+            background: var(--danger);
+            color: #fff
+        }
+
+        .footer-logout {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            border-top: 1px solid var(--lgray)
+        }
+
+        .logout-link {
+            color: var(--green);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .logout-link:hover {
+            color: var(--gold);
+            text-decoration: underline
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            color: #fff;
+            padding: 15px 25px;
+            border-radius: 10px;
+            z-index: 9999;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .2);
+            animation: si .3s ease
+        }
+
+        @keyframes si {
+            from {
+                transform: translateX(100%);
+                opacity: 0
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1
+            }
+        }
+
+        /* ===== HAMBURGER MENU ===== */
+        .hbg {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .hbg:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .hbg span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: white;
+            border-radius: 2px;
+            transition: all .3s ease;
+        }
+
+        .hbg.open span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .hbg.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hbg.open span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        .mnav {
+            display: none;
+            flex-direction: column;
+            background: rgba(0, 0, 0, 0.18);
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.35s ease;
+        }
+
+        .mnav.open {
+            max-height: 400px;
+        }
+
+        .mnav ul {
+            list-style: none;
+            padding: 10px 16px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mnav ul li a {
+            display: block;
+            padding: 12px 16px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .mnav ul li a:hover,
+        .mnav ul li a.active {
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        /* ===== TABLET (≤768px) ===== */
+        @media(max-width:900px) {
+            .ht {
+                flex-direction: row;
+                gap: 0;
+                padding: 12px 16px;
+                flex-wrap: nowrap;
+                align-items: center;
+                position: relative;
+                justify-content: space-between;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .hbg {
+                display: flex;
+                order: -1;
+            }
+
+            .mnav {
+                display: flex;
+            }
+
+            .logo {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                gap: 0;
+            }
+
+            .logo-icon {
+                display: none;
+            }
+
+            .ua {
+                order: 1;
+                gap: 14px;
+            }
+
+            .logo-text {
+                font-size: 20px;
+            }
+
+            .ua {
+                gap: 14px;
+            }
+
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== PHONE (≤480px) ===== */
+        @media(max-width:480px) {
+            body {
+                background: #f9f7f0;
+            }
+
+            #app {
+                margin: 10px;
+                border-radius: 14px;
+            }
+
+            .ht {
+                padding: 10px 14px;
+            }
+
+            .logo-icon {
+                width: 40px;
+                height: 40px;
+            }
+
+            .logo-text {
+                font-size: 18px;
+            }
+
+            .pc {
+                padding: 14px;
+            }
+
+            .profile-card {
+                padding: 20px;
+            }
+
+            .section-body {
+                padding: 16px;
+            }
+
+            .section-header {
+                padding: 14px 16px;
+            }
+
+            .danger-btn {
+                width: 100%;
+            }
+
+            .stats-mini {
+                gap: 8px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div id="app">
+            <header>
+                <div class="ht">
+                    <div class="logo" onclick="location.href='/dashboard'">
+                        <div class="logo-icon"><img src="/I-SPICE/logo/logo.png" alt="I-SPICE Logo"
+                                style="width:100%;height:100%;object-fit:cover;border-radius:50%"></div>
+                        <span class="logo-text">I-SPICE</span>
+                    </div>
+                    <div class="ua">
+                        <div class="ci" onclick="location.href='/cart'">
+                            <i class="fa-solid fa-shopping-cart" style="font-size:24px;color:#fff"></i>
+                            <span class="cc" id="cartCount" th:text="${cartCount?:0}">0</span>
+                        </div>
+                        <div class="up">
+                            <div class="av" th:text="${#strings.substring(user.username,0,1).toUpperCase()}">U</div>
+                            <span style="color:#fff" th:text="${user.username}">User</span>
+                        </div>
+                    </div>
+                    <button class="hbg" id="hamburgerBtn" aria-label="Toggle menu" onclick="toggleMobileNav()">
+                        <span></span><span></span><span></span>
+                    </button>
+                </div>
+                <nav>
+                    <ul class="nl">
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li><a href="/shop">Shop</a></li>
+                        <li><a href="/orders">My Orders</a></li>
+                        <li><a href="/subscriptions">Subscriptions</a></li>
+                        <li><a href="/wishlist">Wishlist</a></li>
+                        <li><a href="/profile" class="active">Profile</a></li>
+                        <li><a href="/support">Support</a></li>
+                    </ul>
+                </nav>
+                <div class="mnav" id="mobileNav">
+                    <ul>
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li><a href="/shop">Shop</a></li>
+                        <li><a href="/orders">My Orders</a></li>
+                        <li><a href="/subscriptions">Subscriptions</a></li>
+                        <li><a href="/wishlist">Wishlist</a></li>
+                        <li><a href="/profile" class="active">Profile</a></li>
+                        <li><a href="/support">Support</a></li>
+                    </ul>
+                </div>
+            </header>
+
+            <div class="pc">
+                <div class="layout">
+                    <!-- Left: Profile Card -->
+                    <div>
+                        <div class="profile-card">
+                            <div class="big-avatar" th:text="${#strings.substring(user.username,0,1).toUpperCase()}">U
+                            </div>
+                            <div class="user-name" th:text="${user.fullName?:user.username}">Full Name</div>
+                            <div class="user-email" th:text="${user.email}">email@example.com</div>
+                            <span class="role-badge" th:text="${user.role?:'USER'}">USER</span>
+
+                            <div class="stats-mini">
+                                <div class="sm">
+                                    <div class="sm-val" th:text="${user.loyaltyPoints}">50</div>
+                                    <div class="sm-label">Points</div>
+                                </div>
+                                <div class="sm">
+                                    <div class="sm-val">⭐ Silver</div>
+                                    <div class="sm-label">Tier</div>
+                                </div>
+                            </div>
+
+                            <!-- Loyalty Progress -->
+                            <div class="loyalty-box">
+                                <div class="loyalty-header">
+                                    <span class="loyalty-title">Loyalty Points</span>
+                                    <span class="tier-badge">Silver</span>
+                                </div>
+                                <div class="loyalty-pts"><i class="fas fa-star" style="color:var(--gold)"></i><span
+                                        th:text="${user.loyaltyPoints}">50</span> pts</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill"
+                                        th:style="'width:'+${user.loyaltyPoints > 500 ? 100 : (user.loyaltyPoints / 500.0 * 100)}+'%'">
+                                    </div>
+                                </div>
+                                <div class="loyalty-sub"
+                                    th:text="${500 - user.loyaltyPoints > 0 ? (500 - user.loyaltyPoints) + ' pts to Gold tier' : 'Gold tier reached! 🎉'}">
+                                    450 pts to Gold tier</div>
+                            </div>
+
+                            <!-- Quick Links -->
+                            <div class="quick-links">
+                                <a class="ql" href="/orders"><i class="fas fa-box"></i> My Orders</a>
+                                <a class="ql" href="/wishlist"><i class="fas fa-heart"></i> Wishlist</a>
+                                <a class="ql" href="/subscriptions"><i class="fas fa-crown"></i> Subscriptions</a>
+                                <a class="ql" href="/support"><i class="fas fa-headset"></i> Help &amp; Support</a>
+                                <a class="ql ql-danger" href="#"
+                                    onclick="document.getElementById('logoutForm').submit()"><i
+                                        class="fas fa-sign-out-alt"></i> Sign Out</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Sections -->
+                    <div class="sections">
+                        <!-- Personal Info -->
+                        <div class="section">
+                            <div class="section-header">
+                                <span class="section-title"><i class="fas fa-user"
+                                        style="color:var(--gold);margin-right:8px"></i>Personal Information</span>
+                                <button class="edit-btn" id="editInfoBtn" onclick="toggleEdit('info')">Edit</button>
+                            </div>
+                            <div class="section-body">
+                                <form id="infoForm" th:action="@{/api/profile/update}" method="post">
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>First Name</label>
+                                            <input type="text" id="firstName" name="firstName"
+                                                th:value="${user.firstName}" disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Last Name</label>
+                                            <input type="text" id="lastName" name="lastName" th:value="${user.lastName}"
+                                                disabled>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Username</label>
+                                            <input type="text" th:value="${user.username}" disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Email</label>
+                                            <input type="email" th:value="${user.email}" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Phone Number</label>
+                                            <input type="tel" id="phone" name="phoneNumber"
+                                                th:value="${user.phoneNumber}" placeholder="Enter your phone number"
+                                                disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Product Interest</label>
+                                            <input type="text" id="interest" name="productInterest"
+                                                th:value="${user.productInterest}"
+                                                placeholder="e.g. Organic Spices, Teas" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="form-row" id="saveInfoRow" style="display:none">
+                                        <button type="submit" class="edit-btn save" style="padding:10px 25px">Save
+                                            Changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Notification Preferences -->
+                        <div class="section">
+                            <div class="section-header">
+                                <span class="section-title"><i class="fas fa-bell"
+                                        style="color:var(--gold);margin-right:8px"></i>Notifications</span>
+                            </div>
+                            <div class="section-body">
+                                <div class="toggle-row">
+                                    <div class="toggle-info">
+                                        <div class="toggle-label">Order Updates</div>
+                                        <div class="toggle-desc">Get notified about order status, shipping, and delivery
+                                        </div>
+                                    </div>
+                                    <div class="switch on" onclick="this.classList.toggle('on')">
+                                        <div class="switch-thumb"></div>
+                                    </div>
+                                </div>
+                                <div class="toggle-row">
+                                    <div class="toggle-info">
+                                        <div class="toggle-label">Newsletter &amp; Offers</div>
+                                        <div class="toggle-desc">Receive weekly deals, product launches, and coupons
+                                        </div>
+                                    </div>
+                                    <div class="switch" th:classappend="${user.newsletterSubscription}?' on':''"
+                                        onclick="this.classList.toggle('on')">
+                                        <div class="switch-thumb"></div>
+                                    </div>
+                                </div>
+                                <div class="toggle-row">
+                                    <div class="toggle-info">
+                                        <div class="toggle-label">Wishlist Alerts</div>
+                                        <div class="toggle-desc">Notify when wishlist items go on sale or are back in
+                                            stock</div>
+                                    </div>
+                                    <div class="switch on" onclick="this.classList.toggle('on')">
+                                        <div class="switch-thumb"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Security -->
+                        <div class="section">
+                            <div class="section-header">
+                                <span class="section-title"><i class="fas fa-lock"
+                                        style="color:var(--gold);margin-right:8px"></i>Security</span>
+                                <button class="edit-btn" onclick="togglePasswordSection()">Change Password</button>
+                            </div>
+                            <div class="section-body" id="passwordSection" style="display:none">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Current Password</label>
+                                        <input type="password" placeholder="Enter current password">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>New Password</label>
+                                        <input type="password" placeholder="Enter new password">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Confirm New Password</label>
+                                        <input type="password" placeholder="Confirm new password">
+                                    </div>
+                                </div>
+                                <button class="edit-btn save"
+                                    onclick="showToast('Password updated successfully! 🔐')">Update Password</button>
+                            </div>
+                        </div>
+
+                        <!-- Danger Zone -->
+                        <div class="section">
+                            <div class="section-header">
+                                <span class="section-title" style="color:var(--danger)"><i
+                                        class="fas fa-exclamation-triangle" style="margin-right:8px"></i>Account</span>
+                            </div>
+                            <div class="section-body">
+                                <div class="danger-box">
+                                    <div class="danger-title">Delete Account</div>
+                                    <div class="danger-desc">Permanently delete your account and all associated data.
+                                        This action cannot be undone.</div>
+                                    <button class="danger-btn"
+                                        onclick="alert('Please contact support to delete your account.')">Request
+                                        Account Deletion</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="footer-logout">
+                    <form th:action="@{/logout}" method="post" id="logoutForm">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <button type="submit" class="logout-link"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleEdit(section) {
+            const btn = document.getElementById('editInfoBtn');
+            const fields = document.querySelectorAll('#infoForm input:not([type=hidden])');
+            const editableIds = ['firstName', 'lastName', 'phone', 'interest'];
+            const editing = btn.textContent === 'Save';
+            if (!editing) {
+                editableIds.forEach(id => { const el = document.getElementById(id); if (el) el.disabled = false; });
+                btn.textContent = 'Cancel'; btn.className = 'edit-btn';
+                document.getElementById('saveInfoRow').style.display = '';
+            } else {
+                editableIds.forEach(id => { const el = document.getElementById(id); if (el) el.disabled = true; });
+                btn.textContent = 'Edit'; document.getElementById('saveInfoRow').style.display = 'none';
+            }
+        }
+        function togglePasswordSection() {
+            const s = document.getElementById('passwordSection');
+            s.style.display = s.style.display === 'none' ? 'block' : 'none';
+        }
+        function showToast(msg, type = 'success') {
+            const t = document.createElement('div'); t.className = 'toast';
+            t.style.background = type === 'error' ? '#dc3545' : '#28a745'; t.innerHTML = msg;
+            document.body.appendChild(t); setTimeout(() => t.remove(), 3000);
+        }
+    </script>
+    <script>
+        function toggleMobileNav() {
+            document.getElementById('hamburgerBtn').classList.toggle('open');
+            document.getElementById('mobileNav').classList.toggle('open');
+        }
+    </script>
+</body>
+
+</html>

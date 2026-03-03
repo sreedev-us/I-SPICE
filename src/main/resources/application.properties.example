@@ -1,0 +1,131 @@
+# ============================================
+# SPRING BOOT CONFIGURATION
+# ============================================
+
+spring.application.name=I-SPICE
+server.port=${SERVER_PORT:8080}
+server.servlet.context-path=/
+
+# Set the active profile, defaulting to dev
+spring.profiles.active=${SPRING_PROFILES_ACTIVE:dev}
+
+# ============================================
+# SUPABASE POSTGRESQL CONFIGURATION
+# ============================================
+
+spring.datasource.url=${DB_URL:jdbc:postgresql://aws-1-ap-southeast-2.pooler.supabase.com:6543/postgres...
+spring.datasource.username=${DB_USERNAME:postgres.qurcampttldycfctcowc}
+spring.datasource.password=YOUR_VALUE_HERE
+
+# Connection Pool Settings (Optimized for Supabase)
+spring.datasource.hikari.maximum-pool-size=5
+spring.datasource.hikari.minimum-idle=2
+spring.datasource.hikari.connection-timeout=60000
+spring.datasource.hikari.idle-timeout=300000
+spring.datasource.hikari.max-lifetime=1800000
+spring.datasource.hikari.connection-test-query=SELECT 1
+spring.datasource.hikari.auto-commit=true
+
+# ============================================
+# JPA/HIBERNATE CONFIGURATION
+# ============================================
+
+# Note: ddl-auto is controlled by environment profiles (dev=update, prod=validate)
+spring.jpa.show-sql=${SHOW_SQL:true}
+spring.jpa.properties.hibernate.format_sql=true
+
+# PostgreSQL Dialect
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+spring.jpa.properties.hibernate.temp.use_jdbc_metadata_defaults=false
+
+# Naming strategy
+spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+spring.jpa.properties.hibernate.id.new_generator_mappings=true
+
+# Don't initialize database with schema.sql
+spring.sql.init.mode=never
+
+# ============================================
+# THYMELEAF CONFIGURATION
+# ============================================
+
+spring.thymeleaf.prefix=classpath:/templates/
+spring.thymeleaf.suffix=.html
+spring.thymeleaf.cache=${THYMELEAF_CACHE:false}
+spring.thymeleaf.mode=HTML
+spring.thymeleaf.encoding=UTF-8
+spring.thymeleaf.check-template-location=true
+
+# ============================================
+# STATIC RESOURCES
+# ============================================
+
+spring.web.resources.static-locations=classpath:/static/
+spring.mvc.static-path-pattern=/**
+spring.web.resources.cache.period=3600
+
+# ============================================
+# VALIDATION CONFIGURATION
+# ============================================
+
+spring.mvc.validate-on-migrate=false
+
+# ============================================
+# MULTIPART FILE UPLOAD
+# ============================================
+
+spring.servlet.multipart.max-file-size=10MB
+spring.servlet.multipart.max-request-size=10MB
+
+# ============================================
+# LOGGING CONFIGURATION
+# ============================================
+# Base logging levels (can be overridden by profiles)
+logging.level.org.springframework=INFO
+logging.level.org.springframework.security=WARN
+logging.level.org.springframework.web=INFO
+logging.level.org.hibernate=INFO
+
+# Log file configuration
+logging.file.name=logs/ispice-application.log
+logging.pattern.file=%d{yyyy-MM-dd HH:mm:ss} - %msg%n
+logging.pattern.console=%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+
+# ============================================
+# APPLICATION-SPECIFIC PROPERTIES
+# ============================================
+
+# File upload paths
+app.upload.dir=uploads/
+app.max-file-size=10485760
+
+# Session timeout (in seconds)
+server.servlet.session.timeout=1800
+
+# HTTP/2 (optional)
+server.http2.enabled=false
+
+# ============================================
+# RAZORPAY CONFIGURATION
+# ============================================
+razorpay.key.id=${RAZORPAY_KEY_ID:rzp_test_SMPIWzuwbaWj3R}
+razorpay.key.secret=YOUR_VALUE_HERE
+
+# ============================================
+# OAUTH2 CONFIGURATION (GOOGLE)
+# ============================================
+spring.security.oauth2.client.registration.google.client-id=${GOOGLE_CLIENT_ID:288657900884-3eegt8ki1kl5i2ne250qu14fv7jb9o4p.apps.googleusercontent.com}
+spring.security.oauth2.client.registration.google.client-secret=YOUR_VALUE_HERE
+spring.security.oauth2.client.registration.google.scope=email,profile
+
+# ============================================
+# EMAIL CONFIGURATION (SMTP)
+# ============================================
+spring.mail.host=${SPRING_MAIL_HOST:smtp.gmail.com}
+spring.mail.port=${SPRING_MAIL_PORT:587}
+spring.mail.username=${SPRING_MAIL_USERNAME:}
+spring.mail.password=YOUR_VALUE_HERE
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+app.base-url=${APP_BASE_URL:http://localhost:8080}

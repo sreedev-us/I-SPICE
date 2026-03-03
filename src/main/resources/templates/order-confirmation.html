@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed! | I-SPICE</title>
+    <link rel="stylesheet" href="/fontawesome/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --gold: #D4AF37;
+            --gold2: #b8941f;
+            --green: #2e7d32;
+            --bg: #f9f7f0;
+            --dark: #333;
+            --gray: #666;
+            --lgray: #e8e3d5;
+            --sh: 0 5px 15px rgba(0, 0, 0, .08);
+            --tr: all .3s ease;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f9f7f0, #fffef9, #f9f7f0);
+            min-height: 100vh;
+            color: var(--dark);
+        }
+
+        .wrap {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        #app {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(212, 175, 55, .1);
+            margin: 20px auto;
+            border: 1px solid #f0e6d3;
+        }
+
+        /* ── Header ── */
+        header {
+            background: linear-gradient(to right, var(--green), var(--gold));
+            color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--sh);
+        }
+
+        .ht {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--gold);
+            overflow: hidden;
+            padding: 0;
+        }
+
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .ua {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .ci {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cc {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--green);
+            color: #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .av {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(to right, var(--gold), var(--gold2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .up {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        nav {
+            background: rgba(255, 255, 255, .1);
+            padding: 10px 20px;
+        }
+
+        .nl {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        .nl a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 0;
+            position: relative;
+            transition: var(--tr);
+        }
+
+        .nl a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #fff;
+            transition: var(--tr);
+        }
+
+        .nl a:hover::after,
+        .nl a.active::after {
+            width: 100%;
+        }
+
+        .nl a.active {
+            font-weight: 700;
+        }
+
+        /* ── Main content ── */
+        .pc {
+            padding: 50px 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ── Animated checkmark ── */
+        .success-ring {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--green), var(--gold));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            box-shadow: 0 0 0 15px rgba(46, 125, 50, .1), 0 0 0 30px rgba(46, 125, 50, .05);
+            animation: ringPop .6s cubic-bezier(.36, .07, .19, .97);
+        }
+
+        .success-ring i {
+            font-size: 54px;
+            color: #fff;
+        }
+
+        @keyframes ringPop {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            60% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .conf-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .conf-sub {
+            font-size: 17px;
+            color: var(--gray);
+            text-align: center;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        .conf-sub strong {
+            color: var(--green);
+        }
+
+        /* ── Cards grid ── */
+        .conf-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            width: 100%;
+            max-width: 900px;
+            margin-bottom: 35px;
+        }
+
+        /* ===== HAMBURGER MENU ===== */
+        .hbg {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .hbg:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .hbg span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: white;
+            border-radius: 2px;
+            transition: var(--tr);
+        }
+
+        .hbg.open span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .hbg.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hbg.open span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        .mnav {
+            display: none;
+            flex-direction: column;
+            background: rgba(0, 0, 0, 0.18);
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.35s ease;
+        }
+
+        .mnav.open {
+            max-height: 400px;
+        }
+
+        .mnav ul {
+            list-style: none;
+            padding: 10px 16px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mnav ul li a {
+            display: block;
+            padding: 12px 16px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: var(--tr);
+            font-size: 15px;
+        }
+
+        .mnav ul li a:hover,
+        .mnav ul li a.active {
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        /* ===== TABLET (≤768px) ===== */
+        @media(max-width: 768px) {
+            .ht {
+                flex-direction: row;
+                gap: 0;
+                padding: 12px 16px;
+                flex-wrap: nowrap;
+                align-items: center;
+                position: relative;
+                justify-content: space-between;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .hbg {
+                display: flex;
+                order: -1;
+            }
+
+            .mnav {
+                display: flex;
+            }
+
+            .logo {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                gap: 0;
+            }
+
+            .logo-icon {
+                display: none;
+            }
+
+            .ua {
+                order: 1;
+                gap: 14px;
+            }
+
+            .logo-text {
+                font-size: 20px;
+            }
+
+            .ua {
+                gap: 14px;
+            }
+
+            .conf-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .loyalty-banner {
+                flex-direction: column;
+                text-align: center;
+                gap: 12px;
+                padding: 18px;
+            }
+
+            .loyalty-pts {
+                margin-left: 0;
+            }
+        }
+
+        /* ===== PHONE (≤480px) ===== */
+        @media(max-width: 480px) {
+            body {
+                background: #f9f7f0;
+            }
+
+            #app {
+                margin: 10px;
+                border-radius: 14px;
+            }
+
+            .ht {
+                padding: 10px 14px;
+            }
+
+            .logo-icon {
+                width: 40px;
+                height: 40px;
+            }
+
+            .logo-text {
+                font-size: 18px;
+            }
+
+            .pc {
+                padding: 14px;
+            }
+
+            .conf-title {
+                font-size: 24px;
+            }
+
+            .conf-sub {
+                font-size: 15px;
+            }
+
+            .card {
+                padding: 16px;
+            }
+
+            .action-btns {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                justify-content: center;
+            }
+
+            .tracker {
+                padding: 16px;
+            }
+
+            .pstep-label {
+                font-size: 10px;
+            }
+        }
+
+        .card {
+            background: #fafaf5;
+            border: 1px solid #f0e6d3;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: var(--sh);
+            transition: var(--tr);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(212, 175, 55, 0.15);
+            border-color: rgba(212, 175, 55, 0.4);
+        }
+
+        .card-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gray);
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title i {
+            color: var(--gold);
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .detail-label {
+            color: var(--gray);
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: var(--dark);
+            text-align: right;
+            max-width: 60%;
+            word-break: break-word;
+        }
+
+        .detail-value.green {
+            color: var(--green);
+            font-size: 18px;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid var(--lgray);
+            margin: 12px 0;
+        }
+
+        /* ── Items list ── */
+        .item-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(232, 227, 213, .6);
+            font-size: 14px;
+        }
+
+        .item-line:last-child {
+            border-bottom: none;
+        }
+
+        .item-icon {
+            color: var(--gold);
+            margin-right: 6px;
+        }
+
+        .item-qty {
+            color: var(--gray);
+            font-size: 12px;
+            margin-left: 4px;
+        }
+
+        /* ── Loyalty banner ── */
+        .loyalty-banner {
+            width: 100%;
+            max-width: 900px;
+            background: linear-gradient(135deg, rgba(46, 125, 50, .08), rgba(212, 175, 55, .08));
+            border: 1px solid rgba(212, 175, 55, .3);
+            border-radius: 16px;
+            padding: 22px 28px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 35px;
+        }
+
+        .loyalty-icon {
+            font-size: 40px;
+        }
+
+        .loyalty-text h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .loyalty-text p {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .loyalty-pts {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(to right, var(--green), var(--gold));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-left: auto;
+            white-space: nowrap;
+        }
+
+        /* ── Status tracker ── */
+        .tracker {
+            width: 100%;
+            max-width: 900px;
+            background: #fafaf5;
+            border: 1px solid #f0e6d3;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 35px;
+        }
+
+        .tracker-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gray);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tracker-title i {
+            color: var(--gold);
+        }
+
+        .ptrack {
+            display: flex;
+            align-items: center;
+        }
+
+        .pstep {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            transition: var(--tr);
+            cursor: default;
+        }
+
+        .pstep:hover {
+            transform: scale(1.1);
+        }
+
+        .picon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            z-index: 1;
+        }
+
+        .done-i {
+            background: linear-gradient(to right, var(--green), var(--gold));
+            color: #fff;
+        }
+
+        .pend-i {
+            background: var(--lgray);
+            color: var(--gray);
+        }
+
+        .plabel2 {
+            font-size: 11px;
+            color: var(--gray);
+            margin-top: 6px;
+            text-align: center;
+        }
+
+        .done-l {
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        .pline {
+            flex: 1;
+            height: 2px;
+            background: var(--lgray);
+            margin: 0 -4px;
+            position: relative;
+            top: -18px;
+        }
+
+        .pline.filled {
+            background: linear-gradient(to right, var(--green), var(--gold));
+        }
+
+        /* ── Action buttons ── */
+        .actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .btn-primary {
+            padding: 14px 28px;
+            background: linear-gradient(to right, var(--green), var(--gold));
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--tr);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(46, 125, 50, .3);
+        }
+
+        .btn-secondary {
+            padding: 14px 28px;
+            background: #fff;
+            color: var(--green);
+            border: 2px solid var(--green);
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--tr);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(46, 125, 50, .05);
+            transform: translateY(-2px);
+        }
+
+        /* ── Countdown ── */
+        .countdown-bar {
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+
+        .countdown-bar span {
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        @media(max-width: 600px) {
+            .conf-title {
+                font-size: 26px;
+            }
+
+            .loyalty-banner {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .loyalty-pts {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div id="app">
+            <!-- Header -->
+            <header>
+                <div class="ht">
+                    <div class="logo" onclick="location.href='/dashboard'">
+                        <div class="logo-icon"><img src="/I-SPICE/logo/logo.png" alt="I-SPICE Logo"
+                                style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></div>
+                        <span class="logo-text">I-SPICE</span>
+                    </div>
+                    <div class="ua">
+                        <div class="ci" onclick="location.href='/cart'">
+                            <i class="fa-solid fa-shopping-cart" style="font-size:24px;color:#fff"></i>
+                            <span class="cc" th:text="${cartCount?:0}">0</span>
+                        </div>
+                        <div class="up" onclick="location.href='/profile'">
+                            <div class="av" th:text="${#strings.substring(user.username,0,1).toUpperCase()}">U</div>
+                            <span style="color:#fff" th:text="${user.username}">User</span>
+                        </div>
+                    </div>
+                    <button class="hbg" id="hamburgerBtn" aria-label="Toggle menu" onclick="toggleMobileNav()">
+                        <span></span><span></span><span></span>
+                    </button>
+                </div>
+                <nav>
+                    <ul class="nl">
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li><a href="/shop">Shop</a></li>
+                        <li><a href="/orders" class="active">My Orders</a></li>
+                        <li><a href="/subscriptions">Subscriptions</a></li>
+                        <li><a href="/wishlist">Wishlist</a></li>
+                        <li><a href="/profile">Profile</a></li>
+                        <li><a href="/support">Support</a></li>
+                    </ul>
+                </nav>
+                <div class="mnav" id="mobileNav">
+                    <ul>
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li><a href="/shop">Shop</a></li>
+                        <li><a href="/orders" class="active">My Orders</a></li>
+                        <li><a href="/subscriptions">Subscriptions</a></li>
+                        <li><a href="/wishlist">Wishlist</a></li>
+                        <li><a href="/profile">Profile</a></li>
+                        <li><a href="/support">Support</a></li>
+                    </ul>
+                </div>
+            </header>
+
+            <div class="pc">
+
+                <!-- Success checkmark -->
+                <div class="success-ring"><i class="fas fa-check"></i></div>
+
+                <h1 class="conf-title">Thank You for Your Order! 🎉</h1>
+                <p class="conf-sub">
+                    Your order has been confirmed, <strong th:text="${user.username}">Customer</strong>!
+                    We are processing it and will update you soon.
+                </p>
+
+                <!-- Order details grid -->
+                <div class="conf-grid" th:if="${order != null}">
+                    <!-- Left: Order info -->
+                    <div class="card">
+                        <div class="card-title"><i class="fas fa-receipt"></i> Order Details</div>
+
+                        <div class="detail-row">
+                            <span class="detail-label">Order Number</span>
+                            <span class="detail-value" style="color:var(--green)"
+                                th:text="${order.orderNumber}">ORD-001</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Date</span>
+                            <span class="detail-value"
+                                th:text="${#temporals.format(order.orderDate,'dd MMM yyyy, hh:mm a')}">—</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Payment</span>
+                            <span class="detail-value"
+                                th:text="${order.paymentMethod != null ? order.paymentMethod.replace('_',' ') : 'Online'}">Online</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Status</span>
+                            <span class="detail-value" style="color:var(--gold)"
+                                th:text="${order.status}">PENDING</span>
+                        </div>
+
+                        <hr class="divider">
+
+                        <div class="detail-row">
+                            <span class="detail-label">Subtotal</span>
+                            <span class="detail-value"
+                                th:text="'₹' + ${#numbers.formatDecimal(order.subtotal,0,'COMMA',2,'POINT')}">₹0</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Shipping</span>
+                            <span class="detail-value" th:if="${order.shipping == 0}"
+                                style="color:var(--green)">FREE</span>
+                            <span class="detail-value" th:if="${order.shipping > 0}"
+                                th:text="'₹' + ${#numbers.formatDecimal(order.shipping,0,'COMMA',2,'POINT')}">₹50</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">GST (18%)</span>
+                            <span class="detail-value"
+                                th:text="'₹' + ${#numbers.formatDecimal(order.tax,0,'COMMA',2,'POINT')}">₹0</span>
+                        </div>
+                        <div class="detail-row" style="margin-top:8px">
+                            <span class="detail-label" style="font-weight:700;font-size:16px">Total Paid</span>
+                            <span class="detail-value green"
+                                th:text="'₹' + ${#numbers.formatDecimal(order.total,0,'COMMA',2,'POINT')}">₹0</span>
+                        </div>
+                    </div>
+
+                    <!-- Right: Items + address -->
+                    <div class="card">
+                        <div class="card-title"><i class="fas fa-box"></i> Items Ordered</div>
+
+                        <div th:each="item : ${order.orderItems}" class="item-line">
+                            <div>
+                                <i class="fas fa-seedling item-icon"></i>
+                                <span th:text="${item.product != null ? item.product.name : 'Product'}">Item</span>
+                                <span class="item-qty" th:text="'×' + ${item.quantity}">×1</span>
+                            </div>
+                            <div style="font-weight:600">
+                                ₹<span th:text="${#numbers.formatDecimal(item.totalPrice,0,'COMMA',2,'POINT')}">0</span>
+                            </div>
+                        </div>
+
+                        <hr class="divider" style="margin-top:16px">
+
+                        <div class="card-title" style="margin-top:16px"><i class="fas fa-map-marker-alt"></i> Shipping
+                            To</div>
+                        <p style="font-size:14px;color:var(--dark);line-height:1.7;white-space:pre-line"
+                            th:text="${order.shippingAddress}">Address</p>
+                    </div>
+                </div>
+
+                <!-- Loyalty points banner -->
+                <div class="loyalty-banner" th:if="${order != null}">
+                    <div class="loyalty-icon">⭐</div>
+                    <div class="loyalty-text">
+                        <h4>Loyalty Points Earned!</h4>
+                        <p>Keep shopping to unlock exclusive rewards and discounts.</p>
+                    </div>
+                    <div class="loyalty-pts">
+                        +<span
+                            th:text="${order.total != null ? order.total.divide(new java.math.BigDecimal('100'), 0, T(java.math.RoundingMode).DOWN).intValue() * 10 : 0}">0</span>
+                        pts
+                    </div>
+                </div>
+
+                <!-- Order progress tracker -->
+                <div class="tracker">
+                    <div class="tracker-title"><i class="fas fa-route"></i> Order Progress</div>
+                    <div class="ptrack">
+                        <div class="pstep">
+                            <div class="picon done-i"><i class="fas fa-check"></i></div>
+                            <div class="plabel2 done-l">Placed</div>
+                        </div>
+                        <div class="pline"></div>
+                        <div class="pstep">
+                            <div class="picon pend-i"><i class="fas fa-box"></i></div>
+                            <div class="plabel2">Processing</div>
+                        </div>
+                        <div class="pline"></div>
+                        <div class="pstep">
+                            <div class="picon pend-i"><i class="fas fa-truck"></i></div>
+                            <div class="plabel2">Shipped</div>
+                        </div>
+                        <div class="pline"></div>
+                        <div class="pstep">
+                            <div class="picon pend-i"><i class="fas fa-home"></i></div>
+                            <div class="plabel2">Delivered</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Countdown redirect -->
+                <div class="countdown-bar">
+                    Redirecting to your orders in <span id="countdown">10</span> seconds…
+                </div>
+
+                <!-- Action buttons -->
+                <div class="actions">
+                    <a href="/orders" class="btn-primary">
+                        <i class="fas fa-history"></i> View My Orders
+                    </a>
+                    <a href="/shop" class="btn-secondary">
+                        <i class="fas fa-shopping-cart"></i> Continue Shopping
+                    </a>
+                </div>
+
+                <p style="margin-top:10px;color:var(--gray);font-size:13px;text-align:center">
+                    A confirmation has been noted on your account.
+                    Need help? <a href="/support" style="color:var(--green);font-weight:600">Contact Support</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        // Trigger Confetti
+        function fireConfetti() {
+            var duration = 3 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#D4AF37', '#2e7d32']
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#D4AF37', '#2e7d32']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+
+        // Fire confetti on load
+        window.addEventListener('load', fireConfetti);
+
+        // Countdown redirect
+        let seconds = 10;
+        const el = document.getElementById('countdown');
+        const timer = setInterval(() => {
+            seconds--;
+            el.textContent = seconds;
+            if (seconds <= 0) {
+                clearInterval(timer);
+                window.location.href = '/orders';
+            }
+        }, 1000);
+
+        function toggleMobileNav() {
+            document.getElementById('hamburgerBtn').classList.toggle('open');
+            document.getElementById('mobileNav').classList.toggle('open');
+        }
+    </script>
+</body>
+
+</html>

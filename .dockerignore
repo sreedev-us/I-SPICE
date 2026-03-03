@@ -1,0 +1,9 @@
+.git
+.idea
+.gradle
+build
+bin
+logs
+uploads
+*~
+*.swp

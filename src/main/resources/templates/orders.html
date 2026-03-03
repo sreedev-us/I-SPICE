@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>My Orders | I-SPICE</title>
+    <link rel="stylesheet" href="/fontawesome/css/all.min.css">
+    <!-- CSRF Tokens for AJAX -->
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+        }
+
+        :root {
+            --gold: #D4AF37;
+            --gold2: #b8941f;
+            --green: #2e7d32;
+            --bg: #f9f7f0;
+            --dark: #333;
+            --gray: #666;
+            --lgray: #e8e3d5;
+            --danger: #dc3545;
+            --warn: #ffc107;
+            --ok: #28a745;
+            --sh: 0 5px 15px rgba(0, 0, 0, .08);
+            --tr: all .3s ease
+        }
+
+        body {
+            background: linear-gradient(135deg, #f9f7f0, #fffef9, #f9f7f0);
+            min-height: 100vh;
+            color: #333
+        }
+
+        .wrap {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh
+        }
+
+        #app {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(212, 175, 55, .1);
+            margin: 20px auto;
+            border: 1px solid #f0e6d3
+        }
+
+        header {
+            background: linear-gradient(to right, var(--green), var(--gold));
+            color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--sh)
+        }
+
+        .ht {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--gold);
+            overflow: hidden;
+            padding: 2px
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff
+        }
+
+        .ua {
+            display: flex;
+            align-items: center;
+            gap: 20px
+        }
+
+        .ci {
+            position: relative;
+            cursor: pointer
+        }
+
+        .cc {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--green);
+            color: #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700
+        }
+
+        .av {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(to right, var(--gold), var(--gold2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 18px
+        }
+
+        .up {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer
+        }
+
+        nav {
+            background: rgba(255, 255, 255, .1);
+            padding: 10px 20px
+        }
+
+        .nl {
+            display: flex;
+            list-style: none;
+            gap: 25px
+        }
+
+        .nl a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 0;
+            position: relative;
+            transition: var(--tr)
+        }
+
+        .nl a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #fff;
+            transition: var(--tr)
+        }
+
+        .nl a:hover::after,
+        .nl a.active::after {
+            width: 100%
+        }
+
+        .nl a.active {
+            font-weight: 700
+        }
+
+        .pc {
+            padding: 40px 20px;
+            flex: 1
+        }
+
+        .ph {
+            margin-bottom: 30px
+        }
+
+        .pt {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark);
+            position: relative;
+            display: inline-block
+        }
+
+        .pt::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(to right, var(--green), var(--gold));
+            border-radius: 2px
+        }
+
+        .ps {
+            color: var(--gray);
+            font-size: 15px;
+            margin-top: 15px
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px
+        }
+
+        .sc {
+            background: #fff;
+            border-radius: 12px;
+            padding: 18px;
+            border: 1px solid #f0e6d3;
+            box-shadow: var(--sh);
+            text-align: center
+        }
+
+        .si {
+            font-size: 24px;
+            margin-bottom: 8px
+        }
+
+        .sv {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--dark)
+        }
+
+        .sl {
+            font-size: 12px;
+            color: var(--gray);
+            margin-top: 3px
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap
+        }
+
+        .tb {
+            padding: 9px 20px;
+            border: 2px solid var(--lgray);
+            border-radius: 25px;
+            background: #fff;
+            color: var(--gray);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--tr)
+        }
+
+        .tb:hover {
+            border-color: var(--gold);
+            color: var(--gold)
+        }
+
+        .tb.active {
+            background: linear-gradient(to right, var(--green), var(--gold));
+            color: #fff;
+            border-color: transparent
+        }
+
+        .tc {
+            background: rgba(255, 255, 255, .25);
+            border-radius: 10px;
+            padding: 2px 8px;
+            font-size: 12px;
+            margin-left: 5px
+        }
+
+        .tb:not(.active) .tc {
+            background: var(--lgray);
+            color: var(--gray)
+        }
+
+        .ol {
+            display: flex;
+            flex-direction: column;
+            gap: 20px
+        }
+
+        .oc {
+            background: #fff;
+            border-radius: 16px;
+            border: 1px solid #f0e6d3;
+            box-shadow: var(--sh);
+            overflow: hidden;
+            transition: var(--tr)
+        }
+
+        .oc:hover {
+            box-shadow: 0 10px 30px rgba(212, 175, 55, .15);
+            transform: translateY(-2px)
+        }
+
+        .oh {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 25px;
+            background: linear-gradient(135deg, #fafaf5, #fff9f0);
+            border-bottom: 1px solid #f0e6d3;
+            flex-wrap: wrap;
+            gap: 12px
+        }
+
+        .on {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dark)
+        }
+
+        .od {
+            font-size: 13px;
+            color: var(--gray);
+            margin-top: 3px
+        }
+
+        .sb {
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .5px
+        }
+
+        .sPENDING {
+            background: rgba(255, 193, 7, .15);
+            color: #856404;
+            border: 1px solid rgba(255, 193, 7, .4)
+        }
+
+        .sPROCESSING {
+            background: rgba(13, 110, 253, .1);
+            color: #0951cc;
+            border: 1px solid rgba(13, 110, 253, .3)
+        }
+
+        .sSHIPPED {
+            background: rgba(111, 66, 193, .1);
+            color: #6f42c1;
+            border: 1px solid rgba(111, 66, 193, .3)
+        }
+
+        .sDELIVERED {
+            background: rgba(40, 167, 69, .1);
+            color: #185a2a;
+            border: 1px solid rgba(40, 167, 69, .3)
+        }
+
+        .sCANCELLED {
+            background: rgba(220, 53, 69, .1);
+            color: #842029;
+            border: 1px solid rgba(220, 53, 69, .3)
+        }
+
+        .ob {
+            padding: 20px 25px
+        }
+
+        .items-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px
+        }
+
+        .ic {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg);
+            border-radius: 8px;
+            padding: 7px 12px;
+            font-size: 13px;
+            border: 1px solid var(--lgray)
+        }
+
+        .ic i {
+            color: var(--gold)
+        }
+
+        .iq {
+            font-weight: 600
+        }
+
+        .more {
+            background: rgba(212, 175, 55, .1);
+            color: var(--gold2);
+            border-color: rgba(212, 175, 55, .3);
+            font-weight: 600
+        }
+
+        .meta {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+            align-items: center
+        }
+
+        .mi {
+            display: flex;
+            flex-direction: column;
+            gap: 3px
+        }
+
+        .ml {
+            font-size: 12px;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: .5px
+        }
+
+        .mv {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--dark)
+        }
+
+        .op {
+            padding: 15px 25px 20px;
+            border-top: 1px solid #f0e6d3
+        }
+
+        .plabel {
+            font-size: 12px;
+            color: var(--gray);
+            margin-bottom: 10px
+        }
+
+        .ptrack {
+            display: flex;
+            align-items: center
+        }
+
+        .pstep {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1
+        }
+
+        .picon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            z-index: 1
+        }
+
+        .done-i {
+            background: linear-gradient(to right, var(--green), var(--gold));
+            color: #fff
+        }
+
+        .cur-i {
+            background: #fff;
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            animation: pulse 1.5s infinite
+        }
+
+        .pend-i {
+            background: var(--lgray);
+            color: var(--gray)
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(212, 175, 55, .4)
+            }
+
+            50% {
+                box-shadow: 0 0 0 6px rgba(212, 175, 55, 0)
+            }
+        }
+
+        .plabel2 {
+            font-size: 11px;
+            color: var(--gray);
+            margin-top: 5px;
+            text-align: center
+        }
+
+        .done-l {
+            color: var(--green);
+            font-weight: 600
+        }
+
+        .pline {
+            flex: 1;
+            height: 2px;
+            background: var(--lgray);
+            margin: 0 -4px;
+            position: relative;
+            top: -15px
+        }
+
+        .pline.filled {
+            background: linear-gradient(to right, var(--green), var(--gold))
+        }
+
+        .of {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 15px 25px;
+            border-top: 1px solid #f0e6d3;
+            flex-wrap: wrap
+        }
+
+        .bo {
+            padding: 9px 18px;
+            border: 2px solid var(--lgray);
+            border-radius: 8px;
+            background: #fff;
+            color: var(--gray);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--tr);
+            display: flex;
+            align-items: center;
+            gap: 6px
+        }
+
+        .bo:hover {
+            border-color: var(--gold);
+            color: var(--gold)
+        }
+
+        .bp {
+            padding: 9px 18px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(to right, var(--green), var(--gold));
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--tr);
+            display: flex;
+            align-items: center;
+            gap: 6px
+        }
+
+        .bp:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(46, 125, 50, .3)
+        }
+
+        .bdr {
+            border-color: var(--danger);
+            color: var(--danger)
+        }
+
+        .bdr:hover {
+            background: var(--danger);
+            color: #fff
+        }
+
+        .empty {
+            text-align: center;
+            padding: 80px 20px
+        }
+
+        .ei {
+            font-size: 64px;
+            color: var(--lgray);
+            margin-bottom: 20px
+        }
+
+        .et {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 10px
+        }
+
+        .es {
+            color: var(--gray);
+            margin-bottom: 30px;
+            line-height: 1.6
+        }
+
+        .footer-logout {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            border-top: 1px solid var(--lgray)
+        }
+
+        .logout-link {
+            color: var(--green);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .logout-link:hover {
+            color: var(--gold);
+            text-decoration: underline
+        }
+
+        /* ===== HAMBURGER MENU ===== */
+        .hbg {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: var(--tr);
+        }
+
+        .hbg:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .hbg span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: white;
+            border-radius: 2px;
+            transition: var(--tr);
+        }
+
+        .hbg.open span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .hbg.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hbg.open span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        .mnav {
+            display: none;
+            flex-direction: column;
+            background: rgba(0, 0, 0, 0.18);
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.35s ease;
+        }
+
+        .mnav.open {
+            max-height: 400px;
+        }
+
+        .mnav ul {
+            list-style: none;
+            padding: 10px 16px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mnav ul li a {
+            display: block;
+            padding: 12px 16px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: var(--tr);
+            font-size: 15px;
+        }
+
+        .mnav ul li a:hover,
+        .mnav ul li a.active {
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        /* ===== TABLET (≤768px) ===== */
+        @media(max-width:768px) {
+            .ht {
+                flex-direction: row;
+                gap: 0;
+                padding: 12px 16px;
+                flex-wrap: nowrap;
+                align-items: center;
+                position: relative;
+                justify-content: space-between;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .hbg {
+                display: flex;
+                order: -1;
+            }
+
+            .mnav {
+                display: flex;
+            }
+
+            .logo {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                gap: 0;
+            }
+
+            .logo-icon {
+                display: none;
+            }
+
+            .ua {
+                order: 1;
+                gap: 14px;
+            }
+
+            .logo-text {
+                font-size: 20px;
+            }
+
+            .ua {
+                gap: 14px;
+            }
+
+            .oh,
+            .meta {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        /* ===== PHONE (≤480px) ===== */
+        @media(max-width:480px) {
+            body {
+                background: #f9f7f0;
+            }
+
+            #app {
+                margin: 10px;
+                border-radius: 14px;
+            }
+
+            .ht {
+                padding: 10px 14px;
+            }
+
+            .logo-icon {
+                width: 40px;
+                height: 40px;
+            }
+
+            .logo-text {
+                font-size: 18px;
+            }
+
+            .ph {
+                padding: 16px;
+            }
+
+            .pt {
+                font-size: 20px;
+            }
+
+            .pc {
+                padding: 14px;
+            }
+
+            .order-card {
+                padding: 14px;
+            }
+
+            .oh {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .meta {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .btn-view,
+            .btn-cancel {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div id="app">
+            <header>
+                <div class="ht">
+                    <div class="logo" onclick="location.href='/dashboard'">
+                        <div class="logo-icon"><img src="/I-SPICE/logo/logo.png" alt="I-SPICE Logo"
+                                style="width:100%;height:100%;object-fit:cover;border-radius:50%"></div>
+                        <span class="logo-text">I-SPICE</span>
+                    </div>
+                    <div class="ua">
+                        <div class="ci" onclick="location.href='/cart'">
+                            <i class="fa-solid fa-shopping-cart" style="font-size:24px;color:#fff"></i>
+                            <span class="cc" id="cartCount" th:text="${cartCount?:0}">0</span>
+                        </div>
+                        <div class="up" onclick="location.href='/profile'">
+                            <div class="av" th:text="${#strings.substring(user.username,0,1).toUpperCase()}">U</div>
+                            <span style="color:#fff" th:text="${user.username}">User</span>
+                        </div>
+                    </div>
+                    <button class="hbg" id="hamburgerBtn" aria-label="Toggle menu" onclick="toggleMobileNav()">
+                        <span></span><span></span><span></span>
+                    </button>
+                </div>
+                <nav>
+                    <ul class="nl">
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li><a href="/shop">Shop</a></li>
+                        <li><a href="/orders" class="active">My Orders</a></li>
+                        <li><a href="/subscriptions">Subscriptions</a></li>
+                        <li><a href="/wishlist">Wishlist</a></li>
+                        <li><a href="/profile">Profile</a></li>
+                        <li><a href="/support">Support</a></li>
+                    </ul>
+                </nav>
+                <div class="mnav" id="mobileNav">
+                    <ul>
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li><a href="/shop">Shop</a></li>
+                        <li><a href="/orders" class="active">My Orders</a></li>
+                        <li><a href="/subscriptions">Subscriptions</a></li>
+                        <li><a href="/wishlist">Wishlist</a></li>
+                        <li><a href="/profile">Profile</a></li>
+                        <li><a href="/support">Support</a></li>
+                    </ul>
+                </div>
+            </header>
+
+            <div class="pc">
+                <div class="ph">
+                    <h1 class="pt">My Orders</h1>
+                    <p class="ps">Track and manage all your I-SPICE purchases</p>
+                </div>
+
+                <div class="stats" th:if="${orders!=null and !orders.isEmpty()}">
+                    <div class="sc">
+                        <div class="si">📦</div>
+                        <div class="sv" th:text="${orders.size()}">0</div>
+                        <div class="sl">Total Orders</div>
+                    </div>
+                    <div class="sc">
+                        <div class="si">✅</div>
+                        <div class="sv" th:text="${#lists.size(orders.?[status.name()=='DELIVERED'])}">0</div>
+                        <div class="sl">Delivered</div>
+                    </div>
+                    <div class="sc">
+                        <div class="si">🚚</div>
+                        <div class="sv"
+                            th:text="${#lists.size(orders.?[status.name()=='SHIPPED' or status.name()=='PROCESSING'])}">
+                            0</div>
+                        <div class="sl">In Transit</div>
+                    </div>
+                    <div class="sc">
+                        <div class="si">⭐</div>
+                        <div class="sv" th:text="${user.loyaltyPoints}">0</div>
+                        <div class="sl">Loyalty Points</div>
+                    </div>
+                </div>
+
+                <div class="tabs" th:if="${orders!=null and !orders.isEmpty()}">
+                    <button class="tb active" onclick="filterOrders('all',this)">All <span class="tc"
+                            th:text="${orders.size()}">0</span></button>
+                    <button class="tb" onclick="filterOrders('active',this)">Active <span class="tc"
+                            th:text="${#lists.size(orders.?[status.name()=='PENDING' or status.name()=='PROCESSING' or status.name()=='SHIPPED'])}">0</span></button>
+                    <button class="tb" onclick="filterOrders('DELIVERED',this)">Delivered <span class="tc"
+                            th:text="${#lists.size(orders.?[status.name()=='DELIVERED'])}">0</span></button>
+                    <button class="tb" onclick="filterOrders('CANCELLED',this)">Cancelled <span class="tc"
+                            th:text="${#lists.size(orders.?[status.name()=='CANCELLED'])}">0</span></button>
+                </div>
+
+                <div class="ol" id="ordersList">
+                    <div th:each="order : ${orders}" th:attr="data-status=${order.status.name()}" class="oc">
+                        <div class="oh">
+                            <div>
+                                <div class="on"><i class="fas fa-receipt"
+                                        style="color:var(--gold);margin-right:8px"></i><span
+                                        th:text="${order.orderNumber}">ORD-001</span></div>
+                                <div class="od">Placed <span
+                                        th:text="${#temporals.format(order.orderDate,'MMM dd, yyyy')}">Jan 1,
+                                        2025</span></div>
+                            </div>
+                            <span class="sb" th:classappend="'s'+${order.status.name()}"
+                                th:text="${order.status.name()}">PENDING</span>
+                        </div>
+                        <div class="ob">
+                            <div class="items-row">
+                                <div th:each="item,i : ${order.orderItems}" th:if="${i.index<3}" class="ic">
+                                    <i class="fas fa-seedling"></i>
+                                    <span th:text="${item.product!=null?item.product.name:'Product'}">Item</span>
+                                    <span class="iq" th:text="'×'+${item.quantity}">×1</span>
+                                </div>
+                                <div class="ic more" th:if="${order.orderItems.size()>3}">+<span
+                                        th:text="${order.orderItems.size()-3}">0</span> more</div>
+                            </div>
+                            <div class="meta">
+                                <div class="mi"><span class="ml">Total</span><span class="mv"
+                                        th:text="'₹'+${#numbers.formatDecimal(order.total,0,'COMMA',2,'POINT')}">₹0</span>
+                                </div>
+                                <div class="mi"><span class="ml">Items</span><span class="mv"
+                                        th:text="${order.itemCount}+' items'">0 items</span></div>
+                                <div class="mi"><span class="ml">Payment</span><span class="mv"
+                                        th:text="${order.paymentMethod?:'Online'}">Online</span></div>
+                                <div class="mi" th:if="${order.trackingNumber!=null}"><span
+                                        class="ml">Tracking</span><span class="mv"
+                                        th:text="${order.trackingNumber}">TRK-001</span></div>
+                            </div>
+                        </div>
+                        <!-- Progress Bar -->
+                        <div class="op" th:if="${order.status.name()!='CANCELLED' and order.status.name()!='REFUNDED'}">
+                            <div class="plabel"><i class="fas fa-route"></i> Order Progress</div>
+                            <div class="ptrack">
+                                <div class="pstep">
+                                    <div class="picon done-i"><i class="fas fa-check"></i></div>
+                                    <div class="plabel2 done-l">Placed</div>
+                                </div>
+                                <div class="pline" th:classappend="${order.status.name()!='PENDING'}?' filled':''">
+                                </div>
+                                <div class="pstep">
+                                    <div class="picon"
+                                        th:classappend="${order.status.name()=='PROCESSING'}?'cur-i':(${order.status.name()=='SHIPPED' or order.status.name()=='DELIVERED'}?'done-i':'pend-i')">
+                                        <i class="fas fa-box"></i>
+                                    </div>
+                                    <div class="plabel2" th:classappend="${order.status.name()!='PENDING'}?'done-l':''">
+                                        Processing</div>
+                                </div>
+                                <div class="pline"
+                                    th:classappend="${order.status.name()=='SHIPPED' or order.status.name()=='DELIVERED'}?' filled':''">
+                                </div>
+                                <div class="pstep">
+                                    <div class="picon"
+                                        th:classappend="${order.status.name()=='SHIPPED'}?'cur-i':(${order.status.name()=='DELIVERED'}?'done-i':'pend-i')">
+                                        <i class="fas fa-truck"></i>
+                                    </div>
+                                    <div class="plabel2"
+                                        th:classappend="${order.status.name()=='SHIPPED' or order.status.name()=='DELIVERED'}?'done-l':''">
+                                        Shipped</div>
+                                </div>
+                                <div class="pline" th:classappend="${order.status.name()=='DELIVERED'}?' filled':''">
+                                </div>
+                                <div class="pstep">
+                                    <div class="picon"
+                                        th:classappend="${order.status.name()=='DELIVERED'}?'done-i':'pend-i'"><i
+                                            class="fas fa-home"></i></div>
+                                    <div class="plabel2"
+                                        th:classappend="${order.status.name()=='DELIVERED'}?'done-l':''">Delivered</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="of">
+                            <button class="bo" onclick="location.href='/support'"><i class="fas fa-headset"></i>
+                                Help</button>
+                            <button class="bo bdr" th:if="${order.status.name()=='PENDING'}" th:data-id="${order.id}"
+                                onclick="cancelOrder(this.getAttribute('data-id'))"><i class="fas fa-times"></i>
+                                Cancel</button>
+                            <button class="bp" th:data-id="${order.id}"
+                                onclick="reorderOrder(this.getAttribute('data-id'))"><i class="fas fa-redo"></i>
+                                Reorder</button>
+                        </div>
+                    </div>
+
+                    <div th:if="${orders==null or orders.isEmpty()}" class="empty">
+                        <div class="ei">📦</div>
+                        <h3 class="et">No orders yet</h3>
+                        <p class="es">You haven't placed any orders yet.<br>Explore our premium spice collection!</p>
+                        <button class="bp" onclick="location.href='/shop'"
+                            style="margin:0 auto;padding:14px 30px;font-size:15px"><i class="fas fa-store"></i> Start
+                            Shopping</button>
+                    </div>
+                </div>
+
+                <div class="footer-logout">
+                    <form th:action="@{/logout}" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <button type="submit" class="logout-link"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function filterOrders(f, btn) {
+            document.querySelectorAll('.tb').forEach(b => b.classList.remove('active')); btn.classList.add('active');
+            document.querySelectorAll('#ordersList .oc').forEach(c => {
+                const s = c.getAttribute('data-status');
+                let show = f === 'all';
+                if (f === 'active') show = ['PENDING', 'PROCESSING', 'SHIPPED'].includes(s);
+                else if (f !== 'all') show = s === f;
+                c.style.display = show ? 'block' : 'none';
+            });
+        }
+    </script>
+    <script>
+        function toggleMobileNav() {
+            document.getElementById('hamburgerBtn').classList.toggle('open');
+            document.getElementById('mobileNav').classList.toggle('open');
+        }
+
+        function cancelOrder(id) {
+            if (!confirm('Are you sure you want to cancel this order?')) {
+                return;
+            }
+
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+            fetch('/api/orders/' + id + '/cancel', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [csrfHeader]: csrfToken
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Order cancelled successfully');
+                        location.reload();
+                    } else {
+                        alert('Error cancelling order: ' + (data.message || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error cancelling order. Please try again.');
+                });
+        }
+
+        function reorderOrder(id) {
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+            fetch('/api/orders/' + id + '/reorder', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [csrfHeader]: csrfToken
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Order items added to your cart!');
+                        location.href = '/cart';
+                    } else {
+                        alert('Error reordering: ' + (data.message || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error reordering. Please try again.');
+                });
+        }
+    </script>
+</body>
+
+</html>
