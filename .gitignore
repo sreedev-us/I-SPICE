@@ -44,3 +44,9 @@ format.py
 run.py
 check_brackets.py
 fix_pc.py
+
+# Logs
+logs/
+*.log
+*.log.*
+*.gz
