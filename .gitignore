@@ -37,7 +37,6 @@ out/
 .vscode/
 
 # Sensitive configuration - never commit real credentials
-src/main/resources/application.properties
 *.py
 remove_bom.py
 format.py
