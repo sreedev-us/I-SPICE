@@ -830,6 +830,12 @@
                 text-align: center;
             }
         }
+
+        @media (max-width: 768px) {
+            .hide-mobile-name {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -850,7 +856,7 @@
                         </div>
                         <div class="up" onclick="location.href='/profile'">
                             <div class="av" th:text="${#strings.substring(user.username,0,1).toUpperCase()}">U</div>
-                            <span style="color:#fff" th:text="${user.username}">User</span>
+                            <span style="color:#fff" class="hide-mobile-name" th:text="${user.username}">User</span>
                         </div>
                     </div>
                     <button class="hbg" id="hamburgerBtn" aria-label="Toggle menu" onclick="toggleMobileNav()">
@@ -941,7 +947,7 @@
                             <div class="items-row">
                                 <div th:each="item,i : ${order.orderItems}" th:if="${i.index<3}" class="ic">
                                     <i class="fas fa-seedling"></i>
-                                    <span th:text="${item.product!=null?item.product.name:'Product'}">Item</span>
+                                    <span th:text="${item.productName!=null?item.productName:'Product'}">Item</span>
                                     <span class="iq" th:text="'×'+${item.quantity}">×1</span>
                                 </div>
                                 <div class="ic more" th:if="${order.orderItems.size()>3}">+<span

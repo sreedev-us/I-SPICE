@@ -14,11 +14,11 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<OrderItem> orderItems = new ArrayList<>();
 
     @Column(name = "order_number", unique = true)
@@ -74,7 +74,8 @@ public class Order {
     private LocalDateTime updatedAt;
 
     // Constructors
-    public Order() {}
+    public Order() {
+    }
 
     public Order(User user) {
         this.user = user;
@@ -110,78 +111,177 @@ public class Order {
 
     // Helper methods
     private String generateOrderNumber() {
-        return "ORD-" + System.currentTimeMillis() + "-" + (int)(Math.random() * 1000);
+        return "ORD-" + System.currentTimeMillis() + "-" + (int) (Math.random() * 1000);
     }
 
     private BigDecimal calculateTax() {
-        if (subtotal == null) return BigDecimal.ZERO;
+        if (subtotal == null)
+            return BigDecimal.ZERO;
         // 18% GST tax
         return subtotal.multiply(BigDecimal.valueOf(0.18));
     }
 
     // Getters and setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public List<OrderItem> getOrderItems() { return orderItems; }
-    public void setOrderItems(List<OrderItem> orderItems) { this.orderItems = orderItems; }
+    public User getUser() {
+        return user;
+    }
 
-    public String getOrderNumber() { return orderNumber; }
-    public void setOrderNumber(String orderNumber) { this.orderNumber = orderNumber; }
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-    public LocalDateTime getOrderDate() { return orderDate; }
-    public void setOrderDate(LocalDateTime orderDate) { this.orderDate = orderDate; }
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
 
-    public OrderStatus getStatus() { return status; }
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
+
+    public String getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
+    public LocalDateTime getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(LocalDateTime orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
     public void setStatus(OrderStatus status) {
         this.status = status;
         this.updatedAt = LocalDateTime.now();
     }
 
-    public BigDecimal getSubtotal() { return subtotal; }
-    public void setSubtotal(BigDecimal subtotal) { this.subtotal = subtotal; }
+    public BigDecimal getSubtotal() {
+        return subtotal;
+    }
 
-    public BigDecimal getShipping() { return shipping; }
-    public void setShipping(BigDecimal shipping) { this.shipping = shipping; }
+    public void setSubtotal(BigDecimal subtotal) {
+        this.subtotal = subtotal;
+    }
 
-    public BigDecimal getTax() { return tax; }
-    public void setTax(BigDecimal tax) { this.tax = tax; }
+    public BigDecimal getShipping() {
+        return shipping;
+    }
 
-    public BigDecimal getTotal() { return total; }
-    public void setTotal(BigDecimal total) { this.total = total; }
+    public void setShipping(BigDecimal shipping) {
+        this.shipping = shipping;
+    }
 
-    public String getShippingAddress() { return shippingAddress; }
-    public void setShippingAddress(String shippingAddress) { this.shippingAddress = shippingAddress; }
+    public BigDecimal getTax() {
+        return tax;
+    }
 
-    public String getBillingAddress() { return billingAddress; }
-    public void setBillingAddress(String billingAddress) { this.billingAddress = billingAddress; }
+    public void setTax(BigDecimal tax) {
+        this.tax = tax;
+    }
 
-    public String getPaymentMethod() { return paymentMethod; }
-    public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
+    public BigDecimal getTotal() {
+        return total;
+    }
 
-    public String getPaymentStatus() { return paymentStatus; }
-    public void setPaymentStatus(String paymentStatus) { this.paymentStatus = paymentStatus; }
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
 
-    public String getTrackingNumber() { return trackingNumber; }
-    public void setTrackingNumber(String trackingNumber) { this.trackingNumber = trackingNumber; }
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
 
-    public String getDeliveryNotes() { return deliveryNotes; }
-    public void setDeliveryNotes(String deliveryNotes) { this.deliveryNotes = deliveryNotes; }
+    public void setShippingAddress(String shippingAddress) {
+        this.shippingAddress = shippingAddress;
+    }
 
-    public LocalDateTime getEstimatedDelivery() { return estimatedDelivery; }
-    public void setEstimatedDelivery(LocalDateTime estimatedDelivery) { this.estimatedDelivery = estimatedDelivery; }
+    public String getBillingAddress() {
+        return billingAddress;
+    }
 
-    public LocalDateTime getDeliveredAt() { return deliveredAt; }
-    public void setDeliveredAt(LocalDateTime deliveredAt) { this.deliveredAt = deliveredAt; }
+    public void setBillingAddress(String billingAddress) {
+        this.billingAddress = billingAddress;
+    }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
 
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+    public String getTrackingNumber() {
+        return trackingNumber;
+    }
+
+    public void setTrackingNumber(String trackingNumber) {
+        this.trackingNumber = trackingNumber;
+    }
+
+    public String getDeliveryNotes() {
+        return deliveryNotes;
+    }
+
+    public void setDeliveryNotes(String deliveryNotes) {
+        this.deliveryNotes = deliveryNotes;
+    }
+
+    public LocalDateTime getEstimatedDelivery() {
+        return estimatedDelivery;
+    }
+
+    public void setEstimatedDelivery(LocalDateTime estimatedDelivery) {
+        this.estimatedDelivery = estimatedDelivery;
+    }
+
+    public LocalDateTime getDeliveredAt() {
+        return deliveredAt;
+    }
+
+    public void setDeliveredAt(LocalDateTime deliveredAt) {
+        this.deliveredAt = deliveredAt;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
     // Business methods
     public void addOrderItem(OrderItem item) {
@@ -244,11 +344,16 @@ public class Order {
 
     @PrePersist
     protected void onCreate() {
-        if (createdAt == null) createdAt = LocalDateTime.now();
-        if (updatedAt == null) updatedAt = LocalDateTime.now();
-        if (orderDate == null) orderDate = LocalDateTime.now();
-        if (orderNumber == null) orderNumber = generateOrderNumber();
-        if (subtotal == null || total == null) calculateTotals();
+        if (createdAt == null)
+            createdAt = LocalDateTime.now();
+        if (updatedAt == null)
+            updatedAt = LocalDateTime.now();
+        if (orderDate == null)
+            orderDate = LocalDateTime.now();
+        if (orderNumber == null)
+            orderNumber = generateOrderNumber();
+        if (subtotal == null || total == null)
+            calculateTotals();
     }
 
     @PreUpdate
@@ -258,11 +363,11 @@ public class Order {
 
     // Enum for order status
     public enum OrderStatus {
-        PENDING,        // Order placed but not processed
-        PROCESSING,     // Order is being prepared
-        SHIPPED,        // Order has been shipped
-        DELIVERED,      // Order delivered to customer
-        CANCELLED,      // Order cancelled
-        REFUNDED        // Order refunded
+        PENDING, // Order placed but not processed
+        PROCESSING, // Order is being prepared
+        SHIPPED, // Order has been shipped
+        DELIVERED, // Order delivered to customer
+        CANCELLED, // Order cancelled
+        REFUNDED // Order refunded
     }
 }

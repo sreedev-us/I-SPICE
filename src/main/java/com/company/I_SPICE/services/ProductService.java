@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +21,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 public class ProductService {
 
     private final ProductRepository productRepository;
@@ -54,11 +56,13 @@ public class ProductService {
         return productRepository.findById(id);
     }
 
+    @Transactional
     @CacheEvict(value = { "products", "products_featured", "products_category", "product" }, allEntries = true)
     public Product saveProduct(Product product) {
         return productRepository.save(product);
     }
 
+    @Transactional
     @CacheEvict(value = { "products", "products_featured", "products_category", "product" }, allEntries = true)
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);

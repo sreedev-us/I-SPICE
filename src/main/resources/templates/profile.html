@@ -815,6 +815,7 @@
                 gap: 12px;
             }
         }
+    @media (max-width: 768px) { .hide-mobile-name { display: none !important; } } 
     </style>
 </head>
 
@@ -835,7 +836,7 @@
                         </div>
                         <div class="up">
                             <div class="av" th:text="${#strings.substring(user.username,0,1).toUpperCase()}">U</div>
-                            <span style="color:#fff" th:text="${user.username}">User</span>
+                            <span style="color:#fff" class="hide-mobile-name" th:text="${user.username}">User</span>
                         </div>
                     </div>
                     <button class="hbg" id="hamburgerBtn" aria-label="Toggle menu" onclick="toggleMobileNav()">
@@ -1108,3 +1109,4 @@
 </body>
 
 </html>
+

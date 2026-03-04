@@ -1165,21 +1165,23 @@ Country" th:errorclass="error"></textarea>
                     <!-- Order Items -->
                     <div class="order-items">
                         <!-- Dynamic items from cart -->
-                        <div class="order-item" th:each="item : ${cart.items}">
-                            <div class="item-details">
-                                <div class="item-image">
-                                    <i class="fas fa-leaf"></i>
+                        <th:block th:if="${cart != null && cart.items != null}">
+                            <div class="order-item" th:each="item : ${cart.items}">
+                                <div class="item-details">
+                                    <div class="item-image">
+                                        <i class="fas fa-leaf"></i>
+                                    </div>
+                                    <div>
+                                        <div class="item-name" th:text="${item.product.name}">Product Name</div>
+                                        <div class="item-quantity" th:text="'Qty: ' + ${item.quantity}">Qty: 1</div>
+                                    </div>
                                 </div>
-                                <div>
-                                    <div class="item-name" th:text="${item.product.name}">Product Name</div>
-                                    <div class="item-quantity" th:text="'Qty: ' + ${item.quantity}">Qty: 1</div>
+                                <div class="item-price">
+                                    ₹<span
+                                        th:text="${#numbers.formatDecimal(item.totalPrice, 0, 'COMMA', 2, 'POINT')}">0.00</span>
                                 </div>
                             </div>
-                            <div class="item-price">
-                                ₹<span
-                                    th:text="${#numbers.formatDecimal(item.totalPrice, 0, 'COMMA', 2, 'POINT')}">0.00</span>
-                            </div>
-                        </div>
+                        </th:block>
 
                         <!-- Empty cart message -->
                         <div th:if="${cart == null || cart.items.isEmpty()}"
@@ -1191,7 +1193,7 @@ Country" th:errorclass="error"></textarea>
                     </div>
 
                     <!-- Calculations -->
-                    <div class="calculation">
+                    <div class="calculation" th:if="${cart != null}">
                         <div class="calc-row">
                             <span>Subtotal</span>
                             <span>₹<span id="subtotal"
@@ -1213,6 +1215,25 @@ Country" th:errorclass="error"></textarea>
                             <span>Total</span>
                             <span class="total-amount">₹<span id="total"
                                     th:text="${#numbers.formatDecimal(cart.total, 0, 'COMMA', 2, 'POINT')}">0.00</span></span>
+                        </div>
+                    </div>
+
+                    <div class="calculation" th:if="${cart == null}">
+                        <div class="calc-row">
+                            <span>Subtotal</span>
+                            <span>₹<span id="subtotal">0.00</span></span>
+                        </div>
+                        <div class="calc-row">
+                            <span>Shipping</span>
+                            <span>₹0.00</span>
+                        </div>
+                        <div class="calc-row">
+                            <span>Tax (18%)</span>
+                            <span>₹<span id="tax">0.00</span></span>
+                        </div>
+                        <div class="calc-row total">
+                            <span>Total</span>
+                            <span class="total-amount">₹<span id="total">0.00</span></span>
                         </div>
                     </div>
 

@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ispice-app:prod
+    container_name: ispice-prod
+    restart: unless-stopped
+    ports:
+      - "80:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      # Database Connection
+      - DB_URL=${DB_URL}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+
+      # APIs & Third-Party
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - RAZORPAY_KEY_ID=${RAZORPAY_KEY_ID}
+      - RAZORPAY_KEY_SECRET=${RAZORPAY_KEY_SECRET}
+
+      # Security & Sessions
+      - SPRING_SECURITY_USER_NAME=${ADMIN_USER:-user}
+      - SPRING_SECURITY_USER_PASSWORD=${ADMIN_PASSWORD:-password}
+
+      # App Settings
+      - THYMELEAF_CACHE=true
+      - APP_BASE_URL=${APP_BASE_URL:-http://localhost}
+
+    # Ensure Docker allocates enough memory but caps it
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+
+    volumes:
+      - app-logs:/app/logs
+      - app-uploads:/app/uploads
+
+volumes:
+  app-logs:
+  app-uploads:

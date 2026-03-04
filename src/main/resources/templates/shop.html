@@ -1017,6 +1017,7 @@
                 font-size: 13px;
             }
         }
+    @media (max-width: 768px) { .hide-mobile-name { display: none !important; } } 
     </style>
 </head>
 
@@ -1039,7 +1040,7 @@
                         <div class="user-profile" onclick="window.location.href='/profile'" th:if="${user != null}">
                             <div class="avatar" th:text="${#strings.substring(user.username, 0, 1).toUpperCase()}">U
                             </div>
-                            <span th:text="${user.username}">User</span>
+                            <span class="hide-mobile-name" th:text="${user.username}">User</span>
                         </div>
                         <div class="user-profile" onclick="window.location.href='/login'" th:unless="${user != null}">
                             <div class="avatar">?</div>
@@ -1510,3 +1511,4 @@
 </body>
 
 </html>
+

@@ -42,7 +42,8 @@ public class HomeController {
 
     @GetMapping({ "/", "/home", "/dashboard" })
     public String home(Model model, Principal principal, HttpServletRequest request) {
-        System.out.println("Ã°Å¸ÂÂ  Dashboard accessed by: " + (principal != null ? principal.getName() : "anonymous"));
+        System.out
+                .println("Ã°Å¸ÂÂ  Dashboard accessed by: " + (principal != null ? principal.getName() : "anonymous"));
 
         if (principal == null) {
             return "redirect:/login";
@@ -86,7 +87,8 @@ public class HomeController {
 
             model.addAttribute("featuredProducts", featuredProducts);
             System.out
-                    .println("Ã°Å¸â€œÂ¦ Featured products count: " + (featuredProducts != null ? featuredProducts.size() : 0));
+                    .println("Ã°Å¸â€œÂ¦ Featured products count: "
+                            + (featuredProducts != null ? featuredProducts.size() : 0));
 
             // Add sustainability calculations
             model.addAttribute("plasticSaved", calculatePlasticSaved(orderCount));
@@ -306,8 +308,7 @@ public class HomeController {
             return "redirect:/checkout";
         }
 
-        User user = userService.findByEmail(principal.getName())
-                .orElseGet(() -> userService.findByUsername(principal.getName()).orElse(null));
+        User user = userService.getUserFromPrincipal(principal).orElse(null);
 
         if (user != null) {
             model.addAttribute("user", user);
@@ -401,7 +402,8 @@ public class HomeController {
         }
 
         try {
-            User user = userService.getUserFromPrincipal(principal).orElseThrow(() -> new RuntimeException("User not found"));
+            User user = userService.getUserFromPrincipal(principal)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
 
             System.out.println("Ã¢Å“â€¦ API: User found - ID: " + user.getId() + ", Name: " + user.getUsername());
 
@@ -583,8 +585,8 @@ public class HomeController {
 
     @GetMapping("/orders/history")
     @ResponseBody
-    public List<Order> getOrderHistory(Principal principal) {
-        System.out.println("Ã°Å¸â€œÅ“ API: Get order history");
+    public List<Map<String, Object>> getOrderHistory(Principal principal) {
+        System.out.println("📔 API: Get order history");
 
         if (principal == null) {
             return Collections.emptyList();
@@ -595,11 +597,47 @@ public class HomeController {
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
             List<Order> orders = orderService.getUserOrders(user.getId());
-            System.out.println("Ã¢Å“â€¦ API: Returning " + orders.size() + " orders");
-            return orders;
+            System.out.println("✅ API: Returning " + orders.size() + " orders");
+
+            // Map to safe DTOs to avoid circular JSON serialization
+            // (Order→User→Cart→User...)
+            List<Map<String, Object>> dtos = new ArrayList<>();
+            for (Order o : orders) {
+                Map<String, Object> dto = new HashMap<>();
+                dto.put("id", o.getId());
+                dto.put("orderNumber", o.getOrderNumber());
+                dto.put("status", o.getStatus());
+                dto.put("paymentStatus", o.getPaymentStatus());
+                dto.put("paymentMethod", o.getPaymentMethod());
+                dto.put("subtotal", o.getSubtotal());
+                dto.put("shipping", o.getShipping());
+                dto.put("tax", o.getTax());
+                dto.put("total", o.getTotal());
+                dto.put("orderDate", o.getOrderDate());
+                dto.put("shippingAddress", o.getShippingAddress());
+                dto.put("itemCount", o.getItemCount());
+
+                List<Map<String, Object>> itemDtos = new ArrayList<>();
+                for (OrderItem item : o.getOrderItems()) {
+                    Map<String, Object> itemDto = new HashMap<>();
+                    itemDto.put("id", item.getId());
+                    itemDto.put("productName", item.getProductName());
+                    itemDto.put("productCategory", item.getProductCategory());
+                    itemDto.put("quantity", item.getQuantity());
+                    itemDto.put("unitPrice", item.getUnitPrice());
+                    itemDto.put("totalPrice", item.getTotalPrice());
+                    if (item.getProduct() != null) {
+                        itemDto.put("productImageUrl", item.getProduct().getImageUrl());
+                    }
+                    itemDtos.add(itemDto);
+                }
+                dto.put("items", itemDtos);
+                dtos.add(dto);
+            }
+            return dtos;
 
         } catch (Exception e) {
-            System.out.println("Ã¢ÂÅ’ API ERROR getting order history: " + e.getMessage());
+            System.out.println("❌ API ERROR getting order history: " + e.getMessage());
             return Collections.emptyList();
         }
     }
@@ -612,8 +650,7 @@ public class HomeController {
 
         if (principal != null) {
             try {
-                User user = userService.findByEmail(principal.getName())
-                        .orElseGet(() -> userService.findByUsername(principal.getName()).orElse(null));
+                User user = userService.getUserFromPrincipal(principal).orElse(null);
                 if (user != null) {
                     model.addAttribute("user", user);
                     model.addAttribute("cartCount", cartService.getCartItemCount(user.getId()));
@@ -629,7 +666,7 @@ public class HomeController {
     @GetMapping("/api/debug/users")
     @ResponseBody
     public ApiResponse debugGetUsers() {
-        System.out.println("Ã°Å¸Ââ€º DEBUG: Get all users");
+        System.out.println("🛠️ DEBUG: Get all users");
         try {
             List<User> users = userService.getAllUsers();
             List<Map<String, Object>> userList = new ArrayList<>();
@@ -638,7 +675,7 @@ public class HomeController {
                 userData.put("id", user.getId());
                 userData.put("username", user.getUsername());
                 userData.put("email", user.getEmail());
-                userData.put("cartId", user.getCart() != null ? user.getCart().getId() : "No cart");
+                // Avoid accessing user.getCart() as it is LAZY and outside transaction
                 userList.add(userData);
             }
             return new ApiResponse(true, "Success", userList);
@@ -790,8 +827,3 @@ public class HomeController {
         }
     }
 }
-
-
-
-
-

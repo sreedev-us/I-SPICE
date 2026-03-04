@@ -12,11 +12,11 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
@@ -57,16 +57,27 @@ public class CartItem {
     }
 
     // Getters and setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public Cart getCart() { return cart; }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
     public void setCart(Cart cart) {
         this.cart = cart;
         this.updatedAt = LocalDateTime.now();
     }
 
-    public Product getProduct() { return product; }
+    public Product getProduct() {
+        return product;
+    }
+
     public void setProduct(Product product) {
         this.product = product;
         if (product != null) {
@@ -81,14 +92,20 @@ public class CartItem {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public Integer getQuantity() { return quantity; }
+    public Integer getQuantity() {
+        return quantity;
+    }
+
     public void setQuantity(Integer quantity) {
         this.quantity = quantity != null ? quantity : 1;
         this.updatedAt = LocalDateTime.now();
     }
 
     // Primary getter/setter for price field
-    public BigDecimal getPrice() { return price; }
+    public BigDecimal getPrice() {
+        return price;
+    }
+
     public void setPrice(BigDecimal price) {
         this.price = price;
         this.unitPrice = price; // Keep them synchronized
@@ -96,18 +113,31 @@ public class CartItem {
     }
 
     // Getter/setter for unitPrice field
-    public BigDecimal getUnitPrice() { return unitPrice; }
+    public BigDecimal getUnitPrice() {
+        return unitPrice;
+    }
+
     public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
         this.price = unitPrice; // Keep them synchronized
         this.updatedAt = LocalDateTime.now();
     }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
     // Calculate total price for this item
     public BigDecimal getTotalPrice() {

@@ -19,9 +19,9 @@ public class CartService {
     private final UserService userService;
 
     public CartService(CartRepository cartRepository,
-                       CartItemRepository cartItemRepository,
-                       ProductRepository productRepository,
-                       UserService userService) {
+            CartItemRepository cartItemRepository,
+            ProductRepository productRepository,
+            UserService userService) {
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
         this.productRepository = productRepository;
@@ -130,7 +130,8 @@ public class CartService {
 
             // Check stock availability
             if (product.getStock() < quantity) {
-                System.out.println("❌ Insufficient stock. Available: " + product.getStock() + ", Requested: " + quantity);
+                System.out
+                        .println("❌ Insufficient stock. Available: " + product.getStock() + ", Requested: " + quantity);
                 throw new RuntimeException("Insufficient stock. Only " + product.getStock() + " items available.");
             }
 
@@ -253,7 +254,8 @@ public class CartService {
             } else {
                 // Check stock availability
                 if (product.getStock() < quantity) {
-                    System.out.println("❌ Insufficient stock. Available: " + product.getStock() + ", Requested: " + quantity);
+                    System.out.println(
+                            "❌ Insufficient stock. Available: " + product.getStock() + ", Requested: " + quantity);
                     throw new RuntimeException("Insufficient stock. Only " + product.getStock() + " items available.");
                 }
 
@@ -366,6 +368,7 @@ public class CartService {
     /**
      * Get total number of items in cart
      */
+    @Transactional
     public int getCartItemCount(Long userId) {
         try {
             System.out.println("🔢 CartService.getCartItemCount() called");
@@ -386,12 +389,14 @@ public class CartService {
     /**
      * Get cart details with all items
      */
+    @Transactional
     public Cart getCartDetails(Long userId) {
         System.out.println("📋 CartService.getCartDetails() called");
         System.out.println("   User ID: " + userId);
 
         try {
             Cart cart = getOrCreateCart(userId);
+            cart.getItems().size(); // Explicitly initialize lazy collection
             System.out.println("✅ Returning cart with " + cart.getItems().size() + " items");
             return cart;
         } catch (Exception e) {
@@ -403,6 +408,7 @@ public class CartService {
     /**
      * Get cart subtotal
      */
+    @Transactional
     public double getCartSubtotal(Long userId) {
         try {
             Cart cart = getOrCreateCart(userId);
@@ -416,6 +422,7 @@ public class CartService {
     /**
      * Get cart total including shipping and tax
      */
+    @Transactional
     public double getCartTotal(Long userId) {
         try {
             Cart cart = getOrCreateCart(userId);
@@ -429,6 +436,7 @@ public class CartService {
     /**
      * Check if cart is empty
      */
+    @Transactional
     public boolean isCartEmpty(Long userId) {
         try {
             Cart cart = getOrCreateCart(userId);
@@ -444,6 +452,7 @@ public class CartService {
     /**
      * Check if product is already in cart
      */
+    @Transactional
     public boolean isProductInCart(Long userId, Long productId) {
         try {
             Cart cart = getOrCreateCart(userId);
@@ -459,6 +468,7 @@ public class CartService {
     /**
      * Get quantity of specific product in cart
      */
+    @Transactional
     public int getProductQuantityInCart(Long userId, Long productId) {
         try {
             Cart cart = getOrCreateCart(userId);
@@ -537,6 +547,7 @@ public class CartService {
     /**
      * Debug method to print cart details
      */
+    @Transactional
     public void printCartDetails(Long userId) {
         try {
             Cart cart = getOrCreateCart(userId);

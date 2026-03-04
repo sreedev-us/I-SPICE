@@ -96,8 +96,7 @@ public class ShopController {
 
             // User data
             if (principal != null) {
-                User user = userService.findByUsername(principal.getName())
-                        .orElseGet(() -> userService.findByEmail(principal.getName()).orElse(null));
+                User user = userService.getUserFromPrincipal(principal).orElse(null);
 
                 if (user != null) {
                     model.addAttribute("user", user);
@@ -140,8 +139,7 @@ public class ShopController {
 
             // Get current user
             if (principal != null) {
-                User user = userService.findByUsername(principal.getName())
-                        .orElseGet(() -> userService.findByEmail(principal.getName()).orElse(null));
+                User user = userService.getUserFromPrincipal(principal).orElse(null);
 
                 if (user != null) {
                     model.addAttribute("user", user);

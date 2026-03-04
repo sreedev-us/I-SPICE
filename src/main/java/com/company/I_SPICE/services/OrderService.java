@@ -21,10 +21,10 @@ public class OrderService {
     private final ProductService productService;
 
     public OrderService(OrderRepository orderRepository,
-                        OrderItemRepository orderItemRepository,
-                        CartService cartService,
-                        UserService userService,
-                        ProductService productService) {
+            OrderItemRepository orderItemRepository,
+            CartService cartService,
+            UserService userService,
+            ProductService productService) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.cartService = cartService;
@@ -35,7 +35,7 @@ public class OrderService {
     // Create order from cart
     @Transactional
     public Order createOrderFromCart(Long userId, String shippingAddress,
-                                     String billingAddress, String paymentMethod) {
+            String billingAddress, String paymentMethod) {
         User user = userService.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
 
@@ -54,21 +54,30 @@ public class OrderService {
             }
         }
 
-        // Create order from cart
-        Order order = new Order(cart);
+        // Build order WITHOUT using Order(Cart) constructor (it pre-adds OrderItems
+        // which
+        // would cause duplicates when we save them via CascadeType.ALL below)
+        Order order = new Order(user);
         order.setShippingAddress(shippingAddress);
         order.setBillingAddress(billingAddress != null ? billingAddress : shippingAddress);
         order.setPaymentMethod(paymentMethod);
         order.setPaymentStatus("PAID");
 
-        // Save order first to get ID
+        // Copy totals from cart
+        order.setSubtotal(cart.getSubtotal());
+        order.setShipping(cart.getShipping());
+        order.setTax(cart.getSubtotal().multiply(java.math.BigDecimal.valueOf(0.18)));
+        order.setTotal(cart.getTotal());
+
+        // Save order to get ID first
         Order savedOrder = orderRepository.save(order);
 
-        // Convert cart items to order items and reduce stock
+        // Add order items and reduce stock
         for (CartItem cartItem : cart.getItems()) {
             OrderItem orderItem = new OrderItem(savedOrder, cartItem.getProduct(),
                     cartItem.getQuantity(), cartItem.getUnitPrice());
             orderItemRepository.save(orderItem);
+            savedOrder.getOrderItems().add(orderItem);
 
             // Reduce product stock
             Product product = cartItem.getProduct();
@@ -76,7 +85,7 @@ public class OrderService {
             productService.saveProduct(product);
         }
 
-        // Recalculate and save totals
+        // Recalculate totals from actual saved items and persist
         savedOrder.calculateTotals();
         savedOrder = orderRepository.save(savedOrder);
 
@@ -95,24 +104,30 @@ public class OrderService {
     }
 
     // Get all orders for a user
+    @Transactional(readOnly = true)
     public List<Order> getUserOrders(Long userId) {
         return orderRepository.findByUserIdOrderByOrderDateDesc(userId);
     }
 
     // Get recent orders with limit
+    @Transactional(readOnly = true)
     public List<Order> getRecentOrders(Long userId, int limit) {
         List<Order> allOrders = getUserOrders(userId);
         return allOrders.stream().limit(limit).toList();
     }
 
     // Get order count for a user
+    @Transactional(readOnly = true)
     public Integer getOrderCount(Long userId) {
         return (int) orderRepository.countByUserId(userId);
     }
 
     // Get order by ID
+    @Transactional(readOnly = true)
     public Optional<Order> getOrderById(Long orderId) {
-        return orderRepository.findById(orderId);
+        Optional<Order> orderOpt = orderRepository.findById(orderId);
+        orderOpt.ifPresent(order -> order.getOrderItems().size()); // Initialize collections
+        return orderOpt;
     }
 
     // Update order status

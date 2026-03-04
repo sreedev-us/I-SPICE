@@ -988,6 +988,7 @@
                 font-size: 18px;
             }
         }
+    @media (max-width: 768px) { .hide-mobile-name { display: none !important; } } 
     </style>
 </head>
 
@@ -1009,7 +1010,7 @@
                         <div class="user-profile" onclick="window.location.href='/profile'">
                             <div class="avatar" th:text="${#strings.substring(user.username, 0, 1).toUpperCase()}">U
                             </div>
-                            <span th:text="${user.username}">User</span>
+                            <span class="hide-mobile-name" th:text="${user.username}">User</span>
                         </div>
                     </div>
                     <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu" onclick="toggleMobileNav()">
@@ -1583,3 +1584,5 @@
 </body>
 
 </html>
+
+

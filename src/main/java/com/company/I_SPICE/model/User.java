@@ -21,9 +21,7 @@ public class User {
     @Column(name = "first_name")
     private String firstName;
 
-    @NotBlank(message = "Last name is required")
-    @Size(min = 2, max = 50, message = " last name must be between 2 and 50 characters")
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = true)
     private String lastName;
 
     @NotBlank(message = "Full name is required")
@@ -85,11 +83,11 @@ public class User {
     private LocalDateTime subscriptionEndDate;
 
     // ORDERS RELATIONSHIP
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Order> orders = new ArrayList<>();
 
     // CART RELATIONSHIP - ADD THIS (CRITICAL FIX)
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Cart cart;
 
     // Constructors

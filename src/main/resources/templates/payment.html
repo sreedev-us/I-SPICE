@@ -564,6 +564,12 @@
             background: #fff;
             border-top: 1px solid var(--light-gray);
         }
+
+        @media (max-width: 768px) {
+            .hide-mobile-name {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -637,24 +643,26 @@
                                     Total Payable Amount</p>
                                 <div class="amount-display">
                                     ₹<span
-                                        th:text="${#numbers.formatDecimal(cart.total, 0, 'COMMA', 2, 'POINT')}">0.00</span>
+                                        th:text="${cart != null ? #numbers.formatDecimal(cart.total, 0, 'COMMA', 2, 'POINT') : '0.00'}">0.00</span>
                                 </div>
                             </div>
                             <div style="text-align: right;">
                                 <p style="color: var(--gray); font-size: 13px; margin-bottom: 5px;">Order Details</p>
                                 <p style="font-weight: 600; color: var(--dark);"
-                                    th:text="${cart.items.size() + ' Item(s)'}">0 Items</p>
+                                    th:text="${cart != null && cart.items != null ? cart.items.size() + ' Item(s)' : '0 Items'}">
+                                    0 Items</p>
                             </div>
                         </div>
 
                         <!-- List of items (collapsible-like feel in small text) -->
-                        <div
+                        <div th:if="${cart != null && cart.items != null}"
                             style="margin-top: 20px; padding: 15px; background: #fafaf7; border-radius: 12px; border: 1px solid var(--light-gray); max-height: 120px; overflow-y: auto;">
                             <div th:each="item : ${cart.items}"
                                 style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px;">
                                 <span style="color: var(--dark); font-weight: 500;">
                                     <i class="fas fa-leaf" style="color: var(--eco-green); margin-right: 6px;"></i>
-                                    <span th:text="${item.product.name}">Product</span>
+                                    <span
+                                        th:text="${item.product != null ? item.product.name : 'Product'}">Product</span>
                                     <span style="color: var(--gray); margin-left: 4px;"
                                         th:text="'x' + ${item.quantity}">x1</span>
                                 </span>
@@ -737,7 +745,7 @@
                                     <button class="pm-pay-btn" id="btn-pay-upi"
                                         onclick="simulatePaymentProcessing('upi')" disabled>
                                         Verify & Pay ₹<span
-                                            th:text="${#numbers.formatDecimal(cart.total, 0, 'COMMA', 2, 'POINT')}">0.00</span>
+                                            th:text="${cart != null ? #numbers.formatDecimal(cart.total, 0, 'COMMA', 2, 'POINT') : '0.00'}">0.00</span>
                                     </button>
                                 </div>
                             </div>
@@ -772,7 +780,7 @@
                                 <button class="pm-pay-btn" id="btn-pay-card" onclick="simulatePaymentProcessing('card')"
                                     disabled>
                                     Pay ₹<span
-                                        th:text="${#numbers.formatDecimal(cart.total, 0, 'COMMA', 2, 'POINT')}">0.00</span>
+                                        th:text="${cart != null ? #numbers.formatDecimal(cart.total, 0, 'COMMA', 2, 'POINT') : '0.00'}">0.00</span>
                                 </button>
                                 <p style="text-align: center; color: var(--gray); font-size: 11px; margin-top: 15px;">
                                     <i class="fas fa-shield-check"></i> Card details are not stored for security.
@@ -806,7 +814,7 @@
                                 <button class="pm-pay-btn" id="btn-pay-nb"
                                     onclick="simulatePaymentProcessing('netbanking')" disabled>
                                     Pay ₹<span
-                                        th:text="${#numbers.formatDecimal(cart.total, 0, 'COMMA', 2, 'POINT')}">0.00</span>
+                                        th:text="${cart != null ? #numbers.formatDecimal(cart.total, 0, 'COMMA', 2, 'POINT') : '0.00'}">0.00</span>
                                 </button>
                             </div>
 

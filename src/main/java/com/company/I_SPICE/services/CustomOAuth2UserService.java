@@ -30,6 +30,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         } catch (Exception ex) {
             // Throwing an instance of AuthenticationException will trigger the
             // OAuth2AuthenticationFailureHandler
+            ex.printStackTrace();
             throw new OAuth2AuthenticationException(ex.getMessage());
         }
     }
@@ -63,7 +64,15 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             user.setFullName(name != null ? name : user.getFirstName() + " " + user.getLastName());
 
             // Set required fields
-            user.setUsername(email.split("@")[0] + UUID.randomUUID().toString().substring(0, 4));
+            String baseUsername = name != null ? name.trim() : email.split("@")[0];
+
+            String finalUsername = baseUsername;
+            int suffix = 1;
+            while (userRepository.findByUsername(finalUsername).isPresent()) {
+                finalUsername = baseUsername + suffix;
+                suffix++;
+            }
+            user.setUsername(finalUsername);
             user.setEmailVerified(true); // OAuth2 providers verify emails
             user.setRole("USER");
             user.setLoyaltyPoints(50);

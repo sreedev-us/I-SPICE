@@ -44,11 +44,8 @@ public class PaymentApiController {
         }
 
         try {
-            User user = userService.findByEmail(principal.getName())
-                    .orElseGet(() -> userService.findByUsername(principal.getName())
-                            .orElseThrow(() -> new RuntimeException("User not found")));
-
-            // Calculate the total cart amount to charge
+            User user = userService.getUserFromPrincipal(principal)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
             Cart cart = cartService.getCartDetails(user.getId());
             if (cart == null || cart.isEmpty()) {
                 response.put("error", "Cart is empty");
@@ -147,9 +144,8 @@ public class PaymentApiController {
         }
 
         try {
-            User user = userService.findByEmail(principal.getName())
-                    .orElseGet(() -> userService.findByUsername(principal.getName())
-                            .orElseThrow(() -> new RuntimeException("User not found")));
+            User user = userService.getUserFromPrincipal(principal)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
 
             String plan = (String) payload.get("plan");
             boolean isAnnual = (Boolean) payload.get("annual");
@@ -231,9 +227,8 @@ public class PaymentApiController {
             if (isValid) {
                 System.out.println("✅ Subscription Signature Verified for Payment ID: " + razorpayPaymentId);
 
-                User user = userService.findByEmail(principal.getName())
-                        .orElseGet(() -> userService.findByUsername(principal.getName())
-                                .orElseThrow(() -> new RuntimeException("User not found")));
+                User user = userService.getUserFromPrincipal(principal)
+                        .orElseThrow(() -> new RuntimeException("User not found"));
 
                 user.setSubscriptionPlan(plan.toUpperCase());
                 user.setSubscriptionStatus("ACTIVE");
