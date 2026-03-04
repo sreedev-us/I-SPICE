@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Import Spring Boot's default Logback configuration -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <!-- ================================================ -->
+    <!-- FILE APPENDER: Only active in the 'dev' profile  -->
+    <!-- ================================================ -->
+    <springProfile name="dev">
+        <property name="LOG_FILE" value="logs/ispice-application.log"/>
+        <include resource="org/springframework/boot/logging/logback/file-appender.xml"/>
+
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
+        </root>
+
+        <logger name="com.company.I_SPICE" level="DEBUG"/>
+        <logger name="org.springframework.security" level="WARN"/>
+        <logger name="org.hibernate.SQL" level="DEBUG"/>
+        <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>
+    </springProfile>
+
+    <!-- ================================================ -->
+    <!-- CONSOLE ONLY: Active for all other profiles (prod, etc) -->
+    <!-- ================================================ -->
+    <springProfile name="!dev">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+
+        <logger name="com.company.I_SPICE" level="INFO"/>
+        <logger name="org.springframework.security" level="WARN"/>
+        <logger name="org.hibernate.SQL" level="ERROR"/>
+        <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="ERROR"/>
+    </springProfile>
+
+</configuration>
