@@ -115,7 +115,7 @@ razorpay.key.secret=YOUR_VALUE_HERE
 # ============================================
 # OAUTH2 CONFIGURATION (GOOGLE)
 # ============================================
-spring.security.oauth2.client.registration.google.client-id=${GOOGLE_CLIENT_ID:288657900884-3eegt8ki1kl5i2ne250qu14fv7jb9o4p.apps.googleusercontent.com}
+spring.security.oauth2.client.registration.google.client-id=${GOOGLE_CLIENT_ID:YOUR_VALUE_HERE}
 spring.security.oauth2.client.registration.google.client-secret=YOUR_VALUE_HERE
 spring.security.oauth2.client.registration.google.scope=email,profile
 
