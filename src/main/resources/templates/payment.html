@@ -426,21 +426,29 @@
         }
 
         /* Specific Components */
-        .qr-placeholder {
-            width: 180px;
-            height: 180px;
-            background: white;
-            border: 2px dashed var(--gold-primary);
-            margin: 0 auto 20px;
+        .upi-icon-banner {
             display: flex;
-            align-items: center;
             justify-content: center;
-            border-radius: 15px;
-            color: var(--gold-primary);
+            gap: 18px;
+            margin-bottom: 25px;
+            align-items: center;
         }
 
-        .qr-placeholder i {
-            font-size: 60px;
+        .upi-icon-banner img {
+            height: 28px;
+            object-fit: contain;
+            filter: grayscale(20%);
+        }
+
+        .saved-badge {
+            font-size: 11px;
+            background: #e8f5e9;
+            color: var(--eco-green);
+            border-radius: 20px;
+            padding: 2px 10px;
+            font-weight: 600;
+            margin-left: 8px;
+            vertical-align: middle;
         }
 
         .pm-processing {
@@ -691,7 +699,7 @@
                         <!-- Sidebar -->
                         <div class="pm-sidebar">
                             <div class="pm-tab active" onclick="switchPmTab('upi')" id="tab-upi">
-                                <i class="fas fa-qrcode"></i> UPI / QR
+                                <i class="fas fa-mobile-screen-button"></i> UPI
                             </div>
                             <div class="pm-tab" onclick="switchPmTab('card')" id="tab-card">
                                 <i class="fas fa-credit-card"></i> Card
@@ -718,36 +726,29 @@
 
                             <!-- UPI Section -->
                             <div class="pm-section active" id="sec-upi">
-                                <h3 style="margin-bottom: 25px; color: var(--dark); font-weight: 700;">Scan & Pay via
-                                    UPI</h3>
-                                <div style="text-align: center;">
-                                    <div class="qr-placeholder">
-                                        <i class="fas fa-qrcode"></i>
-                                    </div>
-                                    <p style="font-size: 13px; color: var(--gray); margin-bottom: 20px;">Open any UPI
-                                        app like GPay, PhonePe or Paytm to scan</p>
+                                <h3 style="margin-bottom: 8px; color: var(--dark); font-weight: 700;">Pay via UPI</h3>
+                                <p style="color: var(--gray); font-size: 13px; margin-bottom: 22px;">Enter your UPI ID
+                                    to pay instantly. Works with GPay, PhonePe, Paytm and all UPI apps.</p>
 
-                                    <div
-                                        style="display: flex; align-items: center; color: var(--light-gray); margin-bottom: 25px;">
-                                        <div style="flex:1; height:1px; background: var(--light-gray);"></div>
-                                        <span
-                                            style="padding: 0 15px; font-size: 12px; color: var(--gray); font-weight: 600; text-transform: uppercase;">OR
-                                            Use UPI ID</span>
-                                        <div style="flex:1; height:1px; background: var(--light-gray);"></div>
-                                    </div>
-
-                                    <div class="upi-input-group">
-                                        <i class="fas fa-at"></i>
-                                        <input type="text" id="upiIdInput"
-                                            placeholder="Enter your UPI ID (e.g. mobile@upi)" oninput="validateUpi()">
-                                    </div>
-
-                                    <button class="pm-pay-btn" id="btn-pay-upi"
-                                        onclick="simulatePaymentProcessing('upi')" disabled>
-                                        Verify & Pay ₹<span
-                                            th:text="${cart != null ? #numbers.formatDecimal(cart.total, 0, 'COMMA', 2, 'POINT') : '0.00'}">0.00</span>
-                                    </button>
+                                <div class="upi-input-group">
+                                    <i class="fas fa-at"></i>
+                                    <input type="text" id="upiIdInput"
+                                        placeholder="Enter your UPI ID (e.g. 9876543210@upi)" oninput="validateUpi()"
+                                        autocomplete="off">
                                 </div>
+                                <p
+                                    style="font-size: 11px; color: var(--gray); margin-top: -18px; margin-bottom: 22px; text-align: left; padding-left: 5px;">
+                                    <i class="fas fa-circle-info" style="color: var(--eco-green);"></i>
+                                    &nbsp;Your UPI ID is saved locally for next time.
+                                    <span class="saved-badge" id="upiSavedBadge" style="display:none;">&#10003;
+                                        Saved</span>
+                                </p>
+
+                                <button class="pm-pay-btn" id="btn-pay-upi" onclick="simulatePaymentProcessing('upi')"
+                                    disabled>
+                                    Verify &amp; Pay &#8377;<span
+                                        th:text="${cart != null ? #numbers.formatDecimal(cart.total, 0, 'COMMA', 2, 'POINT') : '0.00'}">0.00</span>
+                                </button>
                             </div>
 
                             <!-- Card Section -->
@@ -862,6 +863,11 @@
 
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
+        // Load saved credentials on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            loadSavedCredentials();
+        });
+
         function toggleMobileNav() {
             document.getElementById('mobileNav').classList.toggle('active');
             document.getElementById('hamburgerBtn').classList.toggle('active');
@@ -876,14 +882,35 @@
         }
 
 
+        // ============================================
+        // CREDENTIAL PERSISTENCE (localStorage)
+        // ============================================
+        function loadSavedCredentials() {
+            const savedUpi = localStorage.getItem('ispice_upi_id');
+            if (savedUpi) {
+                const input = document.getElementById('upiIdInput');
+                input.value = savedUpi;
+                document.getElementById('upiSavedBadge').style.display = 'inline';
+                validateUpi();
+            }
+
+            const savedCardName = localStorage.getItem('ispice_card_name');
+            if (savedCardName) {
+                document.getElementById('pmCardName').value = savedCardName;
+            }
+        }
+
         // Validation for UPI
         function validateUpi() {
             const input = document.getElementById('upiIdInput');
             const btn = document.getElementById('btn-pay-upi');
-            if (input.value.length > 3 && input.value.includes('@')) {
-                btn.disabled = false;
-            } else {
-                btn.disabled = true;
+            const isValid = input.value.length > 3 && input.value.includes('@');
+            btn.disabled = !isValid;
+
+            // Persist UPI ID to localStorage when valid
+            if (isValid) {
+                localStorage.setItem('ispice_upi_id', input.value.trim());
+                document.getElementById('upiSavedBadge').style.display = 'inline';
             }
         }
 
@@ -911,7 +938,13 @@
             const cvv = document.getElementById('pmCardCvv').value;
             const name = document.getElementById('pmCardName').value;
 
-            btn.disabled = !(num.length >= 15 && exp.length === 5 && cvv.length >= 3 && name.length > 2);
+            const isValid = num.length >= 15 && exp.length === 5 && cvv.length >= 3 && name.length > 2;
+            btn.disabled = !isValid;
+
+            // Save cardholder name (NOT card number or CVV for security)
+            if (name.length > 2) {
+                localStorage.setItem('ispice_card_name', name.trim());
+            }
         }
 
         // Netbanking Validation
