@@ -42,8 +42,7 @@ public class HomeController {
 
     @GetMapping({ "/", "/home", "/dashboard" })
     public String home(Model model, Principal principal, HttpServletRequest request) {
-        System.out
-                .println("Ã°Å¸ÂÂ  Dashboard accessed by: " + (principal != null ? principal.getName() : "anonymous"));
+        System.out.println("[INFO] Dashboard accessed by: " + (principal != null ? principal.getName() : "anonymous"));
 
         if (principal == null) {
             return "redirect:/login";
@@ -54,7 +53,7 @@ public class HomeController {
             User user = userService.getUserFromPrincipal(principal)
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
-            System.out.println("Ã¢Å“â€¦ User found: " + user.getUsername() + " (ID: " + user.getId() + ")");
+            System.out.println("[LOG] User found: " + user.getUsername() + " (ID: " + user.getId() + ")");
 
             // Add user data to model
             model.addAttribute("user", user);
@@ -63,7 +62,7 @@ public class HomeController {
             // Get cart count
             int cartCount = cartService.getCartItemCount(user.getId());
             model.addAttribute("cartCount", cartCount);
-            System.out.println("Ã°Å¸â€ºâ€™ Cart count: " + cartCount);
+            System.out.println("[LOG] Cart count: " + cartCount);
 
             // Add dashboard statistics
             Integer orderCount = orderService.getOrderCount(user.getId());
@@ -86,9 +85,8 @@ public class HomeController {
             }
 
             model.addAttribute("featuredProducts", featuredProducts);
-            System.out
-                    .println("Ã°Å¸â€œÂ¦ Featured products count: "
-                            + (featuredProducts != null ? featuredProducts.size() : 0));
+            System.out.println("[INFO] Featured products count: "
+                    + (featuredProducts != null ? featuredProducts.size() : 0));
 
             // Add sustainability calculations
             model.addAttribute("plasticSaved", calculatePlasticSaved(orderCount));
@@ -99,9 +97,9 @@ public class HomeController {
             try {
                 List<Order> recentOrders = orderService.getRecentOrders(user.getId(), 5);
                 model.addAttribute("recentOrders", recentOrders);
-                System.out.println("Ã°Å¸â€œâ€¹ Recent orders count: " + recentOrders.size());
+                System.out.println("[LOG] Recent orders count: " + recentOrders.size());
             } catch (Exception e) {
-                System.out.println("Ã¢Å¡Â Ã¯Â¸Â Could not load recent orders: " + e.getMessage());
+                System.out.println("[LOG] Could not load recent orders: " + e.getMessage());
                 model.addAttribute("recentOrders", new ArrayList<>());
             }
 
@@ -113,17 +111,17 @@ public class HomeController {
 
             if (csrfAttribute instanceof CsrfToken) {
                 model.addAttribute("_csrf", csrfAttribute);
-                System.out.println("Ã¢Å“â€¦ CSRF token found and added to model");
+                System.out.println("[LOG] CSRF token found and added to model");
             } else {
                 Map<String, String> dummyCsrf = new HashMap<>();
                 dummyCsrf.put("parameterName", "_csrf");
                 dummyCsrf.put("token", "dummy-csrf-token-" + UUID.randomUUID().toString());
                 model.addAttribute("_csrf", dummyCsrf);
-                System.out.println("Ã¢Å¡Â Ã¯Â¸Â Created dummy CSRF token for development");
+                System.out.println("[LOG] Created dummy CSRF token for development");
             }
 
         } catch (Exception e) {
-            System.out.println("Ã¢ÂÅ’ ERROR loading dashboard: " + e.getMessage());
+            System.out.println("[LOG] ERROR loading dashboard: " + e.getMessage());
             e.printStackTrace();
 
             model.addAttribute("orderCount", 0);
@@ -147,27 +145,27 @@ public class HomeController {
 
     @GetMapping("/login")
     public String showLoginForm(HttpServletRequest request, Model model) {
-        System.out.println("Ã°Å¸â€Â Login page accessed");
+        System.out.println("[LOG] Login page accessed");
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
-            System.out.println("Ã°Å¸â€˜Â¤ User already authenticated, redirecting to home");
+            System.out.println("[LOG] User already authenticated, redirecting to home");
             return "redirect:/home";
         }
 
         if (request.getParameter("error") != null) {
             model.addAttribute("error", "Invalid username or password");
-            System.out.println("Ã¢Å¡Â Ã¯Â¸Â Login error parameter found");
+            System.out.println("[LOG] Login error parameter found");
         }
 
         if (request.getParameter("logout") != null) {
             model.addAttribute("success", "You have been logged out successfully");
-            System.out.println("Ã°Å¸â€˜â€¹ Logout parameter found");
+            System.out.println("[LOG] Logout parameter found");
         }
 
         if (request.getParameter("registered") != null) {
             model.addAttribute("success", "Registration successful! Please login.");
-            System.out.println("Ã°Å¸Å½â€° Registration success parameter found");
+            System.out.println("[LOG] Registration success parameter found");
         }
 
         return "login";
@@ -181,7 +179,7 @@ public class HomeController {
 
     @GetMapping("/cart")
     public String cart(Model model, Principal principal) {
-        System.out.println("Ã°Å¸â€ºâ€™ Cart page accessed");
+        System.out.println("[LOG] Cart page accessed");
 
         if (principal == null) {
             return "redirect:/login";
@@ -198,7 +196,7 @@ public class HomeController {
             model.addAttribute("cart", cart);
 
             if (cart != null) {
-                System.out.println("Ã¢Å“â€¦ Cart loaded with " + cart.getItems().size() + " items");
+                System.out.println("[LOG] Cart loaded with " + cart.getItems().size() + " items");
 
                 if (!cart.isEmpty()) {
                     BigDecimal subtotal = cart.getSubtotal();
@@ -211,19 +209,19 @@ public class HomeController {
                     model.addAttribute("shipping", shipping);
                     model.addAttribute("total", total);
 
-                    System.out.println("Ã°Å¸â€™Â° Cart totals - Subtotal: " + subtotal + ", Tax: " + tax +
+                    System.out.println("[LOG] Cart totals - Subtotal: " + subtotal + ", Tax: " + tax +
                             ", Shipping: " + shipping + ", Total: " + total);
                 } else {
-                    System.out.println("Ã°Å¸â€ºâ€™ Cart is empty");
+                    System.out.println("[LOG] Cart is empty");
                 }
             }
 
             List<Order> orders = orderService.getUserOrders(user.getId());
             model.addAttribute("hasOrders", !orders.isEmpty());
-            System.out.println("Ã°Å¸â€œâ€¹ User has orders: " + !orders.isEmpty());
+            System.out.println("[LOG] User has orders: " + !orders.isEmpty());
 
         } catch (Exception e) {
-            System.out.println("Ã¢ÂÅ’ ERROR loading cart: " + e.getMessage());
+            System.out.println("[LOG] ERROR loading cart: " + e.getMessage());
             e.printStackTrace();
             model.addAttribute("error", "Failed to load cart: " + e.getMessage());
             model.addAttribute("hasOrders", false);
@@ -234,7 +232,7 @@ public class HomeController {
 
     @GetMapping("/checkout")
     public String checkoutPage(Model model, Principal principal) {
-        System.out.println("Ã°Å¸â€™Â³ Checkout page accessed");
+        System.out.println("[LOG] Checkout page accessed");
 
         if (principal == null) {
             return "redirect:/login";
@@ -249,12 +247,12 @@ public class HomeController {
 
             Cart cart = cartService.getCartDetails(user.getId());
             if (cart == null || cart.isEmpty()) {
-                System.out.println("Ã¢Å¡Â Ã¯Â¸Â Cart is empty, redirecting to cart page");
+                System.out.println("[LOG] Cart is empty, redirecting to cart page");
                 return "redirect:/cart";
             }
 
             model.addAttribute("cart", cart);
-            System.out.println("Ã¢Å“â€¦ Cart has " + cart.getItems().size() + " items for checkout");
+            System.out.println("[LOG] Cart has " + cart.getItems().size() + " items for checkout");
 
             BigDecimal subtotal = cart.getSubtotal();
             BigDecimal tax = subtotal.multiply(BigDecimal.valueOf(0.18));
@@ -278,11 +276,11 @@ public class HomeController {
                 checkoutForm.setPhone(user.getPhoneNumber());
             model.addAttribute("checkoutForm", checkoutForm);
 
-            System.out.println("Ã°Å¸â€™Â° Checkout totals - Subtotal: " + subtotal + ", Tax: " + tax +
+            System.out.println("[LOG] Checkout totals - Subtotal: " + subtotal + ", Tax: " + tax +
                     ", Shipping: " + shipping + ", Total: " + total);
 
         } catch (Exception e) {
-            System.out.println("Ã¢ÂÅ’ ERROR loading checkout: " + e.getMessage());
+            System.out.println("[LOG] ERROR loading checkout: " + e.getMessage());
             model.addAttribute("error", "Failed to load checkout: " + e.getMessage());
             return "redirect:/cart";
         }
@@ -328,7 +326,7 @@ public class HomeController {
             HttpSession session,
             Principal principal,
             Model model) {
-        System.out.println("Ã°Å¸Å¡â‚¬ Processing checkout");
+        System.out.println("[LOG] Processing checkout");
 
         if (principal == null) {
             return "redirect:/login";
@@ -336,7 +334,7 @@ public class HomeController {
 
         CheckoutForm checkoutForm = (CheckoutForm) session.getAttribute("pendingCheckoutForm");
         if (checkoutForm == null) {
-            System.out.println("Ã¢ÂÅ’ No checkout form in session");
+            System.out.println("[LOG] No checkout form in session");
             return "redirect:/checkout";
         }
 
@@ -349,9 +347,9 @@ public class HomeController {
                     ? fullShipping
                     : (checkoutForm.getBillingAddress() != null ? checkoutForm.getBillingAddress() : fullShipping);
 
-            System.out.println("Ã¢Å“â€¦ User found: " + user.getUsername());
-            System.out.println("Ã°Å¸â€œÂ¦ Shipping address: " + fullShipping);
-            System.out.println("Ã°Å¸â€™Â³ Payment method: " + paymentMethod);
+            System.out.println("[LOG] User found: " + user.getUsername());
+            System.out.println("[LOG] Shipping address: " + fullShipping);
+            System.out.println("[LOG] Payment method: " + paymentMethod);
 
             Order order = orderService.createOrderFromCart(
                     user.getId(), fullShipping, billingAddr, paymentMethod);
@@ -360,13 +358,13 @@ public class HomeController {
             model.addAttribute("order", order);
             model.addAttribute("cartCount", cartService.getCartItemCount(user.getId()));
 
-            System.out.println("Ã°Å¸Å½â€° Order created successfully! Order #: " + order.getOrderNumber());
+            System.out.println("[LOG] Order created successfully! Order #: " + order.getOrderNumber());
 
             session.removeAttribute("pendingCheckoutForm");
             return "order-confirmation";
 
         } catch (Exception e) {
-            System.out.println("Ã¢ÂÅ’ ERROR processing checkout: " + e.getMessage());
+            System.out.println("[LOG] ERROR processing checkout: " + e.getMessage());
             e.printStackTrace();
             model.addAttribute("error", "Checkout failed: " + e.getMessage());
             return "redirect:/cart";
@@ -378,13 +376,13 @@ public class HomeController {
     @GetMapping("/api/products/featured")
     @ResponseBody
     public ApiResponse getFeaturedProducts() {
-        System.out.println("Ã°Å¸â€œÂ¦ API: Get featured products");
+        System.out.println("[LOG] API: Get featured products");
         try {
             List<Product> products = productService.getFeaturedProducts();
-            System.out.println("Ã¢Å“â€¦ API: Returning " + products.size() + " featured products");
+            System.out.println("[LOG] API: Returning " + products.size() + " featured products");
             return new ApiResponse(true, "Success", products);
         } catch (Exception e) {
-            System.out.println("Ã¢ÂÅ’ API ERROR getting featured products: " + e.getMessage());
+            System.out.println("[LOG] API ERROR getting featured products: " + e.getMessage());
             return new ApiResponse(false, "Failed to load products: " + e.getMessage(), null);
         }
     }
@@ -392,12 +390,12 @@ public class HomeController {
     @PostMapping("/api/cart/add")
     @ResponseBody
     public ApiResponse addToCart(@RequestBody CartRequest request, Principal principal) {
-        System.out.println("Ã°Å¸â€ºâ€™ API: addToCart called");
+        System.out.println("[LOG] API: addToCart called");
         System.out.println("   Product ID: " + request.getProductId());
         System.out.println("   Quantity: " + request.getQuantity());
 
         if (principal == null) {
-            System.out.println("Ã¢ÂÅ’ API: No authentication");
+            System.out.println("[LOG] API: No authentication");
             return new ApiResponse(false, "Authentication required", null);
         }
 
@@ -405,13 +403,13 @@ public class HomeController {
             User user = userService.getUserFromPrincipal(principal)
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
-            System.out.println("Ã¢Å“â€¦ API: User found - ID: " + user.getId() + ", Name: " + user.getUsername());
+            System.out.println("[LOG] API: User found - ID: " + user.getId() + ", Name: " + user.getUsername());
 
             CartItem cartItem = cartService.addToCart(user.getId(), request.getProductId(), request.getQuantity());
 
             int cartCount = cartService.getCartItemCount(user.getId());
 
-            System.out.println("Ã¢Å“â€¦ API: Success! Cart count: " + cartCount);
+            System.out.println("[LOG] API: Success! Cart count: " + cartCount);
 
             Map<String, Object> responseData = new HashMap<>();
             responseData.put("cartCount", cartCount);
@@ -432,7 +430,7 @@ public class HomeController {
             return new ApiResponse(true, "Item added to cart successfully", responseData);
 
         } catch (Exception e) {
-            System.out.println("Ã¢ÂÅ’ API ERROR in addToCart: " + e.getMessage());
+            System.out.println("[LOG] API ERROR in addToCart: " + e.getMessage());
             e.printStackTrace();
             return new ApiResponse(false, "Failed to add item: " + e.getMessage(), null);
         }
@@ -441,7 +439,7 @@ public class HomeController {
     @GetMapping("/api/cart/items")
     @ResponseBody
     public ApiResponse getCartItems(Principal principal) {
-        System.out.println("Ã°Å¸â€œâ€¹ API: Get cart items");
+        System.out.println("[LOG] API: Get cart items");
 
         if (principal == null) {
             return new ApiResponse(false, "Authentication required", null);
@@ -483,11 +481,11 @@ public class HomeController {
             }
             cartData.put("items", itemsData);
 
-            System.out.println("Ã¢Å“â€¦ API: Returning cart with " + itemsData.size() + " items");
+            System.out.println("[LOG] API: Returning cart with " + itemsData.size() + " items");
             return new ApiResponse(true, "Success", cartData);
 
         } catch (Exception e) {
-            System.out.println("Ã¢ÂÅ’ API ERROR getting cart items: " + e.getMessage());
+            System.out.println("[LOG] API ERROR getting cart items: " + e.getMessage());
             return new ApiResponse(false, "Failed to load cart: " + e.getMessage(), null);
         }
     }
@@ -495,7 +493,7 @@ public class HomeController {
     @PostMapping("/api/cart/update")
     @ResponseBody
     public ApiResponse updateCartItem(@RequestBody UpdateCartRequest request, Principal principal) {
-        System.out.println("Ã°Å¸â€œÂ API: Update cart item");
+        System.out.println("[LOG] API: Update cart item");
         System.out.println("   Item ID: " + request.getItemId());
         System.out.println("   Quantity: " + request.getQuantity());
 
@@ -520,11 +518,11 @@ public class HomeController {
             }
             responseData.put("cartCount", cartService.getCartItemCount(user.getId()));
 
-            System.out.println("Ã¢Å“â€¦ API: Cart item updated");
+            System.out.println("[LOG] API: Cart item updated");
             return new ApiResponse(true, "Cart updated successfully", responseData);
 
         } catch (Exception e) {
-            System.out.println("Ã¢ÂÅ’ API ERROR updating cart: " + e.getMessage());
+            System.out.println("[LOG] API ERROR updating cart: " + e.getMessage());
             return new ApiResponse(false, "Failed to update cart: " + e.getMessage(), null);
         }
     }
@@ -532,7 +530,7 @@ public class HomeController {
     @PostMapping("/api/cart/remove")
     @ResponseBody
     public ApiResponse removeCartItem(@RequestBody RemoveCartRequest request, Principal principal) {
-        System.out.println("Ã°Å¸â€”â€˜Ã¯Â¸Â API: Remove cart item");
+        System.out.println("[LOG] API: Remove cart item");
         System.out.println("   Item ID: " + request.getItemId());
 
         if (principal == null) {
@@ -550,11 +548,11 @@ public class HomeController {
             responseData.put("message", "Item removed from cart");
             responseData.put("cartCount", cartService.getCartItemCount(user.getId()));
 
-            System.out.println("Ã¢Å“â€¦ API: Cart item removed");
+            System.out.println("[LOG] API: Cart item removed");
             return new ApiResponse(true, "Item removed from cart", responseData);
 
         } catch (Exception e) {
-            System.out.println("Ã¢ÂÅ’ API ERROR removing cart item: " + e.getMessage());
+            System.out.println("[LOG] API ERROR removing cart item: " + e.getMessage());
             return new ApiResponse(false, "Failed to remove item: " + e.getMessage(), null);
         }
     }
@@ -562,7 +560,7 @@ public class HomeController {
     @GetMapping("/api/cart/count")
     @ResponseBody
     public ApiResponse getCartCount(Principal principal) {
-        System.out.println("Ã°Å¸â€Â¢ API: Get cart count");
+        System.out.println("[LOG] API: Get cart count");
 
         if (principal == null) {
             return new ApiResponse(false, "Authentication required", null);
@@ -574,11 +572,11 @@ public class HomeController {
 
             int cartCount = cartService.getCartItemCount(user.getId());
 
-            System.out.println("Ã¢Å“â€¦ API: Cart count = " + cartCount);
+            System.out.println("[LOG] API: Cart count = " + cartCount);
             return new ApiResponse(true, "Success", Map.of("cartCount", cartCount));
 
         } catch (Exception e) {
-            System.out.println("Ã¢ÂÅ’ API ERROR getting cart count: " + e.getMessage());
+            System.out.println("[LOG] API ERROR getting cart count: " + e.getMessage());
             return new ApiResponse(false, "Failed to get cart count: " + e.getMessage(), null);
         }
     }
@@ -586,7 +584,7 @@ public class HomeController {
     @GetMapping("/orders/history")
     @ResponseBody
     public List<Map<String, Object>> getOrderHistory(Principal principal) {
-        System.out.println("📔 API: Get order history");
+        System.out.println("[LOG] API: Get order history");
 
         if (principal == null) {
             return Collections.emptyList();
@@ -597,7 +595,7 @@ public class HomeController {
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
             List<Order> orders = orderService.getUserOrders(user.getId());
-            System.out.println("✅ API: Returning " + orders.size() + " orders");
+            System.out.println("[LOG] API: Returning " + orders.size() + " orders");
 
             // Map to safe DTOs to avoid circular JSON serialization
             // (Order→User→Cart→User...)
@@ -637,7 +635,7 @@ public class HomeController {
             return dtos;
 
         } catch (Exception e) {
-            System.out.println("❌ API ERROR getting order history: " + e.getMessage());
+            System.out.println("[LOG] API ERROR getting order history: " + e.getMessage());
             return Collections.emptyList();
         }
     }
@@ -646,7 +644,7 @@ public class HomeController {
 
     @GetMapping("/debug/cart")
     public String debugCart(Model model, Principal principal) {
-        System.out.println("Ã°Å¸Ââ€º DEBUG: Cart test page");
+        System.out.println("[LOG] DEBUG: Cart test page");
 
         if (principal != null) {
             try {
@@ -656,7 +654,7 @@ public class HomeController {
                     model.addAttribute("cartCount", cartService.getCartItemCount(user.getId()));
                 }
             } catch (Exception e) {
-                System.out.println("Ã¢Å¡Â Ã¯Â¸Â DEBUG: Could not load user info: " + e.getMessage());
+                System.out.println("[LOG] DEBUG: Could not load user info: " + e.getMessage());
             }
         }
 
@@ -666,7 +664,7 @@ public class HomeController {
     @GetMapping("/api/debug/users")
     @ResponseBody
     public ApiResponse debugGetUsers() {
-        System.out.println("🛠️ DEBUG: Get all users");
+        System.out.println("[LOG] DEBUG: Get all users");
         try {
             List<User> users = userService.getAllUsers();
             List<Map<String, Object>> userList = new ArrayList<>();
@@ -687,7 +685,7 @@ public class HomeController {
     @GetMapping("/api/debug/products")
     @ResponseBody
     public ApiResponse debugGetProducts() {
-        System.out.println("Ã°Å¸Ââ€º DEBUG: Get all products");
+        System.out.println("[LOG] DEBUG: Get all products");
         try {
             List<Product> products = productService.findAllProducts();
             return new ApiResponse(true, "Success", products);

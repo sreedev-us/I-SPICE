@@ -74,6 +74,8 @@ public class WebSecurityConfig {
                                                                 "/css/**",
                                                                 "/js/**",
                                                                 "/images/**",
+                                                                "/fontawesome/**",
+                                                                "/I-SPICE/**",
                                                                 "/favicon.ico",
                                                                 "/error",
                                                                 // Product pages (public for viewing)
