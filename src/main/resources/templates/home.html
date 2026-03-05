@@ -217,9 +217,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
             flex-wrap: wrap;
             gap: 15px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--light-gray);
         }
 
         .dashboard-title {
@@ -249,7 +251,9 @@
         .welcome-message {
             font-size: 18px;
             color: var(--gray);
-            margin-bottom: 20px;
+            margin-top: 16px;
+            margin-bottom: 0;
+            line-height: 1.5;
         }
 
         /* Stats Grid */
@@ -988,7 +992,12 @@
                 font-size: 18px;
             }
         }
-    @media (max-width: 768px) { .hide-mobile-name { display: none !important; } } 
+
+        @media (max-width: 768px) {
+            .hide-mobile-name {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -1046,7 +1055,8 @@
                         <div>
                             <div class="dashboard-title">Welcome back, <span th:text="${user.username}">User</span>!
                             </div>
-                            <div class="welcome-message">Discover premium plant-based products for sustainable living
+                            <div class="welcome-message">
+                                <p>Discover premium plant-based products for sustainable living</p>
                             </div>
                         </div>
                         <div class="date-display" id="dateDisplay"></div>
@@ -1584,5 +1594,3 @@
 </body>
 
 </html>
-
-

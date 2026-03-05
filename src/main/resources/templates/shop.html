@@ -214,9 +214,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
             flex-wrap: wrap;
             gap: 15px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--light-gray);
         }
 
         .dashboard-title {
@@ -358,7 +360,7 @@
 
         .filter-group {
             flex: 1;
-            min-width: 200px;
+            min-width: 150px;
         }
 
         .filter-label {
@@ -394,10 +396,11 @@
 
         .price-input {
             flex: 1;
-            padding: 10px;
+            min-width: 0;
+            padding: 9px 8px;
             border: 2px solid var(--light-gray);
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .price-input:focus {
@@ -943,6 +946,10 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
+
+            .price-range {
+                gap: 6px;
+            }
         }
 
         /* ===== PHONE (≤480px) ===== */
@@ -1017,7 +1024,12 @@
                 font-size: 13px;
             }
         }
-    @media (max-width: 768px) { .hide-mobile-name { display: none !important; } } 
+
+        @media (max-width: 768px) {
+            .hide-mobile-name {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -1511,4 +1523,3 @@
 </body>
 
 </html>
-
