@@ -809,7 +809,12 @@
                 font-size: 20px;
             }
         }
-    @media (max-width: 768px) { .hide-mobile-name { display: none !important; } } 
+
+        @media (max-width: 768px) {
+            .hide-mobile-name {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -834,7 +839,8 @@
                             <div class="avatar" id="userAvatar"
                                 th:text="${user != null ? #strings.substring(user.username, 0, 1).toUpperCase() : 'U'}">
                                 U</div>
-                            <span id="navUsername" class="hide-mobile-name" th:text="${user != null ? user.username : 'User'}">User</span>
+                            <span id="navUsername" class="hide-mobile-name"
+                                th:text="${user != null ? user.username : 'User'}">User</span>
                         </div>
                     </div>
                     <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu" onclick="toggleMobileNav()">
@@ -847,7 +853,7 @@
                         <li><a href="/shop">Shop</a></li>
                         <li><a href="/cart" class="active">My Cart</a></li>
                         <li><a href="/orders">Order History</a></li>
-                        <li><a href="#" onclick="showComingSoon()">Subscriptions</a></li>
+                        <li><a href="/subscriptions">Subscriptions</a></li>
                     </ul>
                 </nav>
                 <div class="mobile-nav" id="mobileNav">
@@ -856,6 +862,7 @@
                         <li><a href="/shop">Shop</a></li>
                         <li><a href="/cart" class="active">My Cart</a></li>
                         <li><a href="/orders">Order History</a></li>
+                        <li><a href="/subscriptions">Subscriptions</a></li>
                         <li><a href="/profile">Profile</a></li>
                     </ul>
                 </div>
@@ -1245,4 +1252,3 @@
 </body>
 
 </html>
-
