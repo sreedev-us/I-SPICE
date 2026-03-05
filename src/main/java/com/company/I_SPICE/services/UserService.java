@@ -226,4 +226,61 @@ public class UserService {
             userRepository.save(user);
         }
     }
+
+    // ─── PASSWORD RESET ──────────────────────────────────────────────────────
+
+    /**
+     * Generates a reset token for the given email (if user exists) and saves it
+     * with a 1-hour expiry. Returns the token, or empty if email not found.
+     */
+    @Transactional
+    public Optional<String> generatePasswordResetToken(String email) {
+        Optional<User> userOpt = userRepository.findByEmail(email);
+        if (userOpt.isEmpty()) {
+            return Optional.empty();
+        }
+        User user = userOpt.get();
+        String token = UUID.randomUUID().toString();
+        user.setResetPasswordToken(token);
+        user.setResetPasswordExpiry(LocalDateTime.now().plusHours(1));
+        user.setUpdatedAt(LocalDateTime.now());
+        userRepository.save(user);
+        return Optional.of(token);
+    }
+
+    /**
+     * Validates the given reset token. Returns the User if the token is valid
+     * and not expired, otherwise returns empty.
+     */
+    public Optional<User> validateResetToken(String token) {
+        Optional<User> userOpt = userRepository.findByResetPasswordToken(token);
+        if (userOpt.isEmpty()) {
+            return Optional.empty();
+        }
+        User user = userOpt.get();
+        if (user.getResetPasswordExpiry() == null ||
+                LocalDateTime.now().isAfter(user.getResetPasswordExpiry())) {
+            return Optional.empty(); // token expired
+        }
+        return userOpt;
+    }
+
+    /**
+     * Resets the password for the user with the given token, then clears it.
+     * Returns true if successful, false if token invalid/expired.
+     */
+    @Transactional
+    public boolean resetPassword(String token, String newPassword) {
+        Optional<User> userOpt = validateResetToken(token);
+        if (userOpt.isEmpty()) {
+            return false;
+        }
+        User user = userOpt.get();
+        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setResetPasswordToken(null);
+        user.setResetPasswordExpiry(null);
+        user.setUpdatedAt(LocalDateTime.now());
+        userRepository.save(user);
+        return true;
+    }
 }

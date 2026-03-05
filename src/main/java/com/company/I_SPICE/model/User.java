@@ -61,6 +61,12 @@ public class User {
     @Column(name = "verification_token")
     private String verificationToken;
 
+    @Column(name = "reset_password_token")
+    private String resetPasswordToken;
+
+    @Column(name = "reset_password_expiry")
+    private LocalDateTime resetPasswordExpiry;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
@@ -302,6 +308,22 @@ public class User {
         if (this.firstName != null && this.lastName != null) {
             this.fullName = this.firstName + " " + this.lastName;
         }
+    }
+
+    public String getResetPasswordToken() {
+        return resetPasswordToken;
+    }
+
+    public void setResetPasswordToken(String resetPasswordToken) {
+        this.resetPasswordToken = resetPasswordToken;
+    }
+
+    public LocalDateTime getResetPasswordExpiry() {
+        return resetPasswordExpiry;
+    }
+
+    public void setResetPasswordExpiry(LocalDateTime resetPasswordExpiry) {
+        this.resetPasswordExpiry = resetPasswordExpiry;
     }
 
     @PrePersist
