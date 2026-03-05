@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification - I-SPICE</title>
+    <link rel="stylesheet" href="/fontawesome/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a4b1e 0%, #2e7d32 40%, #b8941f 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
+            top: -150px;
+            right: -150px;
+            border-radius: 50%;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(46, 125, 50, 0.2) 0%, transparent 70%);
+            bottom: -100px;
+            left: -100px;
+            border-radius: 50%;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 24px;
+            padding: 48px 44px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.22), 0 2px 8px rgba(212, 175, 55, 0.12);
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            margin-bottom: 24px;
+        }
+
+        .logo-circle {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2e7d32, #D4AF37);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+            box-shadow: 0 8px 24px rgba(46, 125, 50, 0.3);
+        }
+
+        .logo-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .logo h1 {
+            font-size: 26px;
+            font-weight: 800;
+            color: #2e7d32;
+            letter-spacing: 1px;
+        }
+
+        .status-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 10px 0 24px;
+            color: white;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-success .status-icon {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+
+        .status-error .status-icon {
+            background: linear-gradient(135deg, #dc3545, #f8d7da);
+            color: #dc3545;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+        }
+
+        .page-message {
+            font-size: 15px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        .btn-action {
+            display: inline-block;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #2e7d32, #D4AF37);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            transition: all 0.25s;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(46, 125, 50, 0.35);
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 36px 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card" th:classappend="${success} ? 'status-success' : 'status-error'">
+        <div class="logo">
+            <div class="logo-circle">
+                <img src="/I-SPICE/logo/logo.png" alt="I-SPICE"
+                    onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\'fas fa-leaf\' style=\'font-size:32px;color:white;\'></i>'">
+            </div>
+            <h1>I-SPICE</h1>
+        </div>
+
+        <!-- Success View -->
+        <th:block th:if="${success}">
+            <div class="status-icon"><i class="fas fa-check"></i></div>
+            <div class="page-title">Email Verified!</div>
+            <div class="page-message" th:text="${message}">Your email has been successfully verified.</div>
+            <a href="/login" class="btn-action">Proceed to Sign In</a>
+        </th:block>
+
+        <!-- Error View -->
+        <th:block th:unless="${success}">
+            <div class="status-icon" style="background:#f8d7da; color:#dc3545;"><i class="fas fa-times"></i></div>
+            <div class="page-title">Verification Failed</div>
+            <div class="page-message" th:text="${error}">The verification link is invalid or expired.</div>
+            <a href="/register" class="btn-action"
+                style="background:var(--light-gray); color:#333; background:#e8e3d5; box-shadow:none;">Return to
+                Registration</a>
+        </th:block>
+    </div>
+</body>
+
+</html>

@@ -142,20 +142,22 @@ public class UserController {
 
     // Verify email endpoint (for email verification links)
     @GetMapping("/verify-email")
-    public String verifyEmail(@RequestParam String token, RedirectAttributes redirectAttributes) {
+    public String verifyEmail(@RequestParam String token, Model model) {
         try {
             boolean verified = userService.verifyEmail(token);
+            model.addAttribute("success", verified);
             if (verified) {
-                redirectAttributes.addFlashAttribute("success", "Email verified successfully!");
-                return "redirect:/login?verified=true";
+                model.addAttribute("message",
+                        "Your email has been successfully verified! You can now log in to your account.");
             } else {
-                redirectAttributes.addFlashAttribute("error", "Invalid or expired verification token");
-                return "redirect:/login";
+                model.addAttribute("error",
+                        "Invalid or expired verification link. Please request a new one or try registering again.");
             }
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error verifying email: " + e.getMessage());
-            return "redirect:/login";
+            model.addAttribute("success", false);
+            model.addAttribute("error", "Error verifying email: " + e.getMessage());
         }
+        return "verify-email";
     }
 
     // Simple response class for AJAX calls
