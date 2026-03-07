@@ -106,7 +106,8 @@ public class EmailService {
                 mailSender.send(message);
                 logger.info("Email sent successfully to {}", to);
             } catch (Exception e) {
-                logger.warn("Failed to send email to {}. Missing SMTP credentials? Link generated: \n{}", to, content);
+                logger.error("Failed to send email to {}. Exception: {}", to, e.getMessage(), e);
+                logger.warn("Fallback link generated: \n{}", content);
             }
 
         } catch (MessagingException e) {
