@@ -19,6 +19,9 @@ public class EmailService {
     @Value("${app.base-url:http://localhost:8080}")
     private String baseUrl;
 
+    @Value("${spring.mail.username}")
+    private String fromEmail;
+
     public EmailService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
@@ -90,6 +93,7 @@ public class EmailService {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
+            helper.setFrom(fromEmail);
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(content, true);
