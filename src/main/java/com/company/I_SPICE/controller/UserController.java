@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Controller
 public class UserController {
@@ -72,8 +74,21 @@ public class UserController {
                     "Username already taken. Please choose a different username.");
         }
 
-        // If there are validation errors, return to registration form
-        if (bindingResult.hasErrors()) {
+        // Ensure fullName is set for new registrations
+        if (user.getFullName() == null || user.getFullName().isEmpty()) {
+            String fullStr = (user.getFirstName() != null ? user.getFirstName() : "") + " " +
+                    (user.getLastName() != null ? user.getLastName() : "");
+            user.setFullName(fullStr.trim());
+        }
+
+        // If there are validation errors (excluding fullName which we just handled
+        // manually), return to registration form
+        if (bindingResult.hasErrors() && !bindingResult.hasFieldErrors("fullName")
+                && bindingResult.getErrorCount() == bindingResult.getFieldErrorCount("fullName")) {
+            // Do nothing if fullName is the ONLY error, since we just fixed it
+        } else if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors().forEach(error -> LoggerFactory.getLogger(UserController.class)
+                    .warn("Registration Validation Error: {}", error.getDefaultMessage()));
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", bindingResult);
             redirectAttributes.addFlashAttribute("user", user);
             return "redirect:/register";
@@ -82,11 +97,6 @@ public class UserController {
         // Set newsletter preference
         user.setNewsletterSubscription(newsletter);
         user.setRole("USER"); // Default role
-
-        // Ensure fullName is set for new registrations
-        if (user.getFullName() == null || user.getFullName().isEmpty()) {
-            user.setFullName(user.getFirstName() + " " + user.getLastName());
-        }
 
         try {
             // Register user
