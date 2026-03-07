@@ -46,9 +46,6 @@ public class User {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "product_interest")
-    private String productInterest;
-
     @Column(name = "newsletter_subscription")
     private boolean newsletterSubscription = false;
 
@@ -178,14 +175,6 @@ public class User {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public String getProductInterest() {
-        return productInterest;
-    }
-
-    public void setProductInterest(String productInterest) {
-        this.productInterest = productInterest;
     }
 
     public boolean isNewsletterSubscription() {

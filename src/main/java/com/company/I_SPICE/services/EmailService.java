@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.scheduling.annotation.Async;
 
 @Service
 public class EmailService {
@@ -26,6 +27,7 @@ public class EmailService {
         this.mailSender = mailSender;
     }
 
+    @Async
     public void sendVerificationEmail(String to, String token, String name) {
         String url = baseUrl + "/verify-email?token=" + token;
 
@@ -56,6 +58,7 @@ public class EmailService {
         sendHtmlEmail(to, subject, content);
     }
 
+    @Async
     public void sendPasswordResetEmail(String to, String token, String name) {
         String url = baseUrl + "/reset-password?token=" + token;
 

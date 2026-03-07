@@ -118,9 +118,7 @@ public class UserService {
             if (updatedUser.getPhoneNumber() != null) {
                 existingUser.setPhoneNumber(updatedUser.getPhoneNumber());
             }
-            if (updatedUser.getProductInterest() != null) {
-                existingUser.setProductInterest(updatedUser.getProductInterest());
-            }
+
             existingUser.setNewsletterSubscription(updatedUser.isNewsletterSubscription());
 
             // Update fullName
