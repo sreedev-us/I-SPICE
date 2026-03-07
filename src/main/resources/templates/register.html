@@ -175,19 +175,6 @@
                 <small class="text-danger" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></small>
             </div>
 
-            <div class="input-group">
-                <label for="productInterest">Product Interest</label>
-                <i class="fas fa-shopping-basket input-icon"></i>
-                <select id="productInterest" th:field="*{productInterest}">
-                    <option value="">What type of products interest you most?</option>
-                    <option value="skincare">Skincare & Beauty</option>
-                    <option value="homecare">Home & Cleaning</option>
-                    <option value="food">Food & Beverages</option>
-                    <option value="wellness">Wellness & Supplements</option>
-                    <option value="fashion">Fashion & Textiles</option>
-                    <option value="all">All Plant-Based Products</option>
-                </select>
-            </div>
 
             <div class="terms-checkbox">
                 <input type="checkbox" id="terms" name="terms" value="accepted" required>
