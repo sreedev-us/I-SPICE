@@ -372,17 +372,7 @@ public class PageController {
     // â”€â”€â”€ SUPPORT
     // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-    @GetMapping("/support")
-    public String supportPage(Model model, Principal principal) {
-        if (principal == null)
-            return "redirect:/login";
-        User user = getUser(principal);
-        if (user == null)
-            return "redirect:/login";
-
-        addCommonModel(model, user);
-        return "support";
-    }
+    
 
     @PostMapping("/api/support/submit")
     @ResponseBody
@@ -419,3 +409,4 @@ public class PageController {
         return ResponseEntity.ok(response);
     }
 }
+
