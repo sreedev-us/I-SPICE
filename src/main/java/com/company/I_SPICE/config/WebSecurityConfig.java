@@ -115,7 +115,7 @@ public class WebSecurityConfig {
                                                                 "/wishlist",
                                                                 "/wishlist/**",
                                                                 "/subscriptions",
-                                                                "/support",
+                                                                "/support", "/support/ticket", "/support/ticket/**",
                                                                 "/api/cart/**",
                                                                 "/api/orders/**",
                                                                 "/api/wishlist/**",

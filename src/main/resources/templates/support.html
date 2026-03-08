@@ -830,7 +830,12 @@
                 padding: 16px;
             }
         }
-    @media (max-width: 768px) { .hide-mobile-name { display: none !important; } } 
+
+        @media (max-width: 768px) {
+            .hide-mobile-name {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -993,32 +998,97 @@
                     <div style="display:flex;flex-direction:column;gap:25px">
                         <div class="contact-form-card">
                             <h2 class="section-title-sm">Send Us a Message</h2>
-                            <div class="form-group">
-                                <label>Your Name</label>
-                                <input type="text" th:value="${user.fullName?:user.username}"
-                                    placeholder="Your full name">
+
+                            <!-- Success Message -->
+                            <div th:if="${success}" class="alert alert-success"
+                                style="background-color: #d4edda; color: #155724; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+                                <i class="fas fa-check-circle"></i> <span th:text="${success}"></span>
                             </div>
-                            <div class="form-group">
-                                <label>Email</label>
-                                <input type="email" th:value="${user.email}" placeholder="your@email.com">
+
+                            <form th:action="@{/support/ticket}" method="POST">
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                                <div class="form-group">
+                                    <label>Your Name</label>
+                                    <input type="text" th:value="${user.fullName?:user.username}"
+                                        placeholder="Your full name" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email" th:value="${user.email}" placeholder="your@email.com" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Subject</label>
+                                    <input type="text" name="subject" required
+                                        placeholder="Brief description of the issue">
+                                </div>
+                                <div class="form-group">
+                                    <label>Category</label>
+                                    <select name="category" required>
+                                        <option value="Order Issue">Order Issue</option>
+                                        <option value="Return / Refund">Return / Refund</option>
+                                        <option value="Product Quality">Product Quality</option>
+                                        <option value="Subscription Help">Subscription Help</option>
+                                        <option value="Payment Problem">Payment Problem</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Message</label>
+                                    <textarea name="description" required
+                                        placeholder="Describe your issue in detail..."></textarea>
+                                </div>
+                                <button type="submit" class="submit-btn"><i class="fas fa-paper-plane"></i> Send
+                                    Message</button>
+                            </form>
+                        </div>
+
+                        <!-- My Support Tickets section -->
+                        <div class="contact-form-card" style="margin-top: 25px;">
+                            <h2 class="section-title-sm">My Support Tickets</h2>
+
+                            <div th:if="${tickets == null or tickets.empty}"
+                                style="padding: 20px; text-align: center; color: var(--gray); font-style: italic;">
+                                You don't have any open support tickets.
                             </div>
-                            <div class="form-group">
-                                <label>Subject</label>
-                                <select>
-                                    <option>Order Issue</option>
-                                    <option>Return / Refund</option>
-                                    <option>Product Quality</option>
-                                    <option>Subscription Help</option>
-                                    <option>Payment Problem</option>
-                                    <option>Other</option>
-                                </select>
+
+                            <div th:if="${tickets != null and !tickets.empty}" style="overflow-x: auto;">
+                                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                                    <thead>
+                                        <tr style="border-bottom: 2px solid var(--light-gray); text-align: left;">
+                                            <th style="padding: 10px; color: var(--gray); font-weight: 600;">Ticket #
+                                            </th>
+                                            <th style="padding: 10px; color: var(--gray); font-weight: 600;">Subject
+                                            </th>
+                                            <th style="padding: 10px; color: var(--gray); font-weight: 600;">Status</th>
+                                            <th style="padding: 10px; color: var(--gray); font-weight: 600;">Last
+                                                Updated</th>
+                                            <th style="padding: 10px; color: var(--gray); font-weight: 600;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="ticket : ${tickets}"
+                                            style="border-bottom: 1px solid var(--light-gray);">
+                                            <td style="padding: 12px 10px; font-weight: 600; color: var(--dark);"
+                                                th:text="${ticket.ticketNumber}">TKT-12345</td>
+                                            <td style="padding: 12px 10px;" th:text="${ticket.subject}">Where is my
+                                                order?</td>
+                                            <td style="padding: 12px 10px;">
+                                                <span th:text="${ticket.status}"
+                                                    style="padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; background: var(--light-gray); color: var(--dark); display: inline-block;">OPEN</span>
+                                            </td>
+                                            <td style="padding: 12px 10px; color: var(--gray); font-size: 14px;"
+                                                th:text="${#temporals.format(ticket.updatedAt, 'MMM dd, yyyy HH:mm')}">
+                                                Oct 24, 2023</td>
+                                            <td style="padding: 12px 10px;">
+                                                <a th:href="@{'/support/ticket/' + ${ticket.id}}"
+                                                    style="padding: 6px 12px; background: var(--eco-green); color: white; text-decoration: none; border-radius: 4px; font-size: 13px; display: inline-block;"><i
+                                                        class="fas fa-eye"></i> View</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="form-group">
-                                <label>Message</label>
-                                <textarea placeholder="Describe your issue in detail..."></textarea>
-                            </div>
-                            <button class="submit-btn" onclick="submitForm()"><i class="fas fa-paper-plane"></i> Send
-                                Message</button>
                         </div>
 
                         <div class="hours-card">
@@ -1093,5 +1163,3 @@
 </body>
 
 </html>
-
-

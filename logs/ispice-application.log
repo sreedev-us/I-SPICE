@@ -1,21 +1,21 @@
-2026-03-05T08:09:01.961+05:30  INFO 19732 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Starting ISpiceApplication using Java 17.0.12 with PID 19732 (D:\I-SPICE\I-SPICE\build\classes\java\main started by Sreedev in D:\I-SPICE\I-SPICE)
-2026-03-05T08:09:01.973+05:30 DEBUG 19732 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Running with Spring Boot v4.0.2, Spring v7.0.3
-2026-03-05T08:09:01.974+05:30  INFO 19732 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : The following 1 profile is active: "dev"
-2026-03-05T08:09:02.066+05:30  INFO 19732 --- [I-SPICE] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2026-03-05T08:09:02.066+05:30  INFO 19732 --- [I-SPICE] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2026-03-05T08:09:03.720+05:30  INFO 19732 --- [I-SPICE] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-03-05T08:09:03.835+05:30  INFO 19732 --- [I-SPICE] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 96 ms. Found 8 JPA repository interfaces.
-2026-03-05T08:09:04.369+05:30  INFO 19732 --- [I-SPICE] [restartedMain] o.s.cloud.context.scope.GenericScope     : BeanFactory id=ee7193f3-0145-3488-9428-196320112e6a
-2026-03-05T08:09:05.309+05:30  INFO 19732 --- [I-SPICE] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
-2026-03-05T08:09:05.333+05:30  INFO 19732 --- [I-SPICE] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2026-03-05T08:09:05.333+05:30  INFO 19732 --- [I-SPICE] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.15]
-2026-03-05T08:09:05.455+05:30  INFO 19732 --- [I-SPICE] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 3388 ms
-2026-03-05T08:09:05.879+05:30  INFO 19732 --- [I-SPICE] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
-2026-03-05T08:09:06.031+05:30  INFO 19732 --- [I-SPICE] [restartedMain] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.1.Final
-2026-03-05T08:09:06.898+05:30  INFO 19732 --- [I-SPICE] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-03-05T08:09:06.927+05:30  WARN 19732 --- [I-SPICE] [restartedMain] org.hibernate.orm.deprecation            : HHH90000021: Encountered deprecated setting [hibernate.temp.use_jdbc_metadata_defaults], use [hibernate.boot.allow_jdbc_metadata_access] instead
-2026-03-05T08:09:06.964+05:30  WARN 19732 --- [I-SPICE] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-03-05T08:09:07.001+05:30  INFO 19732 --- [I-SPICE] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+2026-03-08T15:41:30.383+05:30  INFO 9008 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Starting ISpiceApplication using Java 17.0.12 with PID 9008 (D:\I-SPICE\I-SPICE\build\classes\java\main started by Sreedev in D:\I-SPICE\I-SPICE)
+2026-03-08T15:41:30.391+05:30 DEBUG 9008 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Running with Spring Boot v4.0.2, Spring v7.0.3
+2026-03-08T15:41:30.393+05:30  INFO 9008 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : The following 1 profile is active: "dev"
+2026-03-08T15:41:30.463+05:30  INFO 9008 --- [I-SPICE] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-03-08T15:41:30.465+05:30  INFO 9008 --- [I-SPICE] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-03-08T15:41:31.709+05:30  INFO 9008 --- [I-SPICE] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-08T15:41:31.828+05:30  INFO 9008 --- [I-SPICE] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 107 ms. Found 10 JPA repository interfaces.
+2026-03-08T15:41:32.240+05:30  INFO 9008 --- [I-SPICE] [restartedMain] o.s.cloud.context.scope.GenericScope     : BeanFactory id=b37f3d2d-485b-38ac-a162-91b21a628b0d
+2026-03-08T15:41:33.136+05:30  INFO 9008 --- [I-SPICE] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-03-08T15:41:33.183+05:30  INFO 9008 --- [I-SPICE] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-03-08T15:41:33.184+05:30  INFO 9008 --- [I-SPICE] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.15]
+2026-03-08T15:41:33.274+05:30  INFO 9008 --- [I-SPICE] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 2808 ms
+2026-03-08T15:41:33.699+05:30  INFO 9008 --- [I-SPICE] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-03-08T15:41:33.780+05:30  INFO 9008 --- [I-SPICE] [restartedMain] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.1.Final
+2026-03-08T15:41:34.480+05:30  INFO 9008 --- [I-SPICE] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-08T15:41:34.501+05:30  WARN 9008 --- [I-SPICE] [restartedMain] org.hibernate.orm.deprecation            : HHH90000021: Encountered deprecated setting [hibernate.temp.use_jdbc_metadata_defaults], use [hibernate.boot.allow_jdbc_metadata_access] instead
+2026-03-08T15:41:34.524+05:30  WARN 9008 --- [I-SPICE] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-08T15:41:34.547+05:30  INFO 9008 --- [I-SPICE] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
 	Database JDBC URL [undefined/unknown]
 	Database driver: undefined/unknown
 	Database dialect: PostgreSQLDialect
@@ -27,342 +27,101 @@
 	Pool: undefined/unknown
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2026-03-05T08:09:09.022+05:30  INFO 19732 --- [I-SPICE] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-03-05T08:09:09.070+05:30  INFO 19732 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-03-05T08:09:11.122+05:30  INFO 19732 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@407d4f00
-2026-03-05T08:09:11.124+05:30  INFO 19732 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-03-05T08:09:16.305+05:30  INFO 19732 --- [I-SPICE] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-03-05T08:09:16.459+05:30  INFO 19732 --- [I-SPICE] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-03-05T08:09:17.998+05:30  WARN 19732 --- [I-SPICE] [restartedMain] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration': Unsatisfied dependency expressed through method 'setFilterChains' parameter 0: Error creating bean with name 'securityFilterChain' defined in class path resource [com/company/I_SPICE/config/WebSecurityConfig.class]: Unsatisfied dependency expressed through method 'securityFilterChain' parameter 0: Error creating bean with name 'org.springframework.security.config.annotation.web.configuration.HttpSecurityConfiguration': Unsatisfied dependency expressed through method 'setContentNegotiationStrategy' parameter 0: Error creating bean with name 'org.springframework.boot.webmvc.autoconfigure.WebMvcAutoConfiguration$EnableWebMvcConfiguration': Unsatisfied dependency expressed through method 'setConfigurers' parameter 0: Error creating bean with name 'org.springframework.security.config.annotation.web.configuration.OAuth2ClientConfiguration$OAuth2ClientWebMvcSecurityConfiguration': Failed to instantiate [org.springframework.security.config.annotation.web.configuration.OAuth2ClientConfiguration$OAuth2ClientWebMvcSecurityConfiguration]: Constructor threw exception
-2026-03-05T08:09:17.999+05:30  INFO 19732 --- [I-SPICE] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-03-05T08:09:18.004+05:30  INFO 19732 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2026-03-05T08:09:18.463+05:30  INFO 19732 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2026-03-05T08:09:18.466+05:30  INFO 19732 --- [I-SPICE] [restartedMain] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
-2026-03-05T08:09:18.481+05:30  INFO 19732 --- [I-SPICE] [restartedMain] .s.b.a.l.ConditionEvaluationReportLogger : 
+2026-03-08T15:41:36.260+05:30  INFO 9008 --- [I-SPICE] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-08T15:41:36.297+05:30  INFO 9008 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-03-08T15:41:38.595+05:30  INFO 9008 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@303bd145
+2026-03-08T15:41:38.597+05:30  INFO 9008 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-03-08T15:41:43.798+05:30  INFO 9008 --- [I-SPICE] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-08T15:41:43.980+05:30  INFO 9008 --- [I-SPICE] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-03-08T15:41:49.089+05:30  INFO 9008 --- [I-SPICE] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-03-08T15:41:49.249+05:30  INFO 9008 --- [I-SPICE] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-03-08T15:41:49.595+05:30  INFO 9008 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Started ISpiceApplication in 20.473 seconds (process running for 21.976)
+2026-03-08T15:42:06.209+05:30  INFO 9008 --- [I-SPICE] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-08T15:42:06.210+05:30  INFO 9008 --- [I-SPICE] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-03-08T15:42:06.212+05:30  INFO 9008 --- [I-SPICE] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-03-08T15:42:06.432+05:30  INFO 9008 --- [I-SPICE] [http-nio-8080-exec-2] c.c.I_SPICE.config.CsrfControllerAdvice  : Found CSRF token via '_csrf' attribute
+2026-03-08T15:43:41.911+05:30  INFO 26576 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Starting ISpiceApplication using Java 17.0.12 with PID 26576 (D:\I-SPICE\I-SPICE\build\classes\java\main started by Sreedev in D:\I-SPICE\I-SPICE)
+2026-03-08T15:43:41.915+05:30 DEBUG 26576 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Running with Spring Boot v4.0.2, Spring v7.0.3
+2026-03-08T15:43:41.918+05:30  INFO 26576 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : The following 1 profile is active: "dev"
+2026-03-08T15:43:42.009+05:30  INFO 26576 --- [I-SPICE] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-03-08T15:43:42.010+05:30  INFO 26576 --- [I-SPICE] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-03-08T15:43:43.637+05:30  INFO 26576 --- [I-SPICE] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-08T15:43:43.787+05:30  INFO 26576 --- [I-SPICE] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 129 ms. Found 10 JPA repository interfaces.
+2026-03-08T15:43:44.373+05:30  INFO 26576 --- [I-SPICE] [restartedMain] o.s.cloud.context.scope.GenericScope     : BeanFactory id=b37f3d2d-485b-38ac-a162-91b21a628b0d
+2026-03-08T15:43:46.113+05:30  INFO 26576 --- [I-SPICE] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-03-08T15:43:46.155+05:30  INFO 26576 --- [I-SPICE] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-03-08T15:43:46.158+05:30  INFO 26576 --- [I-SPICE] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.15]
+2026-03-08T15:43:46.303+05:30  INFO 26576 --- [I-SPICE] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 4291 ms
+2026-03-08T15:43:46.896+05:30  INFO 26576 --- [I-SPICE] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-03-08T15:43:47.042+05:30  INFO 26576 --- [I-SPICE] [restartedMain] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.1.Final
+2026-03-08T15:43:48.373+05:30  INFO 26576 --- [I-SPICE] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-08T15:43:48.415+05:30  WARN 26576 --- [I-SPICE] [restartedMain] org.hibernate.orm.deprecation            : HHH90000021: Encountered deprecated setting [hibernate.temp.use_jdbc_metadata_defaults], use [hibernate.boot.allow_jdbc_metadata_access] instead
+2026-03-08T15:43:48.459+05:30  WARN 26576 --- [I-SPICE] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-08T15:43:48.501+05:30  INFO 26576 --- [I-SPICE] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [undefined/unknown]
+	Database driver: undefined/unknown
+	Database dialect: PostgreSQLDialect
+	Database version: 13.0
+	Default catalog/schema: unknown/unknown
+	Autocommit mode: undefined/unknown
+	Isolation level: <unknown>
+	JDBC fetch size: undefined/unknown
+	Pool: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-08T15:43:51.022+05:30  INFO 26576 --- [I-SPICE] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-08T15:43:51.063+05:30  INFO 26576 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-03-08T15:43:53.180+05:30  INFO 26576 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@27721e46
+2026-03-08T15:43:53.182+05:30  INFO 26576 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-03-08T15:43:58.173+05:30  INFO 26576 --- [I-SPICE] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-08T15:43:58.347+05:30  INFO 26576 --- [I-SPICE] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-03-08T15:44:05.470+05:30  INFO 26576 --- [I-SPICE] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-03-08T15:44:05.581+05:30  INFO 26576 --- [I-SPICE] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-03-08T15:44:05.920+05:30  INFO 26576 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Started ISpiceApplication in 25.654 seconds (process running for 27.151)
+2026-03-08T15:45:13.483+05:30  INFO 5452 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Starting ISpiceApplication using Java 17.0.12 with PID 5452 (D:\I-SPICE\I-SPICE\build\classes\java\main started by Sreedev in D:\I-SPICE\I-SPICE)
+2026-03-08T15:45:13.487+05:30 DEBUG 5452 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Running with Spring Boot v4.0.2, Spring v7.0.3
+2026-03-08T15:45:13.487+05:30  INFO 5452 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : The following 1 profile is active: "dev"
+2026-03-08T15:45:13.559+05:30  INFO 5452 --- [I-SPICE] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-03-08T15:45:13.559+05:30  INFO 5452 --- [I-SPICE] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-03-08T15:45:14.766+05:30  INFO 5452 --- [I-SPICE] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-08T15:45:14.859+05:30  INFO 5452 --- [I-SPICE] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 80 ms. Found 10 JPA repository interfaces.
+2026-03-08T15:45:15.298+05:30  INFO 5452 --- [I-SPICE] [restartedMain] o.s.cloud.context.scope.GenericScope     : BeanFactory id=b37f3d2d-485b-38ac-a162-91b21a628b0d
+2026-03-08T15:45:16.047+05:30  INFO 5452 --- [I-SPICE] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-03-08T15:45:16.062+05:30  INFO 5452 --- [I-SPICE] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-03-08T15:45:16.064+05:30  INFO 5452 --- [I-SPICE] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.15]
+2026-03-08T15:45:16.150+05:30  INFO 5452 --- [I-SPICE] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 2590 ms
+2026-03-08T15:45:16.473+05:30  INFO 5452 --- [I-SPICE] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-03-08T15:45:16.549+05:30  INFO 5452 --- [I-SPICE] [restartedMain] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.1.Final
+2026-03-08T15:45:17.205+05:30  INFO 5452 --- [I-SPICE] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-08T15:45:17.227+05:30  WARN 5452 --- [I-SPICE] [restartedMain] org.hibernate.orm.deprecation            : HHH90000021: Encountered deprecated setting [hibernate.temp.use_jdbc_metadata_defaults], use [hibernate.boot.allow_jdbc_metadata_access] instead
+2026-03-08T15:45:17.249+05:30  WARN 5452 --- [I-SPICE] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-08T15:45:17.276+05:30  INFO 5452 --- [I-SPICE] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [undefined/unknown]
+	Database driver: undefined/unknown
+	Database dialect: PostgreSQLDialect
+	Database version: 13.0
+	Default catalog/schema: unknown/unknown
+	Autocommit mode: undefined/unknown
+	Isolation level: <unknown>
+	JDBC fetch size: undefined/unknown
+	Pool: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-08T15:45:18.849+05:30  INFO 5452 --- [I-SPICE] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-08T15:45:18.886+05:30  INFO 5452 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-03-08T15:45:20.727+05:30  INFO 5452 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@3bf7ac50
+2026-03-08T15:45:20.729+05:30  INFO 5452 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-03-08T15:45:25.211+05:30  INFO 5452 --- [I-SPICE] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-08T15:45:25.344+05:30  INFO 5452 --- [I-SPICE] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-03-08T15:45:29.548+05:30  INFO 5452 --- [I-SPICE] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-03-08T15:45:29.633+05:30  WARN 5452 --- [I-SPICE] [restartedMain] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-03-08T15:45:29.640+05:30  INFO 5452 --- [I-SPICE] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-08T15:45:29.645+05:30  INFO 5452 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-03-08T15:45:30.102+05:30  INFO 5452 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-03-08T15:45:30.122+05:30  INFO 5452 --- [I-SPICE] [restartedMain] .s.b.a.l.ConditionEvaluationReportLogger : 
 
 Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
-2026-03-05T08:09:18.501+05:30 ERROR 19732 --- [I-SPICE] [restartedMain] o.s.boot.SpringApplication               : Application run failed
-
-org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration': Unsatisfied dependency expressed through method 'setFilterChains' parameter 0: Error creating bean with name 'securityFilterChain' defined in class path resource [com/company/I_SPICE/config/WebSecurityConfig.class]: Unsatisfied dependency expressed through method 'securityFilterChain' parameter 0: Error creating bean with name 'org.springframework.security.config.annotation.web.configuration.HttpSecurityConfiguration': Unsatisfied dependency expressed through method 'setContentNegotiationStrategy' parameter 0: Error creating bean with name 'org.springframework.boot.webmvc.autoconfigure.WebMvcAutoConfiguration$EnableWebMvcConfiguration': Unsatisfied dependency expressed through method 'setConfigurers' parameter 0: Error creating bean with name 'org.springframework.security.config.annotation.web.configuration.OAuth2ClientConfiguration$OAuth2ClientWebMvcSecurityConfiguration': Failed to instantiate [org.springframework.security.config.annotation.web.configuration.OAuth2ClientConfiguration$OAuth2ClientWebMvcSecurityConfiguration]: Constructor threw exception
-	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredMethodElement.resolveMethodArguments(AutowiredAnnotationBeanPostProcessor.java:871)
-	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredMethodElement.inject(AutowiredAnnotationBeanPostProcessor.java:826)
-	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:146)
-	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:492)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1446)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:602)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:525)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:333)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:371)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:331)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:196)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1218)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1184)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1121)
-	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:993)
-	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:620)
-	at org.springframework.boot.web.server.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:143)
-	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:756)
-	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:445)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:321)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1365)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354)
-	at com.company.I_SPICE.ISpiceApplication.main(ISpiceApplication.java:11)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
-	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:52)
-Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'securityFilterChain' defined in class path resource [com/company/I_SPICE/config/WebSecurityConfig.class]: Unsatisfied dependency expressed through method 'securityFilterChain' parameter 0: Error creating bean with name 'org.springframework.security.config.annotation.web.configuration.HttpSecurityConfiguration': Unsatisfied dependency expressed through method 'setContentNegotiationStrategy' parameter 0: Error creating bean with name 'org.springframework.boot.webmvc.autoconfigure.WebMvcAutoConfiguration$EnableWebMvcConfiguration': Unsatisfied dependency expressed through method 'setConfigurers' parameter 0: Error creating bean with name 'org.springframework.security.config.annotation.web.configuration.OAuth2ClientConfiguration$OAuth2ClientWebMvcSecurityConfiguration': Failed to instantiate [org.springframework.security.config.annotation.web.configuration.OAuth2ClientConfiguration$OAuth2ClientWebMvcSecurityConfiguration]: Constructor threw exception
-	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:804)
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:546)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1362)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1194)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:565)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:525)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:333)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:371)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:331)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:201)
-	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:229)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.addCandidateEntry(DefaultListableBeanFactory.java:2008)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.findAutowireCandidates(DefaultListableBeanFactory.java:1971)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveMultipleBeanCollection(DefaultListableBeanFactory.java:1863)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveMultipleBeans(DefaultListableBeanFactory.java:1833)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1711)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1651)
-	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredMethodElement.resolveMethodArguments(AutowiredAnnotationBeanPostProcessor.java:863)
-	... 27 common frames omitted
-Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'org.springframework.security.config.annotation.web.configuration.HttpSecurityConfiguration': Unsatisfied dependency expressed through method 'setContentNegotiationStrategy' parameter 0: Error creating bean with name 'org.springframework.boot.webmvc.autoconfigure.WebMvcAutoConfiguration$EnableWebMvcConfiguration': Unsatisfied dependency expressed through method 'setConfigurers' parameter 0: Error creating bean with name 'org.springframework.security.config.annotation.web.configuration.OAuth2ClientConfiguration$OAuth2ClientWebMvcSecurityConfiguration': Failed to instantiate [org.springframework.security.config.annotation.web.configuration.OAuth2ClientConfiguration$OAuth2ClientWebMvcSecurityConfiguration]: Constructor threw exception
-	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredMethodElement.resolveMethodArguments(AutowiredAnnotationBeanPostProcessor.java:871)
-	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredMethodElement.inject(AutowiredAnnotationBeanPostProcessor.java:826)
-	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:146)
-	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:492)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1446)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:602)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:525)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:333)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:371)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:331)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:196)
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:413)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1362)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1194)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:565)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:525)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:351)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:201)
-	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:229)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1762)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1651)
-	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:912)
-	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791)
-	... 44 common frames omitted
-Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'org.springframework.boot.webmvc.autoconfigure.WebMvcAutoConfiguration$EnableWebMvcConfiguration': Unsatisfied dependency expressed through method 'setConfigurers' parameter 0: Error creating bean with name 'org.springframework.security.config.annotation.web.configuration.OAuth2ClientConfiguration$OAuth2ClientWebMvcSecurityConfiguration': Failed to instantiate [org.springframework.security.config.annotation.web.configuration.OAuth2ClientConfiguration$OAuth2ClientWebMvcSecurityConfiguration]: Constructor threw exception
-	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredMethodElement.resolveMethodArguments(AutowiredAnnotationBeanPostProcessor.java:871)
-	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredMethodElement.inject(AutowiredAnnotationBeanPostProcessor.java:826)
-	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:146)
-	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:492)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1446)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:602)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:525)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:333)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:371)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:331)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:196)
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:413)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1362)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1194)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:565)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:525)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:333)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:371)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:331)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:201)
-	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:229)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1762)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1651)
-	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredMethodElement.resolveMethodArguments(AutowiredAnnotationBeanPostProcessor.java:863)
-	... 66 common frames omitted
-Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.security.config.annotation.web.configuration.OAuth2ClientConfiguration$OAuth2ClientWebMvcSecurityConfiguration': Failed to instantiate [org.springframework.security.config.annotation.web.configuration.OAuth2ClientConfiguration$OAuth2ClientWebMvcSecurityConfiguration]: Constructor threw exception
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:321)
-	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:309)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1382)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1221)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:565)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:525)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:333)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:371)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:331)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:201)
-	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:229)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.addCandidateEntry(DefaultListableBeanFactory.java:2008)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.findAutowireCandidates(DefaultListableBeanFactory.java:1971)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveMultipleBeanCollection(DefaultListableBeanFactory.java:1863)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveMultipleBeans(DefaultListableBeanFactory.java:1833)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1711)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1651)
-	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredMethodElement.resolveMethodArguments(AutowiredAnnotationBeanPostProcessor.java:863)
-	... 89 common frames omitted
-Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.security.config.annotation.web.configuration.OAuth2ClientConfiguration$OAuth2ClientWebMvcSecurityConfiguration]: Constructor threw exception
-	at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:220)
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:129)
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:318)
-	... 106 common frames omitted
-Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'OAuth2AuthorizedClientManager': Failed to instantiate [org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager]: Factory method 'getAuthorizedClientManager' threw exception with message: Error creating bean with name 'clientRegistrationRepository' defined in class path resource [org/springframework/boot/security/oauth2/client/autoconfigure/OAuth2ClientConfigurations$ClientRegistrationRepositoryConfiguration.class]: Unsatisfied dependency expressed through method 'clientRegistrationRepository' parameter 0: Error creating bean with name 'spring.security.oauth2.client-org.springframework.boot.security.oauth2.client.autoconfigure.OAuth2ClientProperties': Client id of registration 'google' must not be empty.
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:657)
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:489)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1362)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1194)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:565)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:525)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:333)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:371)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:331)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:201)
-	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:229)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1762)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory$DependencyObjectProvider.getIfUnique(DefaultListableBeanFactory.java:2611)
-	at org.springframework.security.config.annotation.web.configuration.OAuth2ClientConfiguration$OAuth2ClientWebMvcSecurityConfiguration.<init>(OAuth2ClientConfiguration.java:129)
-	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
-	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:480)
-	at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:207)
-	... 108 common frames omitted
-Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager]: Factory method 'getAuthorizedClientManager' threw exception with message: Error creating bean with name 'clientRegistrationRepository' defined in class path resource [org/springframework/boot/security/oauth2/client/autoconfigure/OAuth2ClientConfigurations$ClientRegistrationRepositoryConfiguration.class]: Unsatisfied dependency expressed through method 'clientRegistrationRepository' parameter 0: Error creating bean with name 'spring.security.oauth2.client-org.springframework.boot.security.oauth2.client.autoconfigure.OAuth2ClientProperties': Client id of registration 'google' must not be empty.
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.lambda$instantiate$0(SimpleInstantiationStrategy.java:183)
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiateWithFactoryMethod(SimpleInstantiationStrategy.java:72)
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:152)
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653)
-	... 127 common frames omitted
-Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'clientRegistrationRepository' defined in class path resource [org/springframework/boot/security/oauth2/client/autoconfigure/OAuth2ClientConfigurations$ClientRegistrationRepositoryConfiguration.class]: Unsatisfied dependency expressed through method 'clientRegistrationRepository' parameter 0: Error creating bean with name 'spring.security.oauth2.client-org.springframework.boot.security.oauth2.client.autoconfigure.OAuth2ClientProperties': Client id of registration 'google' must not be empty.
-	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:804)
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:546)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1362)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1194)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:565)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:525)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:333)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:371)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:331)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:201)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBeansOfType(DefaultListableBeanFactory.java:740)
-	at org.springframework.beans.factory.BeanFactoryUtils.beansOfTypeIncludingAncestors(BeanFactoryUtils.java:373)
-	at org.springframework.beans.factory.BeanFactoryUtils.beanOfTypeIncludingAncestors(BeanFactoryUtils.java:451)
-	at org.springframework.security.config.annotation.web.configuration.OAuth2ClientConfiguration$OAuth2AuthorizedClientManagerRegistrar.getAuthorizedClientManager(OAuth2ClientConfiguration.java:221)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.lambda$instantiate$0(SimpleInstantiationStrategy.java:155)
-	... 130 common frames omitted
-Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'spring.security.oauth2.client-org.springframework.boot.security.oauth2.client.autoconfigure.OAuth2ClientProperties': Client id of registration 'google' must not be empty.
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1817)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:603)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:525)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:333)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:371)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:331)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:201)
-	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:229)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1762)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1651)
-	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:912)
-	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791)
-	... 148 common frames omitted
-Caused by: java.lang.IllegalStateException: Client id of registration 'google' must not be empty.
-	at org.springframework.boot.security.oauth2.client.autoconfigure.OAuth2ClientProperties.validateRegistration(OAuth2ClientProperties.java:71)
-	at java.base/java.util.HashMap.forEach(HashMap.java:1421)
-	at org.springframework.boot.security.oauth2.client.autoconfigure.OAuth2ClientProperties.validate(OAuth2ClientProperties.java:66)
-	at org.springframework.boot.security.oauth2.client.autoconfigure.OAuth2ClientProperties.afterPropertiesSet(OAuth2ClientProperties.java:62)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1864)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1813)
-	... 159 common frames omitted
-
-2026-03-05T08:10:21.708+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Starting ISpiceApplication using Java 17.0.12 with PID 22768 (D:\I-SPICE\I-SPICE\build\classes\java\main started by Sreedev in D:\I-SPICE\I-SPICE)
-2026-03-05T08:10:21.710+05:30 DEBUG 22768 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Running with Spring Boot v4.0.2, Spring v7.0.3
-2026-03-05T08:10:21.711+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : The following 1 profile is active: "dev"
-2026-03-05T08:10:21.758+05:30  INFO 22768 --- [I-SPICE] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2026-03-05T08:10:21.758+05:30  INFO 22768 --- [I-SPICE] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2026-03-05T08:10:22.720+05:30  INFO 22768 --- [I-SPICE] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-03-05T08:10:22.794+05:30  INFO 22768 --- [I-SPICE] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 64 ms. Found 8 JPA repository interfaces.
-2026-03-05T08:10:23.145+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.s.cloud.context.scope.GenericScope     : BeanFactory id=ee7193f3-0145-3488-9428-196320112e6a
-2026-03-05T08:10:23.772+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
-2026-03-05T08:10:23.787+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2026-03-05T08:10:23.787+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.15]
-2026-03-05T08:10:23.859+05:30  INFO 22768 --- [I-SPICE] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 2099 ms
-2026-03-05T08:10:24.146+05:30  INFO 22768 --- [I-SPICE] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
-2026-03-05T08:10:24.220+05:30  INFO 22768 --- [I-SPICE] [restartedMain] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.1.Final
-2026-03-05T08:10:24.772+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-03-05T08:10:24.787+05:30  WARN 22768 --- [I-SPICE] [restartedMain] org.hibernate.orm.deprecation            : HHH90000021: Encountered deprecated setting [hibernate.temp.use_jdbc_metadata_defaults], use [hibernate.boot.allow_jdbc_metadata_access] instead
-2026-03-05T08:10:24.805+05:30  WARN 22768 --- [I-SPICE] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-03-05T08:10:24.822+05:30  INFO 22768 --- [I-SPICE] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
-	Database JDBC URL [undefined/unknown]
-	Database driver: undefined/unknown
-	Database dialect: PostgreSQLDialect
-	Database version: 13.0
-	Default catalog/schema: unknown/unknown
-	Autocommit mode: undefined/unknown
-	Isolation level: <unknown>
-	JDBC fetch size: undefined/unknown
-	Pool: undefined/unknown
-	Minimum pool size: undefined/unknown
-	Maximum pool size: undefined/unknown
-2026-03-05T08:10:25.988+05:30  INFO 22768 --- [I-SPICE] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-03-05T08:10:26.023+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-03-05T08:10:27.989+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@25b05f38
-2026-03-05T08:10:27.991+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-03-05T08:10:32.798+05:30  INFO 22768 --- [I-SPICE] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-03-05T08:10:32.902+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-03-05T08:10:36.710+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
-2026-03-05T08:10:36.793+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
-2026-03-05T08:10:36.991+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Started ISpiceApplication in 16.112 seconds (process running for 16.992)
-2026-03-05T08:17:39.577+05:30  INFO 22768 --- [I-SPICE] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 5710 class path changes (0 additions, 0 deletions, 5710 modifications)
-2026-03-05T08:17:39.591+05:30  INFO 22768 --- [I-SPICE] [Thread-1] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
-2026-03-05T08:17:40.224+05:30  INFO 22768 --- [I-SPICE] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
-2026-03-05T08:17:40.237+05:30  INFO 22768 --- [I-SPICE] [Thread-1] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-03-05T08:17:40.243+05:30  INFO 22768 --- [I-SPICE] [Thread-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2026-03-05T08:17:40.556+05:30  INFO 22768 --- [I-SPICE] [Thread-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2026-03-05T08:17:41.045+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Starting ISpiceApplication using Java 17.0.12 with PID 22768 (D:\I-SPICE\I-SPICE\build\classes\java\main started by Sreedev in D:\I-SPICE\I-SPICE)
-2026-03-05T08:17:41.045+05:30 DEBUG 22768 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Running with Spring Boot v4.0.2, Spring v7.0.3
-2026-03-05T08:17:41.045+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : The following 1 profile is active: "dev"
-2026-03-05T08:17:41.405+05:30  INFO 13612 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Starting ISpiceApplication using Java 17.0.12 with PID 13612 (D:\I-SPICE\I-SPICE\build\classes\java\main started by Sreedev in D:\I-SPICE\I-SPICE)
-2026-03-05T08:17:41.410+05:30 DEBUG 13612 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Running with Spring Boot v4.0.2, Spring v7.0.3
-2026-03-05T08:17:41.411+05:30  INFO 13612 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : The following 1 profile is active: "dev"
-2026-03-05T08:17:41.477+05:30  INFO 13612 --- [I-SPICE] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2026-03-05T08:17:41.478+05:30  INFO 13612 --- [I-SPICE] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2026-03-05T08:17:41.578+05:30  INFO 22768 --- [I-SPICE] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-03-05T08:17:41.618+05:30  INFO 22768 --- [I-SPICE] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 37 ms. Found 8 JPA repository interfaces.
-2026-03-05T08:17:41.864+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.s.cloud.context.scope.GenericScope     : BeanFactory id=ee7193f3-0145-3488-9428-196320112e6a
-2026-03-05T08:17:42.020+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
-2026-03-05T08:17:42.021+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2026-03-05T08:17:42.021+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.15]
-2026-03-05T08:17:42.085+05:30  INFO 22768 --- [I-SPICE] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1035 ms
-2026-03-05T08:17:42.218+05:30  INFO 22768 --- [I-SPICE] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
-2026-03-05T08:17:42.270+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-03-05T08:17:42.271+05:30  WARN 22768 --- [I-SPICE] [restartedMain] org.hibernate.orm.deprecation            : HHH90000021: Encountered deprecated setting [hibernate.temp.use_jdbc_metadata_defaults], use [hibernate.boot.allow_jdbc_metadata_access] instead
-2026-03-05T08:17:42.273+05:30  WARN 22768 --- [I-SPICE] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-03-05T08:17:42.273+05:30  INFO 22768 --- [I-SPICE] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
-	Database JDBC URL [undefined/unknown]
-	Database driver: undefined/unknown
-	Database dialect: PostgreSQLDialect
-	Database version: 13.0
-	Default catalog/schema: unknown/unknown
-	Autocommit mode: undefined/unknown
-	Isolation level: <unknown>
-	JDBC fetch size: undefined/unknown
-	Pool: undefined/unknown
-	Minimum pool size: undefined/unknown
-	Maximum pool size: undefined/unknown
-2026-03-05T08:17:42.511+05:30  INFO 22768 --- [I-SPICE] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-03-05T08:17:42.513+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
-2026-03-05T08:17:42.977+05:30  INFO 13612 --- [I-SPICE] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-03-05T08:17:43.079+05:30  INFO 13612 --- [I-SPICE] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 84 ms. Found 8 JPA repository interfaces.
-2026-03-05T08:17:43.656+05:30  INFO 13612 --- [I-SPICE] [restartedMain] o.s.cloud.context.scope.GenericScope     : BeanFactory id=ee7193f3-0145-3488-9428-196320112e6a
-2026-03-05T08:17:44.101+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@6cd8853b
-2026-03-05T08:17:44.101+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
-2026-03-05T08:17:44.601+05:30  INFO 13612 --- [I-SPICE] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
-2026-03-05T08:17:44.625+05:30  INFO 13612 --- [I-SPICE] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2026-03-05T08:17:44.627+05:30  INFO 13612 --- [I-SPICE] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.15]
-2026-03-05T08:17:44.718+05:30  INFO 13612 --- [I-SPICE] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 3239 ms
-2026-03-05T08:17:45.281+05:30  INFO 13612 --- [I-SPICE] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
-2026-03-05T08:17:45.474+05:30  INFO 13612 --- [I-SPICE] [restartedMain] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.1.Final
-2026-03-05T08:17:46.262+05:30  INFO 13612 --- [I-SPICE] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-03-05T08:17:46.289+05:30  WARN 13612 --- [I-SPICE] [restartedMain] org.hibernate.orm.deprecation            : HHH90000021: Encountered deprecated setting [hibernate.temp.use_jdbc_metadata_defaults], use [hibernate.boot.allow_jdbc_metadata_access] instead
-2026-03-05T08:17:46.316+05:30  WARN 13612 --- [I-SPICE] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-03-05T08:17:46.341+05:30  INFO 13612 --- [I-SPICE] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
-	Database JDBC URL [undefined/unknown]
-	Database driver: undefined/unknown
-	Database dialect: PostgreSQLDialect
-	Database version: 13.0
-	Default catalog/schema: unknown/unknown
-	Autocommit mode: undefined/unknown
-	Isolation level: <unknown>
-	JDBC fetch size: undefined/unknown
-	Pool: undefined/unknown
-	Minimum pool size: undefined/unknown
-	Maximum pool size: undefined/unknown
-2026-03-05T08:17:47.642+05:30  INFO 13612 --- [I-SPICE] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-03-05T08:17:47.668+05:30  INFO 13612 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-03-05T08:17:48.564+05:30  INFO 22768 --- [I-SPICE] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-03-05T08:17:49.441+05:30  INFO 13612 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@355eee2f
-2026-03-05T08:17:49.443+05:30  INFO 13612 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-03-05T08:17:50.146+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
-2026-03-05T08:17:50.195+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
-2026-03-05T08:17:50.517+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Started ISpiceApplication in 9.859 seconds (process running for 450.518)
-2026-03-05T08:17:50.523+05:30  INFO 22768 --- [I-SPICE] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
-2026-03-05T08:17:54.094+05:30  INFO 13612 --- [I-SPICE] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-03-05T08:17:54.269+05:30  INFO 13612 --- [I-SPICE] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-03-05T08:17:59.722+05:30  INFO 13612 --- [I-SPICE] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
-2026-03-05T08:17:59.853+05:30  WARN 13612 --- [I-SPICE] [restartedMain] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
-2026-03-05T08:18:00.067+05:30  INFO 13612 --- [I-SPICE] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-03-05T08:18:00.071+05:30  INFO 13612 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2026-03-05T08:18:00.548+05:30  INFO 13612 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2026-03-05T08:18:00.573+05:30  INFO 13612 --- [I-SPICE] [restartedMain] .s.b.a.l.ConditionEvaluationReportLogger : 
-
-Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
-2026-03-05T08:18:00.593+05:30 ERROR 13612 --- [I-SPICE] [restartedMain] o.s.b.d.LoggingFailureAnalysisReporter   : 
+2026-03-08T15:45:30.142+05:30 ERROR 5452 --- [I-SPICE] [restartedMain] o.s.b.d.LoggingFailureAnalysisReporter   : 
 
 ***************************
 APPLICATION FAILED TO START
@@ -376,131 +135,3 @@ Action:
 
 Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
 
-2026-03-05T08:19:23.274+05:30  INFO 22768 --- [I-SPICE] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-03-05T08:19:23.274+05:30  INFO 22768 --- [I-SPICE] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2026-03-05T08:19:23.277+05:30  INFO 22768 --- [I-SPICE] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
-2026-03-05T08:19:23.354+05:30  INFO 22768 --- [I-SPICE] [http-nio-8080-exec-1] c.c.I_SPICE.config.CsrfControllerAdvice  : Found CSRF token via '_csrf' attribute
-2026-03-05T08:19:23.385+05:30  INFO 22768 --- [I-SPICE] [http-nio-8080-exec-2] c.c.I_SPICE.config.CsrfControllerAdvice  : Found CSRF token via '_csrf' attribute
-2026-03-05T08:20:29.668+05:30  INFO 22768 --- [I-SPICE] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 1 deletion, 0 modifications)
-2026-03-05T08:20:29.670+05:30  INFO 22768 --- [I-SPICE] [Thread-7] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
-2026-03-05T08:20:30.061+05:30  INFO 22768 --- [I-SPICE] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
-2026-03-05T08:20:30.085+05:30  INFO 22768 --- [I-SPICE] [Thread-7] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-03-05T08:20:30.087+05:30  INFO 22768 --- [I-SPICE] [Thread-7] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown initiated...
-2026-03-05T08:20:30.249+05:30  INFO 22768 --- [I-SPICE] [Thread-7] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown completed.
-2026-03-05T08:20:30.607+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Starting ISpiceApplication using Java 17.0.12 with PID 22768 (D:\I-SPICE\I-SPICE\build\classes\java\main started by Sreedev in D:\I-SPICE\I-SPICE)
-2026-03-05T08:20:30.607+05:30 DEBUG 22768 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Running with Spring Boot v4.0.2, Spring v7.0.3
-2026-03-05T08:20:30.607+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : The following 1 profile is active: "dev"
-2026-03-05T08:20:30.978+05:30  INFO 22768 --- [I-SPICE] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-03-05T08:20:31.004+05:30  INFO 22768 --- [I-SPICE] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 25 ms. Found 8 JPA repository interfaces.
-2026-03-05T08:20:31.134+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.s.cloud.context.scope.GenericScope     : BeanFactory id=ee7193f3-0145-3488-9428-196320112e6a
-2026-03-05T08:20:31.245+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
-2026-03-05T08:20:31.247+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2026-03-05T08:20:31.247+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.15]
-2026-03-05T08:20:31.287+05:30  INFO 22768 --- [I-SPICE] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 677 ms
-2026-03-05T08:20:31.386+05:30  INFO 22768 --- [I-SPICE] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
-2026-03-05T08:20:31.421+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-03-05T08:20:31.423+05:30  WARN 22768 --- [I-SPICE] [restartedMain] org.hibernate.orm.deprecation            : HHH90000021: Encountered deprecated setting [hibernate.temp.use_jdbc_metadata_defaults], use [hibernate.boot.allow_jdbc_metadata_access] instead
-2026-03-05T08:20:31.423+05:30  WARN 22768 --- [I-SPICE] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-03-05T08:20:31.423+05:30  INFO 22768 --- [I-SPICE] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
-	Database JDBC URL [undefined/unknown]
-	Database driver: undefined/unknown
-	Database dialect: PostgreSQLDialect
-	Database version: 13.0
-	Default catalog/schema: unknown/unknown
-	Autocommit mode: undefined/unknown
-	Isolation level: <unknown>
-	JDBC fetch size: undefined/unknown
-	Pool: undefined/unknown
-	Minimum pool size: undefined/unknown
-	Maximum pool size: undefined/unknown
-2026-03-05T08:20:31.587+05:30  INFO 22768 --- [I-SPICE] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-03-05T08:20:31.589+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Starting...
-2026-03-05T08:20:33.223+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-3 - Added connection org.postgresql.jdbc.PgConnection@6fb618ff
-2026-03-05T08:20:33.224+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Start completed.
-2026-03-05T08:20:37.894+05:30  INFO 22768 --- [I-SPICE] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-03-05T08:20:39.144+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
-2026-03-05T08:20:39.172+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
-2026-03-05T08:20:39.398+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Started ISpiceApplication in 9.034 seconds (process running for 619.399)
-2026-03-05T08:20:39.400+05:30  INFO 22768 --- [I-SPICE] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
-2026-03-05T08:20:40.562+05:30  INFO 22768 --- [I-SPICE] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (1 addition, 0 deletions, 0 modifications)
-2026-03-05T08:20:40.563+05:30  INFO 22768 --- [I-SPICE] [Thread-13] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
-2026-03-05T08:20:40.887+05:30  INFO 22768 --- [I-SPICE] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
-2026-03-05T08:20:40.891+05:30  INFO 22768 --- [I-SPICE] [Thread-13] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-03-05T08:20:40.892+05:30  INFO 22768 --- [I-SPICE] [Thread-13] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown initiated...
-2026-03-05T08:20:41.349+05:30  INFO 22768 --- [I-SPICE] [Thread-13] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown completed.
-2026-03-05T08:20:41.628+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Starting ISpiceApplication using Java 17.0.12 with PID 22768 (D:\I-SPICE\I-SPICE\build\classes\java\main started by Sreedev in D:\I-SPICE\I-SPICE)
-2026-03-05T08:20:41.628+05:30 DEBUG 22768 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Running with Spring Boot v4.0.2, Spring v7.0.3
-2026-03-05T08:20:41.628+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : The following 1 profile is active: "dev"
-2026-03-05T08:20:41.884+05:30  INFO 22768 --- [I-SPICE] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-03-05T08:20:41.911+05:30  INFO 22768 --- [I-SPICE] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 24 ms. Found 8 JPA repository interfaces.
-2026-03-05T08:20:42.048+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.s.cloud.context.scope.GenericScope     : BeanFactory id=ee7193f3-0145-3488-9428-196320112e6a
-2026-03-05T08:20:42.139+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
-2026-03-05T08:20:42.139+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2026-03-05T08:20:42.139+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.15]
-2026-03-05T08:20:42.169+05:30  INFO 22768 --- [I-SPICE] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 539 ms
-2026-03-05T08:20:42.245+05:30  INFO 22768 --- [I-SPICE] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
-2026-03-05T08:20:42.276+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-03-05T08:20:42.277+05:30  WARN 22768 --- [I-SPICE] [restartedMain] org.hibernate.orm.deprecation            : HHH90000021: Encountered deprecated setting [hibernate.temp.use_jdbc_metadata_defaults], use [hibernate.boot.allow_jdbc_metadata_access] instead
-2026-03-05T08:20:42.277+05:30  WARN 22768 --- [I-SPICE] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-03-05T08:20:42.277+05:30  INFO 22768 --- [I-SPICE] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
-	Database JDBC URL [undefined/unknown]
-	Database driver: undefined/unknown
-	Database dialect: PostgreSQLDialect
-	Database version: 13.0
-	Default catalog/schema: unknown/unknown
-	Autocommit mode: undefined/unknown
-	Isolation level: <unknown>
-	JDBC fetch size: undefined/unknown
-	Pool: undefined/unknown
-	Minimum pool size: undefined/unknown
-	Maximum pool size: undefined/unknown
-2026-03-05T08:20:42.404+05:30  INFO 22768 --- [I-SPICE] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-03-05T08:20:42.404+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Starting...
-2026-03-05T08:20:43.795+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-4 - Added connection org.postgresql.jdbc.PgConnection@718844b
-2026-03-05T08:20:43.796+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Start completed.
-2026-03-05T08:20:48.035+05:30  INFO 22768 --- [I-SPICE] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-03-05T08:20:49.565+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
-2026-03-05T08:20:49.594+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
-2026-03-05T08:20:49.741+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Started ISpiceApplication in 8.311 seconds (process running for 629.742)
-2026-03-05T08:20:49.744+05:30  INFO 22768 --- [I-SPICE] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
-2026-03-05T08:27:50.763+05:30  INFO 22768 --- [I-SPICE] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 7 class path changes (0 additions, 0 deletions, 7 modifications)
-2026-03-05T08:27:50.765+05:30  INFO 22768 --- [I-SPICE] [Thread-19] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
-2026-03-05T08:27:51.323+05:30  INFO 22768 --- [I-SPICE] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
-2026-03-05T08:27:51.327+05:30  INFO 22768 --- [I-SPICE] [Thread-19] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-03-05T08:27:51.328+05:30  INFO 22768 --- [I-SPICE] [Thread-19] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown initiated...
-2026-03-05T08:27:51.330+05:30  INFO 22768 --- [I-SPICE] [Thread-19] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown completed.
-2026-03-05T08:27:51.725+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Starting ISpiceApplication using Java 17.0.12 with PID 22768 (D:\I-SPICE\I-SPICE\build\classes\java\main started by Sreedev in D:\I-SPICE\I-SPICE)
-2026-03-05T08:27:51.725+05:30 DEBUG 22768 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Running with Spring Boot v4.0.2, Spring v7.0.3
-2026-03-05T08:27:51.725+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : The following 1 profile is active: "dev"
-2026-03-05T08:27:52.142+05:30  INFO 22768 --- [I-SPICE] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-03-05T08:27:52.176+05:30  INFO 22768 --- [I-SPICE] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 31 ms. Found 8 JPA repository interfaces.
-2026-03-05T08:27:52.338+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.s.cloud.context.scope.GenericScope     : BeanFactory id=ee7193f3-0145-3488-9428-196320112e6a
-2026-03-05T08:27:52.452+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
-2026-03-05T08:27:52.454+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2026-03-05T08:27:52.454+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.15]
-2026-03-05T08:27:52.505+05:30  INFO 22768 --- [I-SPICE] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 776 ms
-2026-03-05T08:27:52.660+05:30  INFO 22768 --- [I-SPICE] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
-2026-03-05T08:27:52.707+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-03-05T08:27:52.708+05:30  WARN 22768 --- [I-SPICE] [restartedMain] org.hibernate.orm.deprecation            : HHH90000021: Encountered deprecated setting [hibernate.temp.use_jdbc_metadata_defaults], use [hibernate.boot.allow_jdbc_metadata_access] instead
-2026-03-05T08:27:52.709+05:30  WARN 22768 --- [I-SPICE] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-03-05T08:27:52.709+05:30  INFO 22768 --- [I-SPICE] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
-	Database JDBC URL [undefined/unknown]
-	Database driver: undefined/unknown
-	Database dialect: PostgreSQLDialect
-	Database version: 13.0
-	Default catalog/schema: unknown/unknown
-	Autocommit mode: undefined/unknown
-	Isolation level: <unknown>
-	JDBC fetch size: undefined/unknown
-	Pool: undefined/unknown
-	Minimum pool size: undefined/unknown
-	Maximum pool size: undefined/unknown
-2026-03-05T08:27:52.888+05:30  INFO 22768 --- [I-SPICE] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-03-05T08:27:52.889+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Starting...
-2026-03-05T08:27:54.511+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Added connection org.postgresql.jdbc.PgConnection@451c6c63
-2026-03-05T08:27:54.512+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Start completed.
-2026-03-05T08:27:59.335+05:30  INFO 22768 --- [I-SPICE] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-03-05T08:28:02.296+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
-2026-03-05T08:28:02.325+05:30  INFO 22768 --- [I-SPICE] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
-2026-03-05T08:28:02.496+05:30  INFO 22768 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Started ISpiceApplication in 11.08 seconds (process running for 1062.498)
-2026-03-05T08:28:02.499+05:30  INFO 22768 --- [I-SPICE] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
