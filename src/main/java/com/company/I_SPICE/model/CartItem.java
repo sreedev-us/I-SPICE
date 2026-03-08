@@ -49,7 +49,7 @@ public class CartItem {
         this.cart = cart;
         this.product = product;
         this.quantity = quantity;
-        BigDecimal productPrice = product != null ? product.getPrice() : BigDecimal.ZERO;
+        BigDecimal productPrice = product != null ? product.getDiscountedPrice() : BigDecimal.ZERO;
         this.price = productPrice;
         this.unitPrice = productPrice; // Set both to same value
         this.createdAt = LocalDateTime.now();
@@ -82,11 +82,11 @@ public class CartItem {
         this.product = product;
         if (product != null) {
             // Set both price fields when product is set
-            if (this.price == null) {
-                this.price = product.getPrice();
+            if (this.price == null || this.price.equals(BigDecimal.ZERO)) {
+                this.price = product.getDiscountedPrice();
             }
-            if (this.unitPrice == null) {
-                this.unitPrice = product.getPrice();
+            if (this.unitPrice == null || this.unitPrice.equals(BigDecimal.ZERO)) {
+                this.unitPrice = product.getDiscountedPrice();
             }
         }
         this.updatedAt = LocalDateTime.now();
@@ -173,8 +173,8 @@ public class CartItem {
             System.out.println("   Auto-set unitPrice from price: " + unitPrice);
         } else if (price == null && product != null) {
             // Both are null, set from product
-            price = product.getPrice();
-            unitPrice = product.getPrice();
+            price = product.getDiscountedPrice();
+            unitPrice = product.getDiscountedPrice();
             System.out.println("   Auto-set both from product: " + price);
         } else if (price != null && unitPrice != null && !price.equals(unitPrice)) {
             // They're different, sync them (use price as source of truth)

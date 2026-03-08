@@ -173,8 +173,8 @@ public class CartService {
                 newItem.setProduct(product);
                 newItem.setQuantity(quantity);
 
-                // FIX: This is the key change - use setPrice() instead of setUnitPrice()
-                newItem.setPrice(product.getPrice());
+                // FIX: This is the key change - use setPrice() with the discounted price
+                newItem.setPrice(product.getDiscountedPrice());
 
                 newItem.setCreatedAt(LocalDateTime.now());
                 newItem.setUpdatedAt(LocalDateTime.now());

@@ -553,27 +553,39 @@
         }
 
         .current-price {
-            font-size: 22px;
-            font-weight: 700;
+            font-size: 20px;
+            font-weight: 800;
             color: var(--dark);
             display: flex;
             align-items: center;
+            gap: 6px;
+        }
+
+        .price-row {
+            display: flex;
+            align-items: baseline;
             gap: 8px;
+            flex-wrap: wrap;
         }
 
         .original-price {
-            font-size: 16px;
+            font-size: 14px;
             color: var(--gray);
             text-decoration: line-through;
+            font-weight: 500;
         }
 
         .discount-badge {
-            background: var(--danger);
+            background: #e53935;
             color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            white-space: nowrap;
+            box-shadow: 0 2px 4px rgba(229, 57, 53, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .add-to-cart-btn.shop {
@@ -1218,20 +1230,20 @@
 
                                     <div class="product-price-section">
                                         <div class="price-container">
-                                            <div class="current-price">
-                                                ₹<span
-                                                    th:text="${product.discountedPrice != null ? #numbers.formatDecimal(product.discountedPrice, 0, 'COMMA', 2, 'POINT') : #numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')}">0.00</span>
+                                            <div class="price-row">
+                                                <div class="current-price">
+                                                    ₹<span
+                                                        th:text="${product.discountedPrice != null ? #numbers.formatDecimal(product.discountedPrice, 0, 'COMMA', 2, 'POINT') : #numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')}">0.00</span>
+                                                </div>
                                                 <th:block th:if="${product.discount != null && product.discount > 0}">
+                                                    <span class="original-price">
+                                                        ₹<span
+                                                            th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')}">0.00</span>
+                                                    </span>
                                                     <span class="discount-badge"
-                                                        th:text="'-' + product.discount + '%'">-10%</span>
+                                                        th:text="${product.discount} + '% OFF'">10% OFF</span>
                                                 </th:block>
                                             </div>
-                                            <th:block th:if="${product.discount != null && product.discount > 0}">
-                                                <div class="original-price">
-                                                    ₹<span
-                                                        th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')}">0.00</span>
-                                                </div>
-                                            </th:block>
                                         </div>
 
                                         <button class="add-to-cart-btn shop" th:data-product-id="${product.id}"

@@ -72,18 +72,7 @@ public class HomeController {
             // Add featured products from database
             List<Product> featuredProducts = productService.getFeaturedProducts();
 
-            // Calculate discounted prices
-            if (featuredProducts != null) {
-                featuredProducts.forEach(product -> {
-                    if (product.getDiscount() != null && product.getDiscount() > 0) {
-                        double discountedPrice = product.getPrice().doubleValue() * (1 - product.getDiscount() / 100.0);
-                        product.setDiscountedPrice(Math.round(discountedPrice * 100.0) / 100.0);
-                    } else {
-                        product.setDiscountedPrice(product.getPrice().doubleValue());
-                    }
-                });
-            }
-
+            // Prices are now automatically calculated by Product Entity lifecycle hooks
             model.addAttribute("featuredProducts", featuredProducts);
             System.out.println("[INFO] Featured products count: "
                     + (featuredProducts != null ? featuredProducts.size() : 0));

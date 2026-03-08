@@ -49,7 +49,7 @@ public class OrderItem {
     }
 
     public OrderItem(Order order, Product product, Integer quantity) {
-        this(order, product, quantity, product.getPrice());
+        this(order, product, quantity, product.getDiscountedPrice());
     }
 
     @PrePersist
@@ -85,8 +85,8 @@ public class OrderItem {
 
     public void setProduct(Product product) {
         this.product = product;
-        if (product != null && this.unitPrice == null) {
-            this.unitPrice = product.getPrice();
+        if (product != null && (this.unitPrice == null || this.unitPrice.equals(BigDecimal.ZERO))) {
+            this.unitPrice = product.getDiscountedPrice();
         }
         if (product != null && this.productName == null) {
             this.productName = product.getName();

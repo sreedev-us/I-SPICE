@@ -201,6 +201,36 @@
             color: var(--text-light);
         }
 
+        .product-price {
+            font-size: 38px;
+            font-weight: 800;
+            color: var(--dark);
+            letter-spacing: -1px;
+        }
+
+        .price-compare {
+            color: var(--gray);
+            text-decoration: line-through;
+            font-size: 22px;
+            margin-left: 12px;
+            font-weight: 500;
+        }
+
+        .discount-badge {
+            background: #e53935;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 800;
+            display: inline-block;
+            margin-left: 18px;
+            box-shadow: 0 4px 10px rgba(229, 57, 53, 0.25);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transform: translateY(-2px);
+        }
+
         .info-value {
             font-weight: 600;
             color: var(--dark);
@@ -704,27 +734,29 @@
 
         }
 
-        
-    
-    /* -- FINAL ROBUST MOBILE SCROLLING FIX -- */
-    .table-responsive { 
-        width: 100% !important; 
-        overflow-x: auto !important; 
-        -webkit-overflow-scrolling: touch !important; 
-        margin-bottom: 24px;
-        display: block;
-        background: #fff;
-    }
-    .table-responsive table { 
-        min-width: 850px !important; 
-        width: 100% !important;
-        margin: 0 !important;
-    }
-    .table-responsive td, .table-responsive th {
-        white-space: nowrap !important;
-    }
 
-</style>
+
+        /* -- FINAL ROBUST MOBILE SCROLLING FIX -- */
+        .table-responsive {
+            width: 100% !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            margin-bottom: 24px;
+            display: block;
+            background: #fff;
+        }
+
+        .table-responsive table {
+            min-width: 850px !important;
+            width: 100% !important;
+            margin: 0 !important;
+        }
+
+        .table-responsive td,
+        .table-responsive th {
+            white-space: nowrap !important;
+        }
+    </style>
 
 </head>
 
@@ -821,24 +853,46 @@
             <!-- Order Items -->
             <div class="card" style="margin-bottom:20px;">
                 <div class="card-title"><i class="fas fa-box-open" style="color:var(--accent);"></i>Order Items</div>
-                <div class="table-responsive"><table>
-                    <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Qty</th>
-                            <th>Unit Price</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="item : ${order.orderItems}">
-                            <td th:text="${item.product != null ? item.product.name : 'Unknown Product'}">Product</td>
-                            <td th:text="${item.quantity}">1</td>
-                            <td th:text="'₹' + ${item.unitPrice}">₹0</td>
-                            <td style="font-weight:600;" th:text="'₹' + ${item.totalPrice}">₹0</td>
-                        </tr>
-                    </tbody>
-                </table></div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Qty</th>
+                                <th>Unit Price</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="item : ${order.orderItems}">
+                                <td>
+                                    <div style="font-weight: 600;"
+                                        th:text="${item.product != null ? item.product.name : 'Unknown Product'}">
+                                        Product</div>
+                                    <div th:if="${item.product != null && item.product.category != null}"
+                                        style="font-size: 11px; color: var(--text-light); text-transform: uppercase;"
+                                        th:text="${item.product.category}">Category</div>
+                                </td>
+                                <td th:text="${item.quantity}">1</td>
+                                <td>
+                                    <div style="font-weight: 600;"
+                                        th:text="'₹' + ${#numbers.formatDecimal(item.unitPrice, 0, 'COMMA', 2, 'POINT')}">
+                                        ₹0</div>
+                                    <div th:if="${item.product != null && item.product.discount > 0}"
+                                        style="font-size: 11px; color: #e53935; font-weight: 700;">
+                                        <span
+                                            style="text-decoration: line-through; color: var(--text-light); font-weight: normal; margin-right: 4px;"
+                                            th:text="'₹' + ${item.product.price}">₹0</span>
+                                        <span th:text="'-' + ${item.product.discount} + '%'">-10%</span>
+                                    </div>
+                                </td>
+                                <td style="font-weight:700; font-size: 15px; color: var(--dark);"
+                                    th:text="'₹' + ${#numbers.formatDecimal(item.totalPrice, 0, 'COMMA', 2, 'POINT')}">
+                                    ₹0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <div style="text-align:right;padding:14px;border-top:1px solid var(--border);">
                     <div style="font-size:13px;color:var(--text-light);">Subtotal: ₹<span
                             th:text="${order.subtotal}">0</span></div>

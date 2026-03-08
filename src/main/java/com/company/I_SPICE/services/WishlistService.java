@@ -27,15 +27,7 @@ public class WishlistService {
      */
     public List<Product> getWishlistProducts(Long userId) {
         List<Product> products = wishlistRepository.findProductsByUserId(userId);
-        // Populate discounted price for display
-        products.forEach(p -> {
-            if (p.getDiscount() != null && p.getDiscount() > 0) {
-                double dp = p.getPrice().doubleValue() * (1 - p.getDiscount() / 100.0);
-                p.setDiscountedPrice(Math.round(dp * 100.0) / 100.0);
-            } else {
-                p.setDiscountedPrice(p.getPrice().doubleValue());
-            }
-        });
+        // Prices are now automatically calculated by Product Entity lifecycle hooks
         return products;
     }
 

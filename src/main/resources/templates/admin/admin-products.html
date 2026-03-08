@@ -268,14 +268,54 @@
             font-size: 14px;
         }
 
-        .alert-success {
-            background: #d1fae5;
-            color: #065f46;
+        /* Price Display */
+        .admin-price-row {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
         }
 
-        .alert-error {
+        .admin-price-current {
+            font-weight: 800;
+            color: var(--dark);
+            font-size: 15px;
+        }
+
+        .admin-price-original {
+            text-decoration: line-through;
+            color: var(--text-light);
+            font-size: 12px;
+        }
+
+        .admin-discount-badge {
+            display: inline-block;
             background: #fee2e2;
-            color: #991b1b;
+            color: #dc2626;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            margin-top: 4px;
+        }
+
+        /* Stock Status */
+        .stock-badge {
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .stock-low {
+            background: #fff7ed;
+            color: #ea580c;
+            border: 1px solid #ffedd5;
+        }
+
+        .stock-normal {
+            background: #f0fdf4;
+            color: #16a34a;
+            border: 1px solid #dcfce7;
         }
 
         .product-img {
@@ -294,8 +334,8 @@
             display: inline-block;
         }
 
+        /* Badge Yes/No */
         .badge-yes {
-            background: #d1fae5;
             color: #065f46;
         }
 
@@ -761,38 +801,49 @@
                         <tbody>
                             <tr th:each="p : ${products}">
                                 <td>
-                                    <img th:if="${p.imageUrl != null}" th:src="${p.imageUrl}" class="product-img"
-                                        alt="Product">
-                                    <div th:if="${p.imageUrl == null}" class="product-img"
-                                        style="background:#f1f5f9;display:flex;align-items:center;justify-content:center;color:#94a3b8;">
-                                        <i class="fas fa-image"></i>
+                                    <div class="product-img-container">
+                                        <img th:if="${p.imageUrl != null}" th:src="${p.imageUrl}" class="product-img"
+                                            alt="Product">
+                                        <div th:if="${p.imageUrl == null}" class="product-img"
+                                            style="background:#f1f5f9;display:flex;align-items:center;justify-content:center;color:#94a3b8;">
+                                            <i class="fas fa-pepper-hot"></i>
+                                        </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <div style="font-weight:600;" th:text="${p.name}">Product</div>
+                                    <div style="font-weight:700; color: var(--dark);" th:text="${p.name}">Product</div>
                                     <div style="color:var(--text-light);font-size:12px;"
-                                        th:text="${#strings.abbreviate(p.description,50)}">desc</div>
+                                        th:text="${#strings.abbreviate(p.description,40)}">desc</div>
                                 </td>
-                                <td th:text="${p.category}">Category</td>
                                 <td>
-                                    <div th:if="${p.discount != null and p.discount > 0}">
-                                        <span style="font-weight:700;"
-                                            th:text="'₹' + ${#numbers.formatDecimal(p.discountedPrice, 0, 'COMMA', 2, 'POINT')}">₹0</span>
-                                        <div style="text-decoration:line-through; color:var(--text-light); font-size:12px;"
-                                            th:text="'₹' + ${p.price}">₹0</div>
+                                    <span style="font-size: 13px; font-weight: 500;"
+                                        th:text="${p.category}">Category</span>
+                                </td>
+                                <td>
+                                    <div class="admin-price-row">
+                                        <div class="admin-price-current"
+                                            th:text="'₹' + ${#numbers.formatDecimal(p.discountedPrice, 0, 'COMMA', 2, 'POINT')}">
+                                            ₹0</div>
+                                        <div th:if="${p.discount != null and p.discount > 0}"
+                                            class="admin-price-original" th:text="'₹' + ${p.price}">₹0</div>
+                                        <div th:if="${p.discount != null and p.discount > 0}"
+                                            class="admin-discount-badge" th:text="'-' + ${p.discount} + '%'">0%</div>
                                     </div>
-                                    <div th:unless="${p.discount != null and p.discount > 0}"
-                                        th:text="'₹' + ${p.price}">₹0</div>
                                 </td>
                                 <td>
-                                    <span th:text="${p.stock}"
-                                        th:style="${p.stock < 10} ? 'color:var(--danger);font-weight:700;' : ''">0</span>
+                                    <span
+                                        th:class="${p.stock < 10} ? 'stock-badge stock-low' : 'stock-badge stock-normal'">
+                                        <i
+                                            th:class="${p.stock < 10} ? 'fas fa-exclamation-triangle' : 'fas fa-check-circle'"></i>
+                                        <span th:text="${p.stock}">0</span>
+                                    </span>
                                 </td>
                                 <td>
-                                    <span th:if="${p.featured}" class="badge badge-yes">Yes</span>
-                                    <span th:if="${!p.featured}" class="badge badge-no">No</span>
+                                    <span th:if="${p.featured}" class="badge-yes">
+                                        <i class="fas fa-star" style="color:var(--accent); margin-right:4px;"></i>Yes
+                                    </span>
+                                    <span th:if="${!p.featured}" class="badge-no">No</span>
                                 </td>
-                                <td th:text="${p.discount != null ? p.discount + '%' : '0%'}">0%</td>
                                 <td style="white-space:nowrap;">
                                     <a th:href="@{'/admin/products/' + ${p.id} + '/edit'}"
                                         class="btn btn-outline btn-sm"><i class="fas fa-edit"></i> Edit</a>

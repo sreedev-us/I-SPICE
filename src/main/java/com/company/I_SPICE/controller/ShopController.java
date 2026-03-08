@@ -64,15 +64,7 @@ public class ShopController {
             // Get products
             Page<Product> productPage = productService.searchProducts(search, category, minPrice, maxPrice, pageable);
 
-            // Calculate discounted prices for all products
-            productPage.getContent().forEach(product -> {
-                if (product.getDiscount() != null && product.getDiscount() > 0) {
-                    double discountedPrice = product.getPrice().doubleValue() * (1 - product.getDiscount() / 100.0);
-                    product.setDiscountedPrice(Math.round(discountedPrice * 100.0) / 100.0);
-                } else {
-                    product.setDiscountedPrice(product.getPrice().doubleValue());
-                }
-            });
+            // Prices are now automatically calculated by Product Entity lifecycle hooks
 
             model.addAttribute("products", productPage.getContent());
             model.addAttribute("currentPage", page);
@@ -127,13 +119,7 @@ public class ShopController {
                 return "redirect:/shop";
             }
 
-            // Calculate discounted price
-            if (product.getDiscount() != null && product.getDiscount() > 0) {
-                double discountedPrice = product.getPrice().doubleValue() * (1 - product.getDiscount() / 100.0);
-                product.setDiscountedPrice(Math.round(discountedPrice * 100.0) / 100.0);
-            } else {
-                product.setDiscountedPrice(product.getPrice().doubleValue());
-            }
+            // Prices are now automatically calculated by Product Entity lifecycle hooks
 
             model.addAttribute("product", product);
 
@@ -160,15 +146,7 @@ public class ShopController {
 
             // Get related products
             List<Product> relatedProducts = productService.getRelatedProducts(product.getCategory(), product.getId());
-            // Calculate discounted prices for related products
-            relatedProducts.forEach(p -> {
-                if (p.getDiscount() != null && p.getDiscount() > 0) {
-                    double dp = p.getPrice().doubleValue() * (1 - p.getDiscount() / 100.0);
-                    p.setDiscountedPrice(Math.round(dp * 100.0) / 100.0);
-                } else {
-                    p.setDiscountedPrice(p.getPrice().doubleValue());
-                }
-            });
+            // Prices are now automatically calculated by Product Entity lifecycle hooks
             model.addAttribute("relatedProducts", relatedProducts);
 
             // Get product reviews

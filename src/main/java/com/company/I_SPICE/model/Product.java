@@ -2,6 +2,7 @@ package com.company.I_SPICE.model;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -69,8 +70,8 @@ public class Product {
 
     private Integer discount = 0;
 
-    @Column(name = "discounted_price")
-    private Double discountedPrice;
+    @Column(name = "discounted_price", precision = 10, scale = 2)
+    private BigDecimal discountedPrice;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -106,14 +107,16 @@ public class Product {
 
     private void calculateDiscountedPrice() {
         if (price == null) {
-            this.discountedPrice = 0.0;
+            this.discountedPrice = BigDecimal.ZERO;
             return;
         }
         if (discount == null || discount <= 0) {
-            this.discountedPrice = price.doubleValue();
+            this.discountedPrice = price;
         } else {
-            double originalPrice = price.doubleValue();
-            this.discountedPrice = originalPrice * (1 - (discount / 100.0));
+            BigDecimal discountPercent = BigDecimal.valueOf(discount);
+            BigDecimal discountMultiplier = BigDecimal.ONE
+                    .subtract(discountPercent.divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP));
+            this.discountedPrice = price.multiply(discountMultiplier).setScale(2, RoundingMode.HALF_UP);
         }
     }
 
@@ -246,11 +249,11 @@ public class Product {
         this.discount = discount;
     }
 
-    public Double getDiscountedPrice() {
+    public BigDecimal getDiscountedPrice() {
         return discountedPrice;
     }
 
-    public void setDiscountedPrice(Double discountedPrice) {
+    public void setDiscountedPrice(BigDecimal discountedPrice) {
         this.discountedPrice = discountedPrice;
     }
 

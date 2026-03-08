@@ -424,14 +424,15 @@
         }
 
         .discount-badge {
-            background: linear-gradient(to right, var(--eco-green), var(--gold-primary));
+            background: #e53935;
             color: white;
-            padding: 5px 12px;
+            padding: 4px 12px;
             border-radius: 20px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 700;
             display: inline-block;
             margin-left: 15px;
+            box-shadow: 0 2px 5px rgba(229, 57, 53, 0.2);
         }
 
         .product-description {
@@ -1354,9 +1355,18 @@
                         a Review</a>
                 </div>
 
-                <div class="product-price" id="pPrice" style="margin-bottom: 10px;">
-                    ₹<span
-                        th:text="${#numbers.formatDecimal((product?.discountedPrice != null ? product.discountedPrice : (product?.price != null ? product.price : 0.00)), 1, 2)}">0.00</span>
+                <div class="product-price-section" style="margin-bottom: 25px;">
+                    <div class="product-price" id="pPrice"
+                        style="display: flex; align-items: baseline; flex-wrap: wrap;">
+                        ₹<span
+                            th:text="${#numbers.formatDecimal((product?.discountedPrice != null ? product.discountedPrice : (product?.price != null ? product.price : 0.00)), 1, 2)}">0.00</span>
+
+                        <th:block th:if="${product.discount != null && product.discount > 0}">
+                            <span class="price-compare"
+                                th:text="'₹' + ${#numbers.formatDecimal(product.price, 1, 2)}">₹0.00</span>
+                            <span class="discount-badge" th:text="${product.discount} + '% OFF'">10% OFF</span>
+                        </th:block>
+                    </div>
                 </div>
 
                 <p class="product-description" id="pDesc" th:text="${product?.description ?: 'Premium spice quality.'}">

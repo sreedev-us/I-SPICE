@@ -254,9 +254,16 @@
         }
 
         .cart-container {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: 1fr 380px;
             gap: 30px;
+            align-items: flex-start;
+        }
+
+        @media(max-width: 992px) {
+            .cart-container {
+                grid-template-columns: 1fr;
+            }
         }
 
         .cart-items {
@@ -267,18 +274,19 @@
 
         .cart-item {
             background: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: var(--shadow);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
             display: flex;
-            gap: 20px;
-            border: 1px solid #f0e6d3;
+            gap: 24px;
+            border: 1px solid #f1f5f9;
             transition: var(--transition);
         }
 
         .cart-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(46, 125, 50, 0.15);
+            box-shadow: 0 10px 30px rgba(46, 125, 50, 0.08);
+            border-color: rgba(46, 125, 50, 0.2);
+            transform: translateY(-2px);
         }
 
         .cart-item-image {
@@ -315,11 +323,13 @@
         }
 
         .cart-item-name {
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 19px;
+            font-weight: 700;
             color: var(--dark);
+            margin-bottom: 5px;
             cursor: pointer;
             transition: var(--transition);
+            letter-spacing: -0.2px;
         }
 
         .cart-item-name:hover {
@@ -397,18 +407,21 @@
         }
 
         .cart-summary {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: var(--shadow);
-            border: 1px solid #f0e6d3;
+            background: #fff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+            border: 1px solid #f1f5f9;
+            position: sticky;
+            top: 100px;
         }
 
         .summary-title {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 20px;
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 25px;
             color: var(--dark);
+            letter-spacing: -0.5px;
         }
 
         .summary-row {
@@ -447,27 +460,37 @@
             background: linear-gradient(to right, var(--eco-green), var(--gold-primary));
             color: white;
             border: none;
-            border-radius: 10px;
-            padding: 15px;
+            border-radius: 16px;
+            padding: 18px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 800;
             cursor: pointer;
             transition: var(--transition);
-            margin-top: 20px;
+            margin-top: 25px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
+            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .checkout-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(46, 125, 50, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(46, 125, 50, 0.3);
+            filter: brightness(1.05);
+        }
+
+        .checkout-btn:active:not(:disabled) {
+            transform: translateY(-1px);
         }
 
         .checkout-btn:disabled {
-            opacity: 0.6;
+            opacity: 0.5;
             cursor: not-allowed;
+            filter: grayscale(0.5);
+            box-shadow: none;
         }
 
         .empty-cart {
@@ -833,7 +856,9 @@
                                 style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></div>
                         <span class="logo-text">I-SPICE</span>
                     </div>
-                    <div class="user-actions"><a href="/support" class="cart-icon" style="color:white;text-decoration:none;margin-right:15px;"><i class="fas fa-headset"></i> Support</a>
+                    <div class="user-actions"><a href="/support" class="cart-icon"
+                            style="color:white;text-decoration:none;margin-right:15px;"><i class="fas fa-headset"></i>
+                            Support</a>
                         <div class="cart-icon" onclick="window.location.href='/cart'">
                             <i class="fa-solid fa-shopping-cart" style="font-size: 24px; color: white;"></i>
                             <span class="cart-count" id="cartCount"
@@ -911,11 +936,11 @@
                                         <th:block
                                             th:if="${item.product != null && item.product.imageUrl != null && !item.product.imageUrl.isEmpty()}">
                                             <img th:src="${item.product.imageUrl}" th:alt="${item.product.name}"
-                                                onerror="this.onerror=null; this.src=''; this.parentElement.innerHTML='<i class=&quot;fa-solid fa-leaf&quot; style=&quot;font-size:50px;color:var(--gold-primary);padding:35px;&quot;></i>';">
+                                                onerror="this.onerror=null; this.src=''; this.parentElement.innerHTML='<i class=&quot;fa-solid fa-pepper-hot&quot; style=&quot;font-size:50px;color:var(--gold-primary);padding:35px;&quot;></i>';">
                                         </th:block>
                                         <th:block
                                             th:unless="${item.product != null && item.product.imageUrl != null && !item.product.imageUrl.isEmpty()}">
-                                            <i class="fa-solid fa-leaf"
+                                            <i class="fa-solid fa-pepper-hot"
                                                 style="font-size: 50px; color: var(--gold-primary); padding: 35px;"></i>
                                         </th:block>
                                     </div>
@@ -927,8 +952,22 @@
                                                 Product Name
                                             </div>
                                             <div class="cart-item-price">
-                                                ₹<span
-                                                    th:text="${#numbers.formatDecimal(item.product.price, 0, 'COMMA', 2, 'POINT')}">0.00</span>
+                                                <div class="price-box"
+                                                    style="display: flex; align-items: center; gap: 8px;">
+                                                    <span class="cur-price"
+                                                        style="font-weight: 700; color: var(--dark); font-size: 1.1rem;"
+                                                        th:text="'₹' + ${#numbers.formatDecimal(item.price, 1, 2)}">₹0.00</span>
+
+                                                    <th:block
+                                                        th:if="${item.product.discount != null && item.product.discount > 0}">
+                                                        <span class="orig-price"
+                                                            style="text-decoration: line-through; color: var(--gray); font-size: 0.9rem; font-weight: 500;"
+                                                            th:text="'₹' + ${#numbers.formatDecimal(item.product.price, 0, 'COMMA', 2, 'POINT')}">₹0.00</span>
+                                                        <span class="disc-pill"
+                                                            style="background: #e53935; color: white; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; text-transform: uppercase; box-shadow: 0 2px 4px rgba(229, 57, 53, 0.2);"
+                                                            th:text="${item.product.discount} + '% OFF'">10% OFF</span>
+                                                    </th:block>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="cart-item-description"
