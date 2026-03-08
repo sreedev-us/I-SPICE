@@ -1,21 +1,22 @@
 package com.company.I_SPICE.services;
 
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class EmailService {
 
     private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
-
-    private final JavaMailSender mailSender;
 
     @Value("${app.base-url:http://localhost:8080}")
     private String baseUrl;
@@ -23,8 +24,12 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String fromEmail;
 
-    public EmailService(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
+    @Value("${spring.mail.password}")
+    private String brevoApiKey;
+
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    public EmailService() {
     }
 
     @Async
@@ -92,26 +97,30 @@ public class EmailService {
     }
 
     private void sendHtmlEmail(String to, String subject, String content) {
+        if (brevoApiKey == null || brevoApiKey.isEmpty()) {
+            logger.warn("Brevo API Key is missing. Skipping email to {}. Link generated: \n{}", to, content);
+            return;
+        }
+
         try {
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("api-key", brevoApiKey);
+            headers.setAccept(List.of(MediaType.APPLICATION_JSON));
 
-            helper.setFrom(fromEmail);
-            helper.setTo(to);
-            helper.setSubject(subject);
-            helper.setText(content, true);
+            Map<String, Object> body = Map.of(
+                    "sender", Map.of("name", "I-SPICE", "email", fromEmail != null ? fromEmail : "ussreedev@gmail.com"),
+                    "to", List.of(Map.of("email", to)),
+                    "subject", subject,
+                    "htmlContent", content);
 
-            // Allow bypassing email send in dev if credentials aren't set
-            try {
-                mailSender.send(message);
-                logger.info("Email sent successfully to {}", to);
-            } catch (Exception e) {
-                logger.error("Failed to send email to {}. Exception: {}", to, e.getMessage(), e);
-                logger.warn("Fallback link generated: \n{}", content);
-            }
+            HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
+            restTemplate.postForObject("https://api.brevo.com/v3/smtp/email", request, String.class);
 
-        } catch (MessagingException e) {
-            logger.error("Failed to construct email", e);
+            logger.info("Email sent successfully via BREVO API to {}", to);
+        } catch (Exception e) {
+            logger.error("Failed to send email via BREVO API to {}. Exception: {}", to, e.getMessage(), e);
+            logger.warn("Fallback link generated: \n{}", content);
         }
     }
 }
