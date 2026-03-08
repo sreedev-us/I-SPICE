@@ -40,7 +40,7 @@ public class ShopController {
     // List of available categories
     private static final List<String> CATEGORIES = Arrays.asList(
             "Whole Spices", "Ground Spices", "Spice Blends", "Herbs & Seeds",
-            "Organic Spices", "Exotic Spices", "Salts & Seasonings", "Gift Sets");
+            "Organic Spices", "Exotic Spices", "Salts & Seasonings", "Gift Sets", "Premium Spices");
 
     @GetMapping("/shop")
     public String shopPage(Model model,
