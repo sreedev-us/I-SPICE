@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit User — Admin</title>
+    <link rel="stylesheet" href="/fontawesome/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        :root {
+            --sidebar-bg: #1a1f2e;
+            --sidebar-width: 250px;
+            --accent: #D4AF37;
+            --text-light: #94a3b8;
+            --card-bg: #fff;
+            --page-bg: #f1f5f9;
+            --dark: #1e293b;
+            --border: #e2e8f0;
+            --danger: #e53935;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background: var(--page-bg);
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--sidebar-bg);
+            min-height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-brand {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            background: var(--accent);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 16px;
+        }
+
+        .brand-name {
+            color: #fff;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .brand-sub {
+            color: var(--text-light);
+            font-size: 11px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 16px 0;
+        }
+
+        .nav-section-label {
+            color: var(--text-light);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 16px 20px 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 20px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            border-left: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            border-left-color: var(--accent);
+        }
+
+        .nav-item i {
+            width: 18px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 16px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .sidebar-footer a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+        }
+
+        .topbar {
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            padding: 16px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .topbar h1 {
+            font-size: 20px;
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        .content {
+            padding: 28px;
+        }
+
+        .form-card {
+            background: var(--card-bg);
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            padding: 28px;
+            max-width: 680px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1/-1;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        input,
+        select {
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border 0.2s;
+            width: 100%;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--accent);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background: #b89a2c;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--dark);
+        }
+
+        .btn-outline:hover {
+            background: #f8fafc;
+        }
+
+        .section-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+            margin-top: 8px;
+        }
+
+        .info-box {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 14px 18px;
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .info-box strong {
+            color: var(--dark);
+        }
+    </style>
+</head>
+
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon"><i class="fas fa-leaf"></i></div>
+            <div>
+                <div class="brand-name">I-SPICE</div>
+                <div class="brand-sub">Admin Portal</div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">Overview</div>
+            <a href="/admin" class="nav-item"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+            <div class="nav-section-label">Manage</div>
+            <a href="/admin/products" class="nav-item"><i class="fas fa-box"></i><span>Products</span></a>
+            <a href="/admin/users" class="nav-item active"><i class="fas fa-users"></i><span>Users</span></a>
+            <a href="/admin/orders" class="nav-item"><i class="fas fa-shopping-bag"></i><span>Orders</span></a>
+            <a href="/admin/support" class="nav-item"><i class="fas fa-headset"></i><span>Support Tickets</span></a>
+        </nav>
+        <div class="sidebar-footer"><a href="/home"><i class="fas fa-arrow-left"></i> Back to Store</a></div>
+    </aside>
+
+    <div class="main-content">
+        <div class="topbar">
+            <h1>✏️ Edit User</h1>
+            <a href="/admin/users" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back to Users</a>
+        </div>
+        <div class="content">
+            <div class="form-card">
+                <div class="info-box">
+                    Editing: <strong th:text="${editUser.fullName}">User Name</strong>
+                    &nbsp;·&nbsp; Username: <strong th:text="'@' + ${editUser.username}">@user</strong>
+                    &nbsp;·&nbsp; Joined: <strong th:text="${#temporals.format(editUser.createdAt, 'MMM dd, yyyy')}">Jan
+                        1</strong>
+                </div>
+
+                <form th:action="@{'/admin/users/' + ${editUser.id} + '/edit'}" method="POST">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                    <div class="section-label">Personal Info</div>
+                    <div class="form-grid" style="margin-top:12px;">
+                        <div class="form-group">
+                            <label>First Name *</label>
+                            <input type="text" name="firstName" required th:value="${editUser.firstName}">
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" name="lastName" th:value="${editUser.lastName}">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Email *</label>
+                            <input type="email" name="email" required th:value="${editUser.email}">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" name="phoneNumber" th:value="${editUser.phoneNumber}"
+                                placeholder="+91 XXXXX XXXXX">
+                        </div>
+                        <div class="form-group">
+                            <label>Role</label>
+                            <select name="role" required>
+                                <option value="USER" th:selected="${editUser.role == 'USER'}">USER — Regular Customer
+                                </option>
+                                <option value="ADMIN" th:selected="${editUser.role == 'ADMIN'}">ADMIN — Full Access
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="section-label" style="margin-top:20px;">Reset Password <span
+                            style="font-weight:400;text-transform:none;letter-spacing:0;">(leave blank to keep
+                            current)</span></div>
+                    <div class="form-group" style="margin-top:12px;">
+                        <label>New Password</label>
+                        <input type="password" name="newPassword" placeholder="Minimum 8 characters">
+                    </div>
+
+                    <div style="margin-top:24px;display:flex;gap:12px;">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+                        <a href="/admin/users" class="btn btn-outline">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

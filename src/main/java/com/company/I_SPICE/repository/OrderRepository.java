@@ -17,4 +17,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findTop5ByUserIdOrderByOrderDateDesc(Long userId);
 
     long countByUserId(Long userId);
+
+    // Admin methods
+    List<Order> findAllByOrderByOrderDateDesc();
 }

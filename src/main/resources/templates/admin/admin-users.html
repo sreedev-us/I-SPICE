@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users — Admin</title>
+    <link rel="stylesheet" href="/fontawesome/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        :root {
+            --sidebar-bg: #1a1f2e;
+            --sidebar-width: 250px;
+            --accent: #D4AF37;
+            --accent-green: #2e7d32;
+            --danger: #e53935;
+            --text-light: #94a3b8;
+            --card-bg: #fff;
+            --page-bg: #f1f5f9;
+            --dark: #1e293b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background: var(--page-bg);
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--sidebar-bg);
+            min-height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-brand {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            background: var(--accent);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 16px;
+        }
+
+        .brand-name {
+            color: #fff;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .brand-sub {
+            color: var(--text-light);
+            font-size: 11px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 16px 0;
+        }
+
+        .nav-section-label {
+            color: var(--text-light);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 16px 20px 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 20px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            border-left: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            border-left-color: var(--accent);
+        }
+
+        .nav-item i {
+            width: 18px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 16px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .sidebar-footer a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+        }
+
+        .topbar {
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            padding: 16px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .topbar h1 {
+            font-size: 20px;
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        .content {
+            padding: 28px;
+        }
+
+        .panel {
+            background: var(--card-bg);
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 18px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .panel-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th {
+            padding: 12px 18px;
+            background: #f8fafc;
+            color: var(--text-light);
+            font-weight: 600;
+            text-align: left;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 13px 18px;
+            border-top: 1px solid var(--border);
+            color: var(--dark);
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background: #c62828;
+        }
+
+        .btn-sm {
+            padding: 5px 11px;
+            font-size: 12px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--dark);
+        }
+
+        .btn-outline:hover {
+            background: #f8fafc;
+        }
+
+        .alert {
+            padding: 12px 18px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge {
+            padding: 3px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        .badge-admin {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-user {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-yes {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-no {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: linear-gradient(to right, var(--accent), #b89a2c);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .search-bar {
+            padding: 8px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            width: 280px;
+            outline: none;
+        }
+    </style>
+</head>
+
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon"><i class="fas fa-leaf"></i></div>
+            <div>
+                <div class="brand-name">I-SPICE</div>
+                <div class="brand-sub">Admin Portal</div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">Overview</div>
+            <a href="/admin" class="nav-item"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+            <div class="nav-section-label">Manage</div>
+            <a href="/admin/products" class="nav-item"><i class="fas fa-box"></i><span>Products</span></a>
+            <a href="/admin/users" class="nav-item active"><i class="fas fa-users"></i><span>Users</span></a>
+            <a href="/admin/orders" class="nav-item"><i class="fas fa-shopping-bag"></i><span>Orders</span></a>
+            <a href="/admin/support" class="nav-item"><i class="fas fa-headset"></i><span>Support Tickets</span></a>
+        </nav>
+        <div class="sidebar-footer"><a href="/home"><i class="fas fa-arrow-left"></i> Back to Store</a></div>
+    </aside>
+
+    <div class="main-content">
+        <div class="topbar">
+            <h1><i class="fas fa-users" style="color:var(--accent);margin-right:10px;"></i>Users</h1>
+            <input type="text" class="search-bar" placeholder="Search users..." oninput="filterTable(this.value)">
+        </div>
+        <div class="content">
+            <div th:if="${success}" class="alert alert-success"><i class="fas fa-check-circle"></i> <span
+                    th:text="${success}"></span></div>
+            <div th:if="${error}" class="alert alert-error"><i class="fas fa-times-circle"></i> <span
+                    th:text="${error}"></span></div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">All Users (<span th:text="${users.size()}">0</span>)</span>
+                </div>
+                <table id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Role</th>
+                            <th>Verified</th>
+                            <th>Joined</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="u : ${users}">
+                            <td>
+                                <div style="display:flex;align-items:center;gap:12px;">
+                                    <div class="avatar"
+                                        th:text="${#strings.toUpperCase(#strings.substring(u.firstName,0,1))}">A</div>
+                                    <div>
+                                        <div style="font-weight:600;" th:text="${u.fullName}">Full Name</div>
+                                        <div style="color:var(--text-light);font-size:12px;"
+                                            th:text="'@' + ${u.username}">@user</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td th:text="${u.email}">email@example.com</td>
+                            <td th:text="${u.phoneNumber != null ? u.phoneNumber : '—'}">—</td>
+                            <td>
+                                <span th:text="${u.role}" class="badge"
+                                    th:classappend="${u.role == 'ADMIN'} ? 'badge-admin' : 'badge-user'">USER</span>
+                            </td>
+                            <td>
+                                <span th:if="${u.emailVerified}" class="badge badge-yes">✓ Yes</span>
+                                <span th:if="${!u.emailVerified}" class="badge badge-no">✗ No</span>
+                            </td>
+                            <td th:text="${#temporals.format(u.createdAt, 'MMM dd, yyyy')}"
+                                style="color:var(--text-light);font-size:13px;">Jan 1</td>
+                            <td style="white-space:nowrap;">
+                                <a th:href="@{'/admin/users/' + ${u.id} + '/edit'}" class="btn btn-outline btn-sm"><i
+                                        class="fas fa-edit"></i> Edit</a>
+                                <form th:action="@{'/admin/users/' + ${u.id} + '/delete'}" method="POST"
+                                    style="display:inline;"
+                                    onsubmit="return confirm('Delete this user? All their data will be removed.');">
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                    <button type="submit" class="btn btn-danger btn-sm"><i
+                                            class="fas fa-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(users)}">
+                            <td colspan="7" style="text-align:center;color:var(--text-light);padding:30px;">No users
+                                found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        function filterTable(q) {
+            document.querySelectorAll('#usersTable tbody tr').forEach(r => {
+                r.style.display = r.textContent.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+
+</html>

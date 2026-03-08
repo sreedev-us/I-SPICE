@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support Tickets — Admin</title>
+    <link rel="stylesheet" href="/fontawesome/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        :root {
+            --sidebar-bg: #1a1f2e;
+            --sidebar-width: 250px;
+            --accent: #D4AF37;
+            --danger: #e53935;
+            --text-light: #94a3b8;
+            --card-bg: #fff;
+            --page-bg: #f1f5f9;
+            --dark: #1e293b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background: var(--page-bg);
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--sidebar-bg);
+            min-height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-brand {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            background: var(--accent);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 16px;
+        }
+
+        .brand-name {
+            color: #fff;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .brand-sub {
+            color: var(--text-light);
+            font-size: 11px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 16px 0;
+        }
+
+        .nav-section-label {
+            color: var(--text-light);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 16px 20px 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 20px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            border-left: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            border-left-color: var(--accent);
+        }
+
+        .nav-item i {
+            width: 18px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 16px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .sidebar-footer a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+        }
+
+        .topbar {
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            padding: 16px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .topbar h1 {
+            font-size: 20px;
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        .content {
+            padding: 28px;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .filter-btn {
+            padding: 7px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--dark);
+            text-decoration: none;
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: var(--accent);
+            color: #000;
+            border-color: var(--accent);
+        }
+
+        .panel {
+            background: var(--card-bg);
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 18px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .panel-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th {
+            padding: 12px 18px;
+            background: #f8fafc;
+            color: var(--text-light);
+            font-weight: 600;
+            text-align: left;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 13px 18px;
+            border-top: 1px solid var(--border);
+            color: var(--dark);
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-sm {
+            padding: 5px 11px;
+            font-size: 12px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--dark);
+        }
+
+        .btn-outline:hover {
+            background: #f8fafc;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        .badge-open {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fbbf24;
+        }
+
+        .badge-answered {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-closed {
+            background: #f1f5f9;
+            color: var(--text-light);
+        }
+
+        .stat-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 5px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+    </style>
+</head>
+
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon"><i class="fas fa-leaf"></i></div>
+            <div>
+                <div class="brand-name">I-SPICE</div>
+                <div class="brand-sub">Admin Portal</div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">Overview</div>
+            <a href="/admin" class="nav-item"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+            <div class="nav-section-label">Manage</div>
+            <a href="/admin/products" class="nav-item"><i class="fas fa-box"></i><span>Products</span></a>
+            <a href="/admin/users" class="nav-item"><i class="fas fa-users"></i><span>Users</span></a>
+            <a href="/admin/orders" class="nav-item"><i class="fas fa-shopping-bag"></i><span>Orders</span></a>
+            <a href="/admin/support" class="nav-item active"><i class="fas fa-headset"></i><span>Support
+                    Tickets</span></a>
+        </nav>
+        <div class="sidebar-footer"><a href="/home"><i class="fas fa-arrow-left"></i> Back to Store</a></div>
+    </aside>
+
+    <div class="main-content">
+        <div class="topbar">
+            <h1><i class="fas fa-headset" style="color:var(--accent);margin-right:10px;"></i>Support Tickets</h1>
+            <div style="display:flex;gap:16px;">
+                <span class="stat-chip"><i class="fas fa-envelope-open" style="color:#f59e0b;"></i> <span
+                        th:text="${openCount}">0</span> Open</span>
+                <span class="stat-chip"><i class="fas fa-check-circle" style="color:#10b981;"></i> <span
+                        th:text="${closedCount}">0</span> Closed</span>
+            </div>
+        </div>
+        <div class="content">
+            <!-- Filter Tabs -->
+            <div class="filter-bar">
+                <a href="/admin/support" class="filter-btn"
+                    th:classappend="${filterStatus == null} ? ' active' : ''">All Tickets</a>
+                <a href="/admin/support?status=OPEN" class="filter-btn"
+                    th:classappend="${filterStatus == 'OPEN'} ? ' active' : ''">🟡 Open</a>
+                <a href="/admin/support?status=ANSWERED" class="filter-btn"
+                    th:classappend="${filterStatus == 'ANSWERED'} ? ' active' : ''">🟢 Answered</a>
+                <a href="/admin/support?status=CLOSED" class="filter-btn"
+                    th:classappend="${filterStatus == 'CLOSED'} ? ' active' : ''">⚫ Closed</a>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">Tickets (<span th:text="${tickets.size()}">0</span>)</span>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ticket #</th>
+                            <th>Customer</th>
+                            <th>Subject</th>
+                            <th>Category</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="t : ${tickets}">
+                            <td><a th:href="@{'/admin/support/' + ${t.id}}" style="color:var(--accent);font-weight:700;"
+                                    th:text="${t.ticketNumber}">TKT-XXX</a></td>
+                            <td>
+                                <div style="font-weight:600;" th:text="${t.user.fullName}">Name</div>
+                                <div style="font-size:12px;color:var(--text-light);" th:text="${t.user.email}">email
+                                </div>
+                            </td>
+                            <td th:text="${#strings.abbreviate(t.subject, 45)}">Subject</td>
+                            <td th:text="${t.category}">Category</td>
+                            <td th:text="${t.priority}">MEDIUM</td>
+                            <td>
+                                <span th:text="${t.status}" class="badge" th:classappend="${t.status == 'OPEN'} ? 'badge-open' :
+                                                ${t.status == 'ANSWERED'} ? 'badge-answered' : 'badge-closed'">
+                                </span>
+                            </td>
+                            <td style="font-size:13px;color:var(--text-light);"
+                                th:text="${#temporals.format(t.createdAt, 'MMM dd, yyyy')}">Jan 1</td>
+                            <td>
+                                <a th:href="@{'/admin/support/' + ${t.id}}" class="btn btn-outline btn-sm"><i
+                                        class="fas fa-reply"></i> Reply</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(tickets)}">
+                            <td colspan="8" style="text-align:center;color:var(--text-light);padding:30px;">No tickets
+                                found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
