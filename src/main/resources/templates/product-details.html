@@ -1249,6 +1249,8 @@
                     <div class="avatar" id="userAvatar"
                         th:text="${user != null and user.username != null and !user.username.isEmpty() ? #strings.substring(user.username, 0, 1).toUpperCase() : 'U'}">
                         U</div>
+                    <span id="username" class="hide-mobile-name"
+                        th:text="${user != null and user.username != null ? user.username : 'User'}">User</span>
                 </div>
             </div>
             <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu" onclick="toggleMobileNav()">

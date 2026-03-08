@@ -517,12 +517,13 @@
             </div>
 
             <!-- Custom Error/Success Messages -->
-            <div th:if="${error}" class="alert alert-error">
+            <div th:if="${error != null and param.error == null}" class="alert alert-error">
                 <i class="fas fa-exclamation-circle"></i>
                 <span th:text="${error}"></span>
             </div>
 
-            <div th:if="${success}" class="alert alert-success">
+            <div th:if="${success != null and param.logout == null and param.verified == null and param.reset == null}"
+                class="alert alert-success">
                 <i class="fas fa-check-circle"></i>
                 <span th:text="${success}"></span>
             </div>
