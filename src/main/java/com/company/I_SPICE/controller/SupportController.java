@@ -5,7 +5,7 @@ import com.company.I_SPICE.model.SupportTicketReply;
 import com.company.I_SPICE.model.User;
 import com.company.I_SPICE.repository.SupportTicketReplyRepository;
 import com.company.I_SPICE.repository.SupportTicketRepository;
-import com.company.I_SPICE.repository.UserRepository;
+import com.company.I_SPICE.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -28,12 +28,12 @@ public class SupportController {
     private SupportTicketReplyRepository replyRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     private User getAuthenticatedUser(Authentication auth) {
         if (auth == null || !auth.isAuthenticated())
             return null;
-        return userRepository.findByUsername(auth.getName()).orElse(null);
+        return userService.getUserFromPrincipal(auth).orElse(null);
     }
 
     @GetMapping
