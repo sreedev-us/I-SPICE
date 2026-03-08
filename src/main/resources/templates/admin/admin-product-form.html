@@ -53,16 +53,22 @@
             gap: 12px;
         }
 
-        .brand-icon {
-            width: 38px;
-            height: 38px;
-            background: var(--accent);
+        .sidebar-brand .brand-icon {
+            width: 42px;
+            height: 42px;
+            background: #fff;
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #000;
-            font-size: 16px;
+            padding: 4px;
+            overflow: hidden;
+        }
+
+        .sidebar-brand .brand-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         .brand-name {
@@ -284,7 +290,9 @@
 <body>
     <aside class="sidebar">
         <div class="sidebar-brand">
-            <div class="brand-icon"><i class="fas fa-leaf"></i></div>
+            <div class="brand-icon">
+                <img th:src="@{/I-SPICE/logo/logo.png}" alt="Logo">
+            </div>
             <div>
                 <div class="brand-name">I-SPICE</div>
                 <div class="brand-sub">Admin Portal</div>
@@ -370,15 +378,40 @@
                         </div>
                     </div>
 
-                    <div class="section-label" style="margin-top:20px;">Product Image</div>
-                    <div class="form-group" style="margin-top:12px;">
-                        <label>Image URL</label>
-                        <input type="url" name="imageUrl" id="imageUrlInput" placeholder="https://example.com/image.jpg"
-                            th:value="${product.imageUrl}" oninput="previewImg(this.value)">
-                        <img id="previewImg" class="preview-img" th:if="${product.imageUrl != null}"
-                            th:src="${product.imageUrl}" alt="Preview">
-                        <img id="previewImgEmpty" class="preview-img" th:if="${product.imageUrl == null}"
-                            style="display:none;" alt="Preview">
+                    <div class="section-label" style="margin-top:20px;">Product Images</div>
+                    <p style="font-size:12px;color:var(--text-light);margin-top:6px;margin-bottom:12px;">
+                        Add the primary image and as many additional images as you need using the <strong>+</strong>
+                        button.
+                        Images are provided as URLs (links).
+                    </p>
+
+                    <div class="form-group" style="margin-top:0;">
+                        <label>Primary Image URL <span style="color:var(--danger)">*</span></label>
+                        <div style="display:flex;gap:10px;align-items:center;">
+                            <input type="url" name="imageUrl" id="primaryImageUrl"
+                                placeholder="https://example.com/image.jpg" th:value="${product.imageUrl}"
+                                oninput="updatePrimaryPreview(this.value)" style="flex:1;">
+                        </div>
+                        <div id="primaryPreviewWrap" style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+                            <img id="primaryPreview" class="preview-img"
+                                th:if="${product.imageUrl != null and !product.imageUrl.isEmpty()}"
+                                th:src="${product.imageUrl}" alt="Primary Preview">
+                        </div>
+                    </div>
+
+                    <div style="margin-top:18px;">
+                        <label style="font-size:13px;font-weight:600;color:var(--dark);">Additional Images</label>
+                        <div id="extraImagesContainer"
+                            style="display:flex;flex-direction:column;gap:12px;margin-top:10px;">
+                            <!-- Additional image rows inserted here by JS / Thymeleaf -->
+                        </div>
+                        <!-- Hidden field; we'll collect comma-joined URLs here on submit -->
+                        <input type="hidden" name="additionalImages" id="additionalImagesField"
+                            th:value="${product.additionalImages}">
+                        <button type="button" onclick="addImageRow()"
+                            style="margin-top:12px;display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;border:1.5px dashed var(--accent);background:transparent;color:var(--dark);font-size:14px;font-weight:600;cursor:pointer;">
+                            <i class="fas fa-plus"></i> Add Image
+                        </button>
                     </div>
 
                     <div class="section-label" style="margin-top:20px;">Spice Details</div>
@@ -417,10 +450,81 @@
         </div>
     </div>
     <script>
-        function previewImg(url) {
-            const img = document.getElementById('previewImg') || document.getElementById('previewImgEmpty');
-            if (img && url) { img.src = url; img.style.display = 'block'; }
+        // ── Primary image preview ──────────────────────────────────────────────
+        function updatePrimaryPreview(url) {
+            let img = document.getElementById('primaryPreview');
+            if (!img) {
+                img = document.createElement('img');
+                img.id = 'primaryPreview';
+                img.className = 'preview-img';
+                img.alt = 'Primary Preview';
+                document.getElementById('primaryPreviewWrap').appendChild(img);
+            }
+            if (url) { img.src = url; img.style.display = 'block'; }
+            else { img.style.display = 'none'; }
         }
+
+        // ── Extra image rows ───────────────────────────────────────────────────
+        function addImageRow(url) {
+            const container = document.getElementById('extraImagesContainer');
+            const row = document.createElement('div');
+            row.style.cssText = 'display:flex;gap:10px;align-items:flex-start;';
+
+            const inner = document.createElement('div');
+            inner.style.cssText = 'flex:1;display:flex;flex-direction:column;gap:6px;';
+
+            const input = document.createElement('input');
+            input.type = 'url';
+            input.placeholder = 'https://example.com/extra-image.jpg';
+            input.style.cssText = 'padding:10px 14px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;width:100%;';
+            input.className = 'extra-image-input';
+            if (url) input.value = url;
+
+            const preview = document.createElement('img');
+            preview.className = 'preview-img';
+            preview.alt = 'Preview';
+            preview.style.cssText = 'display:' + (url ? 'block' : 'none') + ';max-width:90px;max-height:90px;border-radius:8px;object-fit:cover;border:1px solid #e2e8f0;';
+            if (url) preview.src = url;
+
+            input.addEventListener('input', function () {
+                if (this.value) { preview.src = this.value; preview.style.display = 'block'; }
+                else preview.style.display = 'none';
+                syncHiddenField();
+            });
+
+            input.addEventListener('blur', syncHiddenField);
+
+            inner.appendChild(input);
+            inner.appendChild(preview);
+
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.innerHTML = '<i class="fas fa-trash"></i>';
+            removeBtn.title = 'Remove this image';
+            removeBtn.style.cssText = 'padding:8px 12px;border-radius:8px;border:1px solid #fee2e2;background:#fff;color:#e53935;font-size:14px;cursor:pointer;flex-shrink:0;margin-top:2px;';
+            removeBtn.onclick = function () { container.removeChild(row); syncHiddenField(); };
+
+            row.appendChild(inner);
+            row.appendChild(removeBtn);
+            container.appendChild(row);
+        }
+
+        function syncHiddenField() {
+            const inputs = document.querySelectorAll('.extra-image-input');
+            const urls = Array.from(inputs).map(i => i.value.trim()).filter(v => v.length > 0);
+            document.getElementById('additionalImagesField').value = urls.join(',');
+        }
+
+        // Intercept form submit to sync hidden field one last time
+        document.querySelector('form').addEventListener('submit', syncHiddenField);
+
+        // ── On load: render existing additional images ─────────────────────────
+        document.addEventListener('DOMContentLoaded', function () {
+            const existing = document.getElementById('additionalImagesField').value;
+            if (existing && existing.trim().length > 0) {
+                existing.split(',').map(s => s.trim()).filter(s => s).forEach(addImageRow);
+            }
+        });
     </script>
 </body>
 

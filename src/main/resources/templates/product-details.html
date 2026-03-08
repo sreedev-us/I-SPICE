@@ -235,19 +235,26 @@
         .product-images {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 16px;
+        }
+
+        .gallery-main-wrap {
+            position: relative;
+            width: 100%;
+            height: 420px;
+            border-radius: 16px;
+            overflow: hidden;
+            background: var(--light-bg);
+            border: 1px solid var(--light-gray);
         }
 
         .main-image {
             width: 100%;
-            height: 400px;
-            border-radius: 15px;
-            overflow: hidden;
-            background: var(--light-bg);
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid var(--light-gray);
+            overflow: hidden;
         }
 
         .main-image img {
@@ -255,29 +262,105 @@
             height: 100%;
             object-fit: contain;
             padding: 20px;
+            transition: transform 0.35s ease;
         }
 
+        .main-image img:hover {
+            transform: scale(1.07);
+        }
+
+        /* Prev / Next arrows */
+        .gallery-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 5;
+            transition: all 0.2s ease;
+            color: var(--dark);
+            font-size: 14px;
+        }
+
+        .gallery-arrow:hover {
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+            transform: translateY(-50%) scale(1.08);
+        }
+
+        .gallery-arrow.prev {
+            left: 12px;
+        }
+
+        .gallery-arrow.next {
+            right: 12px;
+        }
+
+        .gallery-arrow.hidden {
+            display: none;
+        }
+
+        /* Image counter badge */
+        .gallery-counter {
+            position: absolute;
+            bottom: 12px;
+            right: 14px;
+            background: rgba(0, 0, 0, 0.45);
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 20px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Thumbnail strip */
         .thumbnail-images {
             display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--light-gray) transparent;
+        }
+
+        .thumbnail-images::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .thumbnail-images::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .thumbnail-images::-webkit-scrollbar-thumb {
+            background: var(--light-gray);
+            border-radius: 4px;
         }
 
         .thumbnail {
-            width: 80px;
-            height: 80px;
+            width: 72px;
+            height: 72px;
+            flex-shrink: 0;
             border-radius: 10px;
             overflow: hidden;
             cursor: pointer;
             border: 2px solid transparent;
-            transition: var(--transition);
+            transition: all 0.2s ease;
             background: var(--light-bg);
         }
 
         .thumbnail:hover,
         .thumbnail.active {
             border-color: var(--eco-green);
-            transform: translateY(-3px);
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15);
         }
 
         .thumbnail img {
@@ -286,10 +369,10 @@
             object-fit: cover;
         }
 
+
         /* Product Info */
         .product-info {
             display: flex;
-            flex-direction: column;
             gap: 20px;
         }
 
@@ -1100,7 +1183,12 @@
                 font-size: 14px;
             }
         }
-    @media (max-width: 768px) { .hide-mobile-name { display: none !important; } } 
+
+        @media (max-width: 768px) {
+            .hide-mobile-name {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -1166,16 +1254,42 @@
         <div class="product-details">
             <!-- Left Column: Product Images -->
             <div class="product-images">
-                <div class="main-image" id="mainImage">
-                    <img th:if="${product.imageUrl}" th:src="${product.imageUrl}" th:alt="${product.name}"
-                        style="width:100%;height:100%;object-fit:contain;">
-                    <i th:unless="${product.imageUrl}" class="fa-solid fa-leaf"
-                        style="font-size: 100px; color: var(--gold-primary);"></i>
+                <div class="gallery-main-wrap">
+                    <!-- Prev arrow -->
+                    <button class="gallery-arrow prev hidden" id="galleryPrev" onclick="galleryNav(-1)"
+                        aria-label="Previous image">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+
+                    <!-- Main image display -->
+                    <div class="main-image" id="mainImage">
+                        <img th:if="${product.imageUrl}" th:src="${product.imageUrl}" th:alt="${product.name}"
+                            id="mainImageEl" style="width:100%;height:100%;object-fit:contain;">
+                        <i th:unless="${product.imageUrl}" class="fa-solid fa-box-open"
+                            style="font-size: 80px; color: var(--light-gray);"></i>
+                    </div>
+
+                    <!-- Next arrow -->
+                    <button class="gallery-arrow next" id="galleryNext" onclick="galleryNav(1)" aria-label="Next image">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+
+                    <!-- Counter badge -->
+                    <div class="gallery-counter" id="galleryCounter"></div>
                 </div>
+
+                <!-- Thumbnail strip -->
                 <div class="thumbnail-images" id="thumbnailContainer">
-                    <div th:if="${product?.imageUrl}" class="thumbnail active" th:data-image-url="${product?.imageUrl}"
-                        onclick="changeImage(this.getAttribute('data-image-url'))">
+                    <!-- Primary image thumbnail -->
+                    <div th:if="${product?.imageUrl}" class="thumbnail active" th:data-index="0"
+                        th:data-image-url="${product?.imageUrl}" onclick="selectThumbnail(this)">
                         <img th:src="${product?.imageUrl}" th:alt="${product?.name}">
+                    </div>
+                    <!-- Additional image thumbnails -->
+                    <div th:each="img, iterStat : ${product.additionalImageList}" class="thumbnail"
+                        th:data-index="${iterStat.index + 1}" th:data-image-url="${img}"
+                        onclick="selectThumbnail(this)">
+                        <img th:src="${img}" th:alt="${product.name + ' image ' + (iterStat.index + 2)}">
                     </div>
                 </div>
             </div>
@@ -1643,17 +1757,86 @@
         }
 
         // UI Helper Functions
-        function changeImage(src) {
-            const mainImage = document.getElementById('mainImage');
-            if (mainImage) {
-                mainImage.innerHTML = `<img src="${src}" alt="Product Image" style="width:100%;height:100%;object-fit:contain;">`;
+        // --- New Multi-Image Gallery Logic ---
+        let currentImageIndex = 0;
+        let galleryImages = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const thumbs = document.querySelectorAll('.thumbnail-images .thumbnail');
+            if (thumbs.length > 0) {
+                thumbs.forEach(t => {
+                    galleryImages.push(t.getAttribute('data-image-url'));
+                });
+                updateGalleryState();
+            }
+        });
+
+        function updateGalleryState() {
+            if (galleryImages.length === 0) return;
+
+            // Update main image
+            const mainImg = document.getElementById('mainImageEl');
+            if (mainImg) {
+                mainImg.src = galleryImages[currentImageIndex];
             }
 
-            // Update active thumbnail
-            document.querySelectorAll('.thumbnail').forEach(thumb => {
-                thumb.classList.remove('active');
+            // Update thumbnails
+            const thumbs = document.querySelectorAll('.thumbnail-images .thumbnail');
+            thumbs.forEach((t, index) => {
+                if (index === currentImageIndex) t.classList.add('active');
+                else t.classList.remove('active');
             });
-            event.currentTarget.classList.add('active');
+
+            // Update counter
+            const counter = document.getElementById('galleryCounter');
+            if (counter && galleryImages.length > 1) {
+                counter.textContent = `${currentImageIndex + 1} / ${galleryImages.length}`;
+                counter.style.display = 'block';
+            } else if (counter) {
+                counter.style.display = 'none';
+            }
+
+            // Update arrows
+            const prevBtn = document.getElementById('galleryPrev');
+            const nextBtn = document.getElementById('galleryNext');
+
+            if (galleryImages.length <= 1) {
+                if (prevBtn) prevBtn.classList.add('hidden');
+                if (nextBtn) nextBtn.classList.add('hidden');
+            } else {
+                if (prevBtn) {
+                    if (currentImageIndex === 0) prevBtn.classList.add('hidden');
+                    else prevBtn.classList.remove('hidden');
+                }
+                if (nextBtn) {
+                    if (currentImageIndex === galleryImages.length - 1) nextBtn.classList.add('hidden');
+                    else nextBtn.classList.remove('hidden');
+                }
+            }
+        }
+
+        function selectThumbnail(element) {
+            const indexStr = element.getAttribute('data-index');
+            if (indexStr !== null) {
+                currentImageIndex = parseInt(indexStr);
+                updateGalleryState();
+            }
+        }
+
+        function galleryNav(direction) {
+            if (galleryImages.length <= 1) return;
+            currentImageIndex += direction;
+
+            if (currentImageIndex < 0) currentImageIndex = 0;
+            if (currentImageIndex >= galleryImages.length) currentImageIndex = galleryImages.length - 1;
+
+            updateGalleryState();
+
+            // Scroll thumbnail into view
+            const activeThumb = document.querySelector(`.thumbnail-images .thumbnail[data-index="${currentImageIndex}"]`);
+            if (activeThumb) {
+                activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
         }
 
         function selectOption(type, value) {
@@ -2043,4 +2226,3 @@
 </body>
 
 </html>
-

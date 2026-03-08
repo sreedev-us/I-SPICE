@@ -100,6 +100,7 @@ public class AdminController {
         p.setPrice(form.getPrice());
         p.setCategory(form.getCategory());
         p.setImageUrl(form.getImageUrl());
+        p.setAdditionalImages(form.getAdditionalImages());
         p.setStock(form.getStock());
         p.setFeatured(form.isFeatured());
         p.setDiscount(form.getDiscount());

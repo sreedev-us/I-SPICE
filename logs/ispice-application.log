@@ -450,3 +450,17 @@ Identify and stop the process that's listening on port 8080 or configure this ap
 2026-03-08T16:45:36.141+05:30  INFO 34956 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Starting...
 2026-03-08T16:45:36.210+05:30  INFO 26576 --- [I-SPICE] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
 2026-03-08T16:45:36.211+05:30  INFO 26576 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Starting...
+2026-03-08T16:45:37.816+05:30  INFO 26576 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Added connection org.postgresql.jdbc.PgConnection@610d70b4
+2026-03-08T16:45:37.816+05:30  INFO 26576 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Start completed.
+2026-03-08T16:45:37.829+05:30  INFO 34956 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Added connection org.postgresql.jdbc.PgConnection@368ed4e1
+2026-03-08T16:45:37.829+05:30  INFO 34956 --- [I-SPICE] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Start completed.
+2026-03-08T16:45:42.228+05:30  INFO 26576 --- [I-SPICE] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-08T16:45:42.238+05:30  INFO 34956 --- [I-SPICE] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-08T16:45:43.666+05:30  INFO 26576 --- [I-SPICE] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-03-08T16:45:43.695+05:30  INFO 26576 --- [I-SPICE] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-03-08T16:45:43.843+05:30  INFO 26576 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Started ISpiceApplication in 8.489 seconds (process running for 3725.073)
+2026-03-08T16:45:43.844+05:30  INFO 26576 --- [I-SPICE] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2026-03-08T16:45:43.933+05:30  INFO 34956 --- [I-SPICE] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-03-08T16:45:43.961+05:30  INFO 34956 --- [I-SPICE] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8081 (http) with context path '/'
+2026-03-08T16:45:44.104+05:30  INFO 34956 --- [I-SPICE] [restartedMain] com.company.I_SPICE.ISpiceApplication    : Started ISpiceApplication in 8.794 seconds (process running for 3542.224)
+2026-03-08T16:45:44.106+05:30  INFO 34956 --- [I-SPICE] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged

@@ -3,6 +3,10 @@ package com.company.I_SPICE.model;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "products")
@@ -26,6 +30,21 @@ public class Product {
 
     @Column(name = "image_url")
     private String imageUrl;
+
+    @Column(name = "additional_images", columnDefinition = "TEXT")
+    private String additionalImages; // comma-separated list of extra image URLs
+
+    /**
+     * Returns the additional images as a list, stripping empty entries.
+     */
+    public List<String> getAdditionalImageList() {
+        if (additionalImages == null || additionalImages.isBlank())
+            return Collections.emptyList();
+        return Arrays.stream(additionalImages.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.toList());
+    }
 
     private boolean featured = false;
 
@@ -123,6 +142,14 @@ public class Product {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getAdditionalImages() {
+        return additionalImages;
+    }
+
+    public void setAdditionalImages(String additionalImages) {
+        this.additionalImages = additionalImages;
     }
 
     public boolean isFeatured() {

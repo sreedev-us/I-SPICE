@@ -91,17 +91,22 @@
         }
 
         .company-icon {
-            width: 60px;
-            height: 60px;
+            width: 70px;
+            height: 70px;
             background: #fff;
-            border-radius: 50%;
+            border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--gold-primary);
-            font-size: 28px;
-            border: 2px solid var(--eco-green);
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+            padding: 5px;
+            border: 1px solid var(--light-gray);
+            box-shadow: var(--shadow);
+        }
+
+        .company-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         .company-name {
@@ -431,7 +436,12 @@
                 display: none;
             }
         }
-    @media (max-width: 768px) { .hide-mobile-name { display: none !important; } } 
+
+        @media (max-width: 768px) {
+            .hide-mobile-name {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -440,7 +450,9 @@
         <div class="left-panel">
             <div>
                 <div class="company-logo">
-                    <div class="company-icon"><i class="fa-solid fa-leaf"></i></div>
+                    <div class="company-icon">
+                        <img th:src="@{/I-SPICE/logo/logo.png}" alt="I-SPICE Logo">
+                    </div>
                     <div class="company-name">I-SPICE</div>
                 </div>
                 <div class="features">
@@ -492,7 +504,7 @@
             </div>
 
             <!-- Success Messages -->
-            
+
 
             <div th:if="${param.verified}" class="alert alert-success">
                 <i class="fas fa-check-circle"></i>
@@ -725,5 +737,3 @@
 </body>
 
 </html>
-
-
