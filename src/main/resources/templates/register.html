@@ -610,239 +610,28 @@
     </div>
 
     <script>
-        // Password toggle functionality
-        const togglePassword = document.getElementById('togglePassword');
-        const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
-        const passwordInput = document.getElementById('password');
-        const confirmPasswordInput = document.getElementById('confirmPassword');
-        const emailInput = document.getElementById('email');
-        const phoneInput = document.getElementById('phoneNumber');
-        const registerForm = document.getElementById('registerForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const btnText = document.getElementById('btnText');
-        const btnSpinner = document.getElementById('btnSpinner');
-        const termsCheckbox = document.getElementById('terms');
-
-        // Toggle password visibility
-        togglePassword.addEventListener('click', function () {
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            const icon = this.querySelector('i');
-            icon.classList.toggle('fa-eye');
-            icon.classList.toggle('fa-eye-slash');
-        });
-
-        toggleConfirmPassword.addEventListener('click', function () {
-            const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            confirmPasswordInput.setAttribute('type', type);
-            const icon = this.querySelector('i');
-            icon.classList.toggle('fa-eye');
-            icon.classList.toggle('fa-eye-slash');
-        });
-
-        // Email validation
-        emailInput.addEventListener('input', function () {
-            const email = this.value;
-            const validationText = document.getElementById('emailValidation');
-
-            if (email.length === 0) {
-                validationText.textContent = '';
-                validationText.className = 'password-strength';
-                return;
-            }
-
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            const isValid = emailRegex.test(email);
-
-            if (isValid) {
-                validationText.textContent = '✓ Valid email format';
-                validationText.className = 'password-strength strength-strong';
-            } else {
-                validationText.textContent = 'Please enter a valid email address';
-                validationText.className = 'password-strength strength-weak';
-            }
-        });
-
-        // Password strength checker
-        passwordInput.addEventListener('input', function () {
-            const password = this.value;
-            const strengthText = document.getElementById('passwordStrength');
-
-            if (password.length === 0) {
-                strengthText.textContent = '';
-                strengthText.className = 'password-strength';
-                return;
-            }
-
-            let strength = 'Weak';
-            let strengthClass = 'strength-weak';
-
-            if (password.length >= 8) {
-                strength = 'Medium';
-                strengthClass = 'strength-medium';
-            }
-
-            if (password.length >= 10 && /[A-Z]/.test(password) && /[0-9]/.test(password) && /[^A-Za-z0-9]/.test(password)) {
-                strength = 'Strong';
-                strengthClass = 'strength-strong';
-            }
-
-            strengthText.textContent = `Password strength: ${strength}`;
-            strengthText.className = `password-strength ${strengthClass}`;
-        });
-
-        // Password match checker
-        confirmPasswordInput.addEventListener('input', function () {
-            const password = passwordInput.value;
-            const confirmPassword = this.value;
-            const matchText = document.getElementById('passwordMatch');
-
-            if (confirmPassword.length === 0) {
-                matchText.textContent = '';
-                matchText.className = 'password-strength';
-                return;
-            }
-
-            if (password === confirmPassword) {
-                matchText.textContent = '✓ Passwords match';
-                matchText.className = 'password-strength strength-strong';
-            } else {
-                matchText.textContent = 'Passwords do not match';
-                matchText.className = 'password-strength strength-weak';
-            }
-        });
-
-        // Phone number validation
-        phoneInput.addEventListener('input', function () {
-            const phone = this.value.replace(/\D/g, '');
-            const validationText = document.getElementById('phoneValidation');
-
-            if (phone.length === 0) {
-                validationText.textContent = '';
-                validationText.className = 'password-strength';
-                return;
-            }
-
-            // Format phone number as user types
-            let formattedPhone = phone;
-            if (phone.length > 3 && phone.length <= 6) {
-                formattedPhone = `(${phone.slice(0, 3)}) ${phone.slice(3)}`;
-            } else if (phone.length > 6) {
-                formattedPhone = `(${phone.slice(0, 3)}) ${phone.slice(3, 6)}-${phone.slice(6, 10)}`;
-            }
-            this.value = formattedPhone;
-
-            const isValid = phone.length >= 10;
-            if (isValid) {
-                validationText.textContent = '✓ Valid phone number';
-                validationText.className = 'password-strength strength-strong';
-            } else {
-                validationText.textContent = 'Please enter a valid phone number (at least 10 digits)';
-                validationText.className = 'password-strength strength-weak';
-            }
-        });
-
-        // Form validation and submission
-        registerForm.addEventListener('submit', function (e) {
-            const password = passwordInput.value;
-            const confirmPassword = confirmPasswordInput.value;
-            const email = emailInput.value;
-            const phone = phoneInput.value.replace(/\D/g, '');
-
-            let errors = [];
-
-            // Email validation
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                errors.push('Please enter a valid email address');
-            }
-
-            // Password validation
-            if (password.length < 8) {
-                errors.push('Password must be at least 8 characters long');
-            }
-
-            if (password !== confirmPassword) {
-                errors.push('Passwords do not match');
-            }
-
-            // Phone validation
-            if (phone.length < 10) {
-                errors.push('Please enter a valid phone number (at least 10 digits)');
-            }
-
-            // Terms agreement
-            if (!termsCheckbox.checked) {
-                errors.push('You must agree to the Terms of Service and Privacy Policy');
-            }
-
-            if (errors.length > 0) {
-                e.preventDefault();
-                alert(errors.join('\n'));
-                return;
-            }
-
-            // Strip formatting from phone number before sending
-            phoneInput.value = phone;
-
-            // Show loading state
-            btnText.textContent = 'Creating Account...';
-            btnSpinner.style.display = 'inline-block';
-            submitBtn.disabled = true;
-        });
-
-        // Real-time username availability check (simulated)
-        const usernameInput = document.getElementById('username');
-        usernameInput.addEventListener('input', function () {
-            const username = this.value;
-            const availabilityText = document.getElementById('usernameAvailability');
-
-            if (username.length === 0) {
-                availabilityText.textContent = '';
-                return;
-            }
-
-            // Simulate checking username availability
-            setTimeout(() => {
-                const takenUsernames = ['plantlover', 'greenthumb', 'gardener', 'admin', 'user'];
-                if (takenUsernames.includes(username.toLowerCase())) {
-                    availabilityText.textContent = 'Username is taken';
-                    availabilityText.className = 'password-strength strength-weak';
-                } else if (username.length < 3) {
-                    availabilityText.textContent = 'Username must be at least 3 characters';
-                    availabilityText.className = 'password-strength strength-weak';
-                } else {
-                    availabilityText.textContent = '✓ Username is available';
-                    availabilityText.className = 'password-strength strength-strong';
-                }
-            }, 500);
-        });
-
-        // Add focus effects
-        const inputs = document.querySelectorAll('input, select');
-        inputs.forEach(input => {
-            input.addEventListener('focus', function () {
-                this.style.boxShadow = '0 0 0 3px rgba(46, 125, 50, 0.2)';
-            });
-
-            input.addEventListener('blur', function () {
-                this.style.boxShadow = '';
-            });
-        });
-
-        // Check if form was submitted with errors and show loading state
-        document.addEventListener('DOMContentLoaded', function () {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('registerForm');
-            const hasErrors = document.querySelector('.alert-error') !== null;
-
-            if (hasErrors) {
-                // If there are server-side errors, reset button state
-                btnText.textContent = 'Create Account';
-                btnSpinner.style.display = 'none';
-                submitBtn.disabled = false;
+            const submitBtn = document.getElementById('submitBtn');
+            const phoneInput = document.getElementById('phoneNumber');
+            
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    // Strip formatting characters from phone if input exists before submitting
+                    if (phoneInput && phoneInput.value) {
+                        phoneInput.value = phoneInput.value.replace(/\D/g, '');
+                    }
+                    
+                    // Show a simple loading state on the button
+                    if (submitBtn) {
+                        submitBtn.textContent = 'Creating Account...';
+                        submitBtn.style.opacity = '0.7';
+                        // Do not disable the button or it might prevent actual form submission in some browsers
+                    }
+                });
             }
         });
     </script>
 </body>
-
 </html>
