@@ -69,7 +69,7 @@ public class Product {
 
     private Integer discount = 0;
 
-    @Transient
+    @Column(name = "discounted_price")
     private Double discountedPrice;
 
     @Column(name = "created_at", updatable = false)
@@ -88,11 +88,33 @@ public class Product {
             averageRating = 0.0;
         if (discount == null)
             discount = 0;
+        calculateDiscountedPrice();
     }
 
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
+        calculateDiscountedPrice();
+    }
+
+    @PostLoad
+    protected void onPostLoad() {
+        if (discountedPrice == null) {
+            calculateDiscountedPrice();
+        }
+    }
+
+    private void calculateDiscountedPrice() {
+        if (price == null) {
+            this.discountedPrice = 0.0;
+            return;
+        }
+        if (discount == null || discount <= 0) {
+            this.discountedPrice = price.doubleValue();
+        } else {
+            double originalPrice = price.doubleValue();
+            this.discountedPrice = originalPrice * (1 - (discount / 100.0));
+        }
     }
 
     // Getters and setters for all fields

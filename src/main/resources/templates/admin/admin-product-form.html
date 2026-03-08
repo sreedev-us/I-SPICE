@@ -776,6 +776,17 @@
                             <input type="number" name="weightGrams" min="0" placeholder="100"
                                 th:value="${product.weightGrams}">
                         </div>
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <div id="pricePreviewWrap"
+                                style="background: var(--page-bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                                <div style="font-size: 14px; font-weight: 700; color: var(--dark);">
+                                    <i class="fas fa-tag" style="color: var(--accent); margin-right: 8px;"></i>Final
+                                    Resulting Price:
+                                </div>
+                                <div id="finalPriceDisplay"
+                                    style="font-size: 20px; font-weight: 800; color: var(--accent-green);">₹0.00</div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="section-label" style="margin-top:20px;">Product Images</div>
@@ -918,8 +929,32 @@
         // Intercept form submit to sync hidden field one last time
         document.querySelector('form').addEventListener('submit', syncHiddenField);
 
+        // ── Real-time Price Calculation ──────────────────────────────────────
+        function updateFinalPrice() {
+            const priceInput = document.querySelector('input[name="price"]');
+            const discountInput = document.querySelector('input[name="discount"]');
+            const display = document.getElementById('finalPriceDisplay');
+
+            const price = parseFloat(priceInput.value) || 0;
+            const discount = parseFloat(discountInput.value) || 0;
+
+            let finalPrice = price;
+            if (discount > 0 && discount <= 100) {
+                finalPrice = price * (1 - (discount / 100));
+            }
+
+            display.textContent = '₹' + finalPrice.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
         // ── On load: render existing additional images ─────────────────────────
         document.addEventListener('DOMContentLoaded', function () {
+            // Setup price listeners
+            const priceInput = document.querySelector('input[name="price"]');
+            const discountInput = document.querySelector('input[name="discount"]');
+            priceInput.addEventListener('input', updateFinalPrice);
+            discountInput.addEventListener('input', updateFinalPrice);
+            updateFinalPrice();
+
             const existing = document.getElementById('additionalImagesField').value;
             if (existing && existing.trim().length > 0) {
                 existing.split(',').map(s => s.trim()).filter(s => s).forEach(addImageRow);
