@@ -887,7 +887,7 @@
 
                         <div th:each="item : ${order.orderItems}" class="item-line">
                             <div>
-                                <i class="fas fa-seedling item-icon"></i>
+                                <i class="fas fa-pepper-hot item-icon"></i>
                                 <span th:text="${item.productName != null ? item.productName : 'Product'}">Item</span>
                                 <span class="item-qty" th:text="'×' + ${item.quantity}">×1</span>
                             </div>

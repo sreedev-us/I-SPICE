@@ -1185,10 +1185,10 @@
 
                                     <th:block th:if="${product.imageUrl != null && !product.imageUrl.isEmpty()}">
                                         <img th:src="${product.imageUrl}" th:alt="${product.name}" class="product-image"
-                                            onerror="this.onerror=null; this.src=''; this.parentElement.innerHTML='<i class=\'fa-solid fa-seedling\' style=\'font-size:50px;color:var(--gold-primary);padding:35px;\'></i>';">
+                                            onerror="this.onerror=null; this.src=''; this.parentElement.innerHTML='<i class=\'fa-solid fa-pepper-hot\' style=\'font-size:50px;color:var(--gold-primary);padding:35px;\'></i>';">
                                     </th:block>
                                     <th:block th:unless="${product.imageUrl != null && !product.imageUrl.isEmpty()}">
-                                        <i class="fa-solid fa-seedling"
+                                        <i class="fa-solid fa-pepper-hot"
                                             style="font-size: 50px; color: var(--gold-primary); padding: 35px;"></i>
                                     </th:block>
                                 </div>
@@ -1254,7 +1254,7 @@
                         <div th:if="${products == null || products.isEmpty()}" style="grid-column: 1 / -1;">
                             <div class="no-products">
                                 <div class="no-products-icon">
-                                    <i class="fa-solid fa-seedling"></i>
+                                    <i class="fa-solid fa-pepper-hot"></i>
                                 </div>
                                 <h3>No products found</h3>
                                 <p>Try adjusting your search or filters to find what you're looking for.</p>

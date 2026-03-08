@@ -1653,8 +1653,8 @@
                 precioElement.textContent = `₹${parseFloat(product.price).toFixed(2)}`;
             }
 
-            document.getElementById('pDesc').textContent = product.description || "Premium plant-based quality.";
-            document.getElementById('pCategory').textContent = product.category || "Indoor Plants";
+            document.getElementById('pDesc').textContent = product.description || "Premium hand-selected spice quality.";
+            document.getElementById('pCategory').textContent = product.category || "Whole Spices";
             document.getElementById('tabDescription').textContent = product.description || "No detailed description available.";
 
             // Update breadcrumb
@@ -1686,33 +1686,33 @@
             const featureList = document.getElementById('featureList');
 
             const features = {
-                'Indoor': [
-                    '100% Natural & Organic',
-                    'Air Purifying Qualities',
-                    'Easy to Maintain',
-                    'Pet-Friendly',
-                    'Eco-Friendly Pot'
+                'Whole Spices': [
+                    '100% Pure & Natural',
+                    'Ethically Sourced',
+                    'Hand-Selected Quality',
+                    'Rich in Essential Oils',
+                    'No Preservatives'
                 ],
-                'Succulent': [
-                    '100% Natural & Organic',
-                    'Low Maintenance',
-                    'Drought Tolerant',
-                    'Air Purifying',
-                    'Eco-Friendly Pot'
+                'Ground Spices': [
+                    'Cold-Ground for Freshness',
+                    'Aromatic & Intense',
+                    'Non-GMO Certified',
+                    'Sustainably Sourced',
+                    'Zero Artificial Colors'
                 ],
-                'Tree': [
-                    '100% Natural & Organic',
-                    'Statement Piece',
-                    'Air Purifying',
-                    'Long Lifespan',
-                    'Eco-Friendly Pot'
+                'Organic Spices': [
+                    'Certified Organic',
+                    'Chemical-Free Processing',
+                    'Peak Harvested',
+                    'Full Traceability',
+                    'Premium Flavor Profile'
                 ],
                 'General': [
-                    '100% Natural & Organic',
-                    'Premium Quality',
-                    'Sustainable Sourced',
+                    '100% Handpicked Quality',
+                    'Ethically Sourced Spices',
                     'Eco-Friendly Packaging',
-                    'Easy Care Instructions'
+                    'Laboratory Tested',
+                    'Freshness Guaranteed'
                 ]
             };
 
@@ -1726,33 +1726,29 @@
             const careElement = document.getElementById('careInstructions');
 
             const careInstructions = {
-                'Indoor': `For your indoor plant:<br><br>
-               <strong>Watering:</strong> Water when top inch of soil is dry<br>
-               <strong>Light:</strong> Bright, indirect sunlight<br>
-               <strong>Temperature:</strong> 18-24°C ideal range<br>
-               <strong>Humidity:</strong> Moderate humidity (40-60%)<br>
-               <strong>Fertilizer:</strong> Use organic plant food monthly during growing season`,
+                'Whole Spices': `Storage & Usage Tips:<br><br>
+               <strong>Storage:</strong> Store in an airtight container in a cool, dark place<br>
+               <strong>Freshness:</strong> Grind just before use for maximum flavor<br>
+               <strong>Shelf Life:</strong> Best used within 1-2 years<br>
+               <strong>Usage:</strong> Perfect for slow-cooking and tempering`,
 
-                'Succulent': `For your succulent:<br><br>
-               <strong>Watering:</strong> Water sparingly, allow soil to dry completely<br>
-               <strong>Light:</strong> Bright, direct sunlight<br>
-               <strong>Temperature:</strong> 15-27°C ideal range<br>
-               <strong>Soil:</strong> Well-draining cactus/succulent mix<br>
-               <strong>Care:</strong> Avoid overwatering - succulents store water in leaves`,
+                'Ground Spices': `Storage & Usage Tips:<br><br>
+               <strong>Storage:</strong> Keep away from direct sunlight and heat<br>
+               <strong>Handling:</strong> Use a dry spoon to prevent clumping<br>
+               <strong>Freshness:</strong> Best used within 6 months for peak aroma<br>
+               <strong>Tip:</strong> Add towards the end of cooking to preserve volatile oils`,
 
-                'Tree': `For your indoor tree:<br><br>
-               <strong>Watering:</strong> Water when top 2 inches of soil are dry<br>
-               <strong>Light:</strong> Bright, indirect to direct light<br>
-               <strong>Temperature:</strong> 15-24°C ideal range<br>
-               <strong>Pruning:</strong> Trim to maintain shape as needed<br>
-               <strong>Rotation:</strong> Rotate plant regularly for even growth`,
+                'Organic Spices': `Storage & Usage Tips:<br><br>
+               <strong>Storage:</strong> Keep in a cool, dry place to maintain organic integrity<br>
+               <strong>Handling:</strong> Avoid moisture exposure<br>
+               <strong>Freshness:</strong> Highly concentrated flavor - use slightly less than conventional spices<br>
+               <strong>Certification:</strong> 100% Pesticide and Chemical free`,
 
-                'General': `General plant care:<br><br>
-               <strong>Watering:</strong> Check soil moisture regularly<br>
-               <strong>Light:</strong> Place according to plant's light requirements<br>
-               <strong>Temperature:</strong> Keep in stable environment<br>
-               <strong>Observation:</strong> Watch for signs of stress<br>
-               <strong>Love:</strong> Plants thrive with attention and care`
+                'General': `Spice Care & Usage:<br><br>
+               <strong>Storage:</strong> Store in a cool, dry, and dark environment<br>
+               <strong>Aroma:</strong> Keep containers tightly sealed when not in use<br>
+               <strong>Handling:</strong> Always use clean, dry utensils<br>
+               <strong>Health:</strong> Natural spices are rich in antioxidants and traditional benefits`
             };
 
             careElement.innerHTML = careInstructions[category] || careInstructions['General'];

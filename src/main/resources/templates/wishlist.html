@@ -718,7 +718,12 @@
                 padding: 10px;
             }
         }
-    @media (max-width: 768px) { .hide-mobile-name { display: none !important; } } 
+
+        @media (max-width: 768px) {
+            .hide-mobile-name {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -794,70 +799,62 @@
                         th:data-id="${product.id}"
                         onclick="window.location.href='/product/' + this.getAttribute('data-id')"
                         style="cursor: pointer;">
-                        <div class="img-box">
-                            <span class="stock-badge"
-                                th:classappend="${product.stock!=null and product.stock<=0}?'out-stock':'in-stock'"
-                                th:text="${product.stock!=null and product.stock<=0}?'Out of Stock':'In Stock'">In
-                                Stock</span>
-                            <button class="wish-btn" th:data-id="${product.id}"
-                                onclick="removeWishlist(this.getAttribute('data-id'))" title="Remove from wishlist">
-                                <i class="fas fa-heart"></i>
-                            </button>
-                            <th:block th:if="${product.imageUrl!=null and !product.imageUrl.isEmpty()}">
-                                <img th:src="${product.imageUrl}" th:alt="${product.name}"
-                                    onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-seedling\' style=\'font-size:50px;color:var(--gold);padding:35px;\'></i>'">
-                            </th:block>
-                            <th:block th:unless="${product.imageUrl!=null and !product.imageUrl.isEmpty()}">
-                                <i class="fa-solid fa-seedling"
-                                    style="font-size:50px;color:var(--gold);padding:35px;"></i>
+                        <th:block th:if="${product.imageUrl!=null and !product.imageUrl.isEmpty()}">
+                            <img th:src="${product.imageUrl}" th:alt="${product.name}"
+                                onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-pepper-hot\' style=\'font-size:50px;color:var(--gold);padding:35px;\'></i>'">
+                        </th:block>
+                        <th:block th:unless="${product.imageUrl!=null and !product.imageUrl.isEmpty()}">
+                            <i class="fa-solid fa-pepper-hot"
+                                style="font-size:50px;color:var(--gold);padding:35px;"></i>
+                        </th:block>
+                    </div>
+                    <div class="body">
+                        <div class="cat" th:text="${product.category?:'Other'}">Category</div>
+                        <div class="pname" th:text="${product.name}">Product Name</div>
+                        <div class="pdesc"
+                            th:text="${product.description!=null?#strings.abbreviate(product.description,90):''}">
+                            Desc</div>
+                        <div class="price-row">
+                            <span class="cur"
+                                th:text="'₹'+${#numbers.formatDecimal(product.discountedPrice!=null?product.discountedPrice:product.price,0,'COMMA',2,'POINT')}">₹0</span>
+                            <th:block th:if="${product.discount!=null and product.discount>0}">
+                                <span class="orig"
+                                    th:text="'₹'+${#numbers.formatDecimal(product.price,0,'COMMA',2,'POINT')}">₹0</span>
+                                <span class="disc" th:text="'-'+${product.discount}+'%'">-10%</span>
                             </th:block>
                         </div>
-                        <div class="body">
-                            <div class="cat" th:text="${product.category?:'Other'}">Category</div>
-                            <div class="pname" th:text="${product.name}">Product Name</div>
-                            <div class="pdesc"
-                                th:text="${product.description!=null?#strings.abbreviate(product.description,90):''}">
-                                Desc</div>
-                            <div class="price-row">
-                                <span class="cur"
-                                    th:text="'₹'+${#numbers.formatDecimal(product.discountedPrice!=null?product.discountedPrice:product.price,0,'COMMA',2,'POINT')}">₹0</span>
-                                <th:block th:if="${product.discount!=null and product.discount>0}">
-                                    <span class="orig"
-                                        th:text="'₹'+${#numbers.formatDecimal(product.price,0,'COMMA',2,'POINT')}">₹0</span>
-                                    <span class="disc" th:text="'-'+${product.discount}+'%'">-10%</span>
-                                </th:block>
-                            </div>
-                            <div class="actions">
-                                <button class="atc" th:disabled="${product.stock!=null and product.stock<=0}"
-                                    th:attr="data-id=${product.id},data-name=${product.name}"
-                                    th:text="${product.stock!=null and product.stock<=0}?'Out of Stock':'Add to Cart'"
-                                    onclick="addToCart(event,this)">Add to Cart</button>
-                                <button class="removebtn" th:data-id="${product.id}"
-                                    onclick="removeWishlist(this.getAttribute('data-id'))"><i
-                                        class="fas fa-trash"></i></button>
-                            </div>
+                        <div class="actions">
+                            <button class="atc" th:disabled="${product.stock!=null and product.stock<=0}"
+                                th:attr="data-id=${product.id},data-name=${product.name}"
+                                th:text="${product.stock!=null and product.stock<=0}?'Out of Stock':'Add to Cart'"
+                                onclick="addToCart(event,this)">Add to Cart</button>
+                            <button class="removebtn" th:data-id="${product.id}"
+                                onclick="removeWishlist(this.getAttribute('data-id'))"><i
+                                    class="fas fa-trash"></i></button>
                         </div>
                     </div>
-
-                    <div th:if="${wishlist==null or wishlist.isEmpty()}" class="empty">
-                        <div class="ei">❤️</div>
-                        <h3 class="et">Your wishlist is empty</h3>
-                        <p class="es">Save products you love and come back to them anytime.<br>Start exploring our
-                            premium collection!</p>
-                        <button class="btn-primary" onclick="location.href='/shop'"
-                            style="margin:0 auto;padding:14px 30px;font-size:15px"><i class="fas fa-store"></i> Browse
-                            Products</button>
-                    </div>
-                </div>
-
-                <div class="footer-logout">
-                    <form th:action="@{/logout}" method="post">
-                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                        <button type="submit" class="logout-link"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
-                    </form>
                 </div>
             </div>
+
+            <div th:if="${wishlist==null or wishlist.isEmpty()}" class="empty">
+                <div class="ei">❤️</div>
+                <h3 class="et">Your wishlist is empty</h3>
+                <p class="es">Save products you love and come back to them anytime.<br>Start exploring our
+                    premium collection!</p>
+                <button class="btn-primary" onclick="location.href='/shop'"
+                    style="margin:0 auto;padding:14px 30px;font-size:15px"><i class="fas fa-store"></i> Browse
+                    Products</button>
+            </div>
         </div>
+
+        <div class="footer-logout">
+            <form th:action="@{/logout}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <button type="submit" class="logout-link"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+            </form>
+        </div>
+    </div>
+    </div>
     </div>
 
     <script>
@@ -913,5 +910,3 @@
 </body>
 
 </html>
-
-
