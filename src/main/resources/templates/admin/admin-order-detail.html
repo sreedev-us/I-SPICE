@@ -704,47 +704,27 @@
 
         }
 
-        /* -- VIEWPORT OVERFLOW FIX -- */
-        html,
-        body {
-            max-width: 100vw;
-            overflow-x: hidden;
-        }
+        
+    
+    /* -- FINAL ROBUST MOBILE SCROLLING FIX -- */
+    .table-responsive { 
+        width: 100% !important; 
+        overflow-x: auto !important; 
+        -webkit-overflow-scrolling: touch !important; 
+        margin-bottom: 24px;
+        display: block;
+        background: #fff;
+    }
+    .table-responsive table { 
+        min-width: 850px !important; 
+        width: 100% !important;
+        margin: 0 !important;
+    }
+    .table-responsive td, .table-responsive th {
+        white-space: nowrap !important;
+    }
 
-        .panel {
-            max-width: 100%;
-        }
-
-        .topbar {
-            flex-wrap: wrap !important;
-        }
-
-        .topbar-right {
-            flex-wrap: wrap;
-        }
-
-
-        /* -- FORCE TABLE SCROLLING FIX -- */
-        .panel,
-        .card {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .panel table,
-        .card table {
-            min-width: 700px;
-            white-space: nowrap;
-        }
-
-        .panel td,
-        .card td {
-            white-space: nowrap;
-            max-width: 250px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-    </style>
+</style>
 
 </head>
 
@@ -841,7 +821,7 @@
             <!-- Order Items -->
             <div class="card" style="margin-bottom:20px;">
                 <div class="card-title"><i class="fas fa-box-open" style="color:var(--accent);"></i>Order Items</div>
-                <table>
+                <div class="table-responsive"><table>
                     <thead>
                         <tr>
                             <th>Product</th>
@@ -858,7 +838,7 @@
                             <td style="font-weight:600;" th:text="'₹' + ${item.totalPrice}">₹0</td>
                         </tr>
                     </tbody>
-                </table>
+                </table></div>
                 <div style="text-align:right;padding:14px;border-top:1px solid var(--border);">
                     <div style="font-size:13px;color:var(--text-light);">Subtotal: ₹<span
                             th:text="${order.subtotal}">0</span></div>
