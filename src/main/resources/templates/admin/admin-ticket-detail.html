@@ -529,7 +529,14 @@
             /* Hide description column in table on mobile to fit screen better */
             td.hide-mobile, th.hide-mobile { display: none; }
         }
-    </style>
+    
+        /* -- VIEWPORT OVERFLOW FIX -- */
+        html, body { max-width: 100vw; overflow-x: hidden; }
+        .panel { max-width: 100%; }
+        .topbar { flex-wrap: wrap !important; }
+        .topbar-right { flex-wrap: wrap; }
+
+</style>
 
 
 </head>
