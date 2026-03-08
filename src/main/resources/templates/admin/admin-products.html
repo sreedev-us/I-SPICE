@@ -464,6 +464,12 @@
         .topbar { flex-wrap: wrap !important; }
         .topbar-right { flex-wrap: wrap; }
 
+
+        /* -- FORCE TABLE SCROLLING FIX -- */
+        .panel { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .panel table { min-width: 700px; white-space: nowrap; }
+        .panel td { white-space: nowrap; max-width: 250px; overflow: hidden; text-overflow: ellipsis; }
+
 </style>
 
 </head>
