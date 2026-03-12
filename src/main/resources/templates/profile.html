@@ -679,6 +679,8 @@
 
         .mnav.open {
             max-height: 400px;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
         }
 
         .mnav ul {
@@ -743,14 +745,12 @@
             .ua {
                 order: 1;
                 gap: 14px;
+                min-width: 80px;
+                justify-content: flex-end;
             }
 
             .logo-text {
                 font-size: 20px;
-            }
-
-            .ua {
-                gap: 14px;
             }
 
             .layout {
@@ -787,14 +787,28 @@
             }
 
             .pc {
-                padding: 14px;
+                padding: 16px;
             }
 
             .profile-card {
-                padding: 20px;
+                padding: 24px;
             }
 
-            .section-body {
+            .big-avatar {
+                width: 80px;
+                height: 80px;
+                font-size: 32px;
+            }
+
+            .stats-mini {
+                gap: 10px;
+            }
+
+            .sm {
+                padding: 10px;
+            }
+
+            .loyalty-box {
                 padding: 16px;
             }
 
@@ -802,20 +816,24 @@
                 padding: 14px 16px;
             }
 
-            .danger-btn {
-                width: 100%;
-            }
-
-            .stats-mini {
-                gap: 8px;
+            .section-body {
+                padding: 16px;
             }
 
             .form-row {
-                grid-template-columns: 1fr;
                 gap: 12px;
             }
+
+            .danger-btn {
+                width: 100%;
+            }
         }
-    @media (max-width: 768px) { .hide-mobile-name { display: none !important; } } 
+
+        @media (max-width: 768px) {
+            .hide-mobile-name {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 

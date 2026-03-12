@@ -465,16 +465,50 @@
             line-height: 1.5;
         }
 
-        .product-footer {
+        .product-price-section {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            margin-top: auto;
+            width: 100%;
         }
 
-        .product-price {
-            font-size: 20px;
-            font-weight: 700;
+        .price-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .price-row {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .current-price {
+            font-size: 1.2rem;
+            font-weight: 800;
             color: var(--dark);
+        }
+
+        .original-price {
+            font-size: 0.85rem;
+            color: var(--gray);
+            text-decoration: line-through;
+            font-weight: 500;
+        }
+
+        .discount-badge {
+            background: #e53935;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            white-space: nowrap;
+            box-shadow: 0 2px 4px rgba(229, 57, 53, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .add-to-cart-btn {
@@ -797,6 +831,8 @@
 
         .mobile-nav.open {
             max-height: 400px;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
         }
 
         .mobile-nav ul {
@@ -871,12 +907,14 @@
             .user-actions {
                 gap: 14px;
                 order: 1;
+                min-width: 80px;
+                justify-content: flex-end;
             }
 
             .avatar {
-                width: 34px;
-                height: 34px;
-                font-size: 15px;
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
             }
 
             .dashboard-header {
@@ -981,7 +1019,35 @@
             }
 
             .products-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .product-card {
+                border-radius: 12px;
+            }
+
+            .product-image {
+                height: 150px;
+            }
+
+            .product-info {
+                padding: 12px;
+            }
+
+            .product-name {
+                font-size: 14px;
+                margin-bottom: 5px;
+            }
+
+            .current-price {
+                font-size: 1rem;
+            }
+
+            .add-to-cart-btn {
+                padding: 6px 10px;
+                font-size: 12px;
+                min-width: unset;
             }
 
             .stats-container {
@@ -1179,23 +1245,23 @@
                                                 th:text="${product.description != null ? product.description : 'No description available'}">
                                                 Product description
                                             </div>
-                                            <div class="product-footer">
-                                                <div class="product-price"
-                                                    style="display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;">
-                                                    <span
-                                                        style="font-weight: 800; color: var(--dark); font-size: 1.1rem;"
-                                                        th:text="'₹' + ${product.discountedPrice != null ? #numbers.formatDecimal(product.discountedPrice, 0, 'COMMA', 2, 'POINT') : #numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')}">₹0.00</span>
-
-                                                    <th:block
-                                                        th:if="${product.discount != null && product.discount > 0}">
-                                                        <span
-                                                            style="text-decoration: line-through; color: #999; font-size: 0.85rem; font-weight: 500;"
-                                                            th:text="'₹' + ${#numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')}">₹0.00</span>
-                                                        <span
-                                                            style="background: #e53935; color: white; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; text-transform: uppercase; box-shadow: 0 2px 4px rgba(229, 57, 53, 0.2);">
-                                                            <span th:text="${product.discount} + '% OFF'">10% OFF</span>
-                                                        </span>
-                                                    </th:block>
+                                            <div class="product-price-section">
+                                                <div class="price-container">
+                                                    <div class="price-row">
+                                                        <div class="current-price">
+                                                            ₹<span
+                                                                th:text="${product.discountedPrice != null ? #numbers.formatDecimal(product.discountedPrice, 0, 'COMMA', 2, 'POINT') : #numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')}">0.00</span>
+                                                        </div>
+                                                        <th:block
+                                                            th:if="${product.discount != null && product.discount > 0}">
+                                                            <span class="original-price">
+                                                                ₹<span
+                                                                    th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')}">0.00</span>
+                                                            </span>
+                                                            <span class="discount-badge"
+                                                                th:text="${product.discount} + '% OFF'">10% OFF</span>
+                                                        </th:block>
+                                                    </div>
                                                 </div>
                                                 <!-- Add to Cart button - prevent click from navigating -->
                                                 <button class="add-to-cart-btn" th:data-product-id="${product.id}"

@@ -19,17 +19,20 @@ public class OrderService {
     private final CartService cartService;
     private final UserService userService;
     private final ProductService productService;
+    private final EmailService emailService;
 
     public OrderService(OrderRepository orderRepository,
             OrderItemRepository orderItemRepository,
             CartService cartService,
             UserService userService,
-            ProductService productService) {
+            ProductService productService,
+            EmailService emailService) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.cartService = cartService;
         this.userService = userService;
         this.productService = productService;
+        this.emailService = emailService;
     }
 
     // Create order from cart
@@ -169,6 +172,16 @@ public class OrderService {
         order.setStatus(Order.OrderStatus.CANCELLED);
         order.setPaymentStatus("REFUNDED");
 
-        return orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
+
+        // Send order cancellation email
+        try {
+            emailService.sendOrderCancellationEmail(savedOrder);
+            System.out.println("[LOG] Order cancellation email triggered for order: " + savedOrder.getOrderNumber());
+        } catch (Exception e) {
+            System.err.println("[ERROR] Failed to send order cancellation email: " + e.getMessage());
+        }
+
+        return savedOrder;
     }
 }

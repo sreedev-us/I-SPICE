@@ -3,6 +3,7 @@ package com.company.I_SPICE.controller;
 import com.company.I_SPICE.model.*;
 import com.company.I_SPICE.repository.*;
 import com.company.I_SPICE.services.UserService;
+import com.company.I_SPICE.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,6 +32,8 @@ public class AdminController {
     private SupportTicketReplyRepository replyRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    private OrderService orderService;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -205,14 +208,11 @@ public class AdminController {
 
     @PostMapping("/orders/{id}/cancel")
     public String cancelOrder(@PathVariable Long id, RedirectAttributes attr) {
-        Optional<Order> opt = orderRepository.findById(id);
-        if (opt.isPresent()) {
-            Order o = opt.get();
-            o.markAsCancelled();
-            orderRepository.save(o);
-            attr.addFlashAttribute("success", "Order " + o.getOrderNumber() + " cancelled.");
-        } else {
-            attr.addFlashAttribute("error", "Order not found.");
+        try {
+            Order o = orderService.cancelOrder(id);
+            attr.addFlashAttribute("success", "Order " + o.getOrderNumber() + " cancelled successfully.");
+        } catch (Exception e) {
+            attr.addFlashAttribute("error", "Failed to cancel order: " + e.getMessage());
         }
         return "redirect:/admin/orders/" + id;
     }

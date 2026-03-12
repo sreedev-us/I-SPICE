@@ -25,15 +25,18 @@ public class HomeController {
     private final OrderService orderService;
     private final ProductService productService;
     private final CartService cartService;
+    private final EmailService emailService;
 
     public HomeController(UserService userService,
             OrderService orderService,
             ProductService productService,
-            CartService cartService) {
+            CartService cartService,
+            EmailService emailService) {
         this.userService = userService;
         this.orderService = orderService;
         this.productService = productService;
         this.cartService = cartService;
+        this.emailService = emailService;
     }
 
     // ==================== DASHBOARD & PAGES ====================
@@ -342,6 +345,14 @@ public class HomeController {
 
             Order order = orderService.createOrderFromCart(
                     user.getId(), fullShipping, billingAddr, paymentMethod);
+
+            // Send order confirmation email
+            try {
+                emailService.sendOrderConfirmationEmail(order);
+                System.out.println("[LOG] Order confirmation email triggered for order: " + order.getOrderNumber());
+            } catch (Exception e) {
+                System.err.println("[ERROR] Failed to send order confirmation email: " + e.getMessage());
+            }
 
             model.addAttribute("user", user);
             model.addAttribute("order", order);
