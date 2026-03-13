@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secure Checkout - I-SPICE</title>
+    <link rel="icon" type="image/png" th:href="@{/I-SPICE/logo/logo.png}">
     <link rel="stylesheet" href="/fontawesome/css/all.min.css">
     <style>
         /* === GLOBAL STYLES === */
@@ -1356,18 +1357,28 @@ Country" th:errorclass="error"></textarea>
             // Phone number formatting
             const phoneInput = document.getElementById('phone');
             phoneInput.addEventListener('input', function (e) {
-                let value = e.target.value.replace(/\D/g, '');
-                if (value.length > 10) value = value.substring(0, 10);
+                // Get only digits
+                let digits = e.target.value.replace(/\D/g, '');
+                
+                // If it starts with 91, strip it so we only deal with the local number
+                if (digits.startsWith('91')) {
+                    digits = digits.substring(2);
+                }
+                
+                // Cap at 10 digits for local number
+                if (digits.length > 10) digits = digits.substring(0, 10);
 
-                if (value.length > 5) {
-                    value = value.substring(0, 5) + ' ' + value.substring(5);
+                let formatted = digits;
+                if (digits.length > 5) {
+                    formatted = digits.substring(0, 5) + ' ' + digits.substring(5);
                 }
 
-                if (value.length > 0 && !value.startsWith('+')) {
-                    value = '+91 ' + value;
+                // Prepend +91 if there's any input
+                if (digits.length > 0) {
+                    e.target.value = '+91 ' + formatted;
+                } else {
+                    e.target.value = '';
                 }
-
-                e.target.value = value;
             });
         }
 

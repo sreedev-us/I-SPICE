@@ -346,12 +346,14 @@ public class HomeController {
             Order order = orderService.createOrderFromCart(
                     user.getId(), fullShipping, billingAddr, paymentMethod);
 
-            // Automatically update user's phone number if it's missing in the database
-            if ((user.getPhoneNumber() == null || user.getPhoneNumber().isBlank()) && 
-                checkoutForm.getPhone() != null && !checkoutForm.getPhone().isBlank()) {
-                System.out.println("[LOG] Automatically updating phone number for user: " + user.getUsername());
+            // Automatically update user's phone number if it differs from the one in the database
+            if (checkoutForm.getPhone() != null && !checkoutForm.getPhone().isBlank() && 
+                !checkoutForm.getPhone().equals(user.getPhoneNumber())) {
+                System.out.println("[LOG] Updating phone number for user: " + user.getUsername());
                 user.setPhoneNumber(checkoutForm.getPhone());
                 userService.updateUser(user);
+                model.addAttribute("phoneUpdated", true);
+                model.addAttribute("phoneWarning", "Your profile phone number has been updated to the one provided at checkout.");
             }
 
             // Send order confirmation email

@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>My Wishlist | I-SPICE</title>
+    <link rel="icon" type="image/png" th:href="@{/I-SPICE/logo/logo.png}">
     <link rel="stylesheet" href="/fontawesome/css/all.min.css">
     <style>
         * {
@@ -835,7 +836,7 @@
                         <div class="pname" th:text="${product.name}">Product Name</div>
                         <div class="pdesc"
                             th:text="${product.description!=null?#strings.abbreviate(product.description,90):''}"
-                            style="-webkit-line-clamp: 2; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden;">
+                            style="-webkit-line-clamp: 2; line-clamp: 2; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden;">
                             Desc</div>
                         <div class="price-row"
                             style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 12px;">

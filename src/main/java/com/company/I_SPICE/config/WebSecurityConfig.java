@@ -54,13 +54,13 @@ public class WebSecurityConfig {
                                                 .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
                                                 .contentSecurityPolicy(csp -> csp
                                                                 .policyDirectives("default-src 'self'; " +
-                                                                                "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://checkout.razorpay.com; "
+                                                                                "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://cdn.jsdelivr.net https://checkout.razorpay.com; "
                                                                                 +
                                                                                 "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com/ajax/libs; "
                                                                                 +
-                                                                                "font-src 'self' data: https://cdnjs.cloudflare.com/ajax/libs https://r2cdn.perplexity.ai; "
+                                                                                "font-src 'self' data: https://cdnjs.cloudflare.com/ajax/libs; "
                                                                                 +
-                                                                                "img-src 'self' data: https: http:; " +
+                                                                                "img-src 'self' data: blob: https: http:; " +
                                                                                 "connect-src 'self' https://*.supabase.co https://api.razorpay.com; "
                                                                                 +
                                                                                 "frame-src 'self' https://api.razorpay.com;")))
