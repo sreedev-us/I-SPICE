@@ -88,6 +88,26 @@ public class PageController {
         return "orders";
     }
 
+    @GetMapping("/orders/{id}")
+    public String orderDetailPage(@PathVariable Long id, Model model, Principal principal,
+            RedirectAttributes redirectAttributes) {
+        if (principal == null)
+            return "redirect:/login";
+        User user = getUser(principal);
+        if (user == null)
+            return "redirect:/login";
+
+        Optional<Order> orderOpt = orderService.getOrderById(id);
+        if (orderOpt.isEmpty() || !orderOpt.get().getUser().getId().equals(user.getId())) {
+            redirectAttributes.addFlashAttribute("error", "Order not found");
+            return "redirect:/orders";
+        }
+
+        addCommonModel(model, user);
+        model.addAttribute("order", orderOpt.get());
+        return "order-detail";
+    }
+
     @PostMapping("/api/orders/{id}/cancel")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> cancelOrder(@PathVariable Long id, Principal principal) {

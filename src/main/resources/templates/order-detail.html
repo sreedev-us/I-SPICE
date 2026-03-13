@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details | I-SPICE</title>
+    <link rel="stylesheet" href="/fontawesome/css/all.min.css">
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        :root { --gold:#d4af37; --gold2:#b8941f; --green:#2e7d32; --dark:#333; --gray:#666; --lgray:#e8e3d5; --border:#eef2f7; --danger:#dc3545; --sh:0 5px 15px rgba(0,0,0,.08); --tr:all .3s ease; }
+        body { background: radial-gradient(circle at top left, rgba(212,175,55,.14), transparent 28%), radial-gradient(circle at top right, rgba(46,125,50,.12), transparent 26%), linear-gradient(135deg, #f9f7f0, #fffef9 45%, #f6f1e3); min-height: 100vh; color: var(--dark); }
+        .wrap { width: 100%; max-width: 1400px; margin: 0 auto; min-height: 100vh; }
+        #app { background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 15px 30px rgba(212,175,55,.1); margin: 20px auto; border: 1px solid #f0e6d3; }
+        header { background: linear-gradient(to right, var(--green), var(--gold)); color: #fff; position: sticky; top: 0; z-index: 1000; box-shadow: var(--sh); }
+        .ht { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; }
+        .logo { display: flex; align-items: center; gap: 15px; cursor: pointer; }
+        .logo-icon { width: 50px; height: 50px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--gold); overflow: hidden; padding: 2px; }
+        .logo-text { font-size: 24px; font-weight: 700; color: #fff; }
+        .ua { display: flex; align-items: center; gap: 20px; }
+        .ci { position: relative; cursor: pointer; }
+        .cc { position: absolute; top: -8px; right: -8px; background: var(--green); color: #fff; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
+        .av { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(to right, var(--gold), var(--gold2)); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 18px; }
+        .up { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        nav { background: rgba(255,255,255,.1); padding: 10px 20px; }
+        .nl { display: flex; list-style: none; gap: 25px; }
+        .nl a { color: #fff; text-decoration: none; font-weight: 500; padding: 8px 0; position: relative; }
+        .nl a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: #fff; transition: var(--tr); }
+        .nl a:hover::after, .nl a.active::after { width: 100%; }
+        .pc { padding: 38px 20px 28px; }
+        .topbar { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--green); text-decoration: none; font-weight: 700; margin-bottom: 14px; }
+        .title { font-size: 30px; font-weight: 800; }
+        .subtitle { color: var(--gray); margin-top: 10px; line-height: 1.6; }
+        .status-pill { padding: 10px 16px; border-radius: 999px; font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+        .sPENDING { background: #fff8e1; color: #f57f17; border: 1px solid #ffecb3; }
+        .sPROCESSING { background: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb; }
+        .sSHIPPED { background: #f3e5f5; color: #7b1fa2; border: 1px solid #e1bee7; }
+        .sDELIVERED { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+        .sCANCELLED, .sREFUNDED { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
+        .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 24px; }
+        .tile, .panel { background: #fff; border: 1px solid var(--border); border-radius: 22px; padding: 22px; box-shadow: 0 6px 24px rgba(0,0,0,.04); }
+        .tile-label, .detail-label { font-size: 11px; color: var(--gray); text-transform: uppercase; letter-spacing: .08em; font-weight: 700; margin-bottom: 8px; }
+        .tile-value { font-size: 18px; font-weight: 800; color: var(--dark); line-height: 1.4; }
+        .tracker { border: 1px solid rgba(212,175,55,.18); border-radius: 22px; padding: 22px; margin-bottom: 24px; background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(249,247,240,.92)), linear-gradient(120deg, rgba(46,125,50,.04), rgba(212,175,55,.06)); box-shadow: 0 16px 32px rgba(120,98,39,.08); }
+        .tracker-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 22px; flex-wrap: wrap; }
+        .tracker-label { font-size: 13px; font-weight: 800; color: var(--gray); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .tracker-note { color: var(--gray); line-height: 1.5; }
+        .tracker-badge { padding: 10px 14px; border-radius: 999px; background: rgba(46,125,50,.1); color: var(--green); border: 1px solid rgba(46,125,50,.15); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+        .ptrack { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; position: relative; }
+        .pline { position: absolute; top: 23px; left: calc(12.5% + 24px); right: calc(12.5% + 24px); height: 4px; border-radius: 999px; background: linear-gradient(to right, #ece7da, #e3dcc8); overflow: hidden; z-index: 1; }
+        .pline-fill { position: absolute; inset: 0 auto 0 0; width: var(--progress, 0%); height: 100%; border-radius: inherit; background: linear-gradient(to right, var(--green), var(--gold)); transition: width .5s ease-in-out, height .5s ease-in-out; }
+        .pstep { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; }
+        .picon { width: 48px; height: 48px; border-radius: 16px; display: flex; align-items: center; justify-content: center; border: 2px solid; background: #fff; box-shadow: 0 10px 22px rgba(0,0,0,.05); }
+        .ptext { display: flex; flex-direction: column; gap: 4px; align-items: center; }
+        .plabel2 { font-size: 12px; font-weight: 800; color: var(--gray); }
+        .pdesc { font-size: 11px; color: #7f8a7a; line-height: 1.45; max-width: 130px; }
+        .done-i { background: linear-gradient(135deg, var(--green), var(--gold)); color: #fff; border-color: transparent; }
+        .cur-i { background: #fffdf6; color: var(--gold2); border-color: rgba(212,175,55,.7); transform: translateY(-2px) scale(1.04); box-shadow: 0 14px 24px rgba(212,175,55,.22); }
+        .pend-i { background: rgba(255,255,255,.88); color: #b9b29e; border-color: #ddd4bf; box-shadow: none; }
+        .done-l { color: var(--dark); }
+        .cur-l { color: var(--gold2); }
+        .grid { display: grid; grid-template-columns: 1.3fr .9fr; gap: 24px; align-items: start; }
+        .panel-title { font-size: 18px; font-weight: 800; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+        .items, .detail-list { display: grid; gap: 14px; }
+        .item { display: flex; justify-content: space-between; gap: 12px; padding: 16px; border-radius: 16px; background: #fafaf8; border: 1px solid #f2efe6; }
+        .item-left { display: flex; gap: 12px; align-items: flex-start; }
+        .item-icon { min-width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: rgba(212,175,55,.12); color: var(--gold2); }
+        .item-name { font-weight: 800; margin-bottom: 5px; }
+        .item-meta { color: var(--gray); font-size: 13px; line-height: 1.5; }
+        .item-price { text-align: right; font-weight: 800; white-space: nowrap; }
+        .detail { padding: 14px 0; border-bottom: 1px solid #f2efe6; }
+        .detail:last-child { border-bottom: none; padding-bottom: 0; }
+        .detail-value { font-weight: 700; line-height: 1.6; word-break: break-word; }
+        .totals { display: grid; gap: 10px; margin-top: 18px; padding-top: 18px; border-top: 1px solid #f2efe6; }
+        .total-row { display: flex; justify-content: space-between; gap: 10px; color: var(--gray); }
+        .total-row strong { color: var(--dark); font-size: 17px; }
+        .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+        .btn { border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 18px; border-radius: 999px; font-size: 14px; font-weight: 700; transition: var(--tr); }
+        .btn-primary { background: linear-gradient(to right, var(--green), var(--gold)); color: #fff; }
+        .btn-secondary { background: #fff; color: var(--green); border: 1px solid rgba(46,125,50,.18); }
+        .btn-danger { background: #fff; color: var(--danger); border: 1px solid rgba(220,53,69,.18); }
+        .btn:hover { transform: translateY(-2px); }
+        .hbg { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 6px; border-radius: 8px; background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3); }
+        .hbg span { display: block; width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: var(--tr); }
+        .hbg.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hbg.open span:nth-child(2) { opacity: 0; }
+        .hbg.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+        .mnav { display: none; flex-direction: column; background: rgba(0,0,0,.18); overflow: hidden; max-height: 0; transition: max-height .35s ease; }
+        .mnav.open { max-height: 400px; }
+        .mnav ul { list-style: none; padding: 10px 16px 16px; display: flex; flex-direction: column; gap: 4px; }
+        .mnav ul li a { display: block; padding: 12px 16px; color: #fff; text-decoration: none; font-weight: 500; border-radius: 8px; }
+        .mnav ul li a:hover, .mnav ul li a.active { background: rgba(255,255,255,.18); }
+        @media(max-width:900px) { .grid { grid-template-columns: 1fr; } }
+        @media(max-width:768px) { .ht { flex-direction: row; gap: 0; padding: 12px 16px; flex-wrap: nowrap; align-items: center; position: relative; justify-content: space-between; } nav { display: none; } .hbg { display: flex; order: -1; } .mnav { display: flex; } .logo { position: absolute; left: 50%; transform: translateX(-50%); gap: 0; } .logo-icon { display: none; } .hide-mobile-name { display: none !important; } .tracker-head { flex-direction: column; align-items: stretch; } }
+        @media(max-width:640px) { body { background: #f9f7f0; } #app { margin: 0; border-radius: 0; border: none; } .pc { padding: 22px 16px 26px; } .title { font-size: 24px; } .summary { grid-template-columns: 1fr 1fr; } .ptrack { grid-template-columns: 1fr; gap: 14px; } .pline { top: 24px; bottom: 24px; left: 22px; right: auto; width: 4px; height: auto; } .pline-fill { width: 100% !important; height: var(--progress, 0%); } .pstep { display: grid; grid-template-columns: 48px 1fr; align-items: center; justify-items: start; text-align: left; gap: 12px; min-height: 62px; } .ptext { align-items: flex-start; } .pdesc { max-width: none; } .item { flex-direction: column; } .item-price { text-align: left; } .actions { flex-direction: column; } .btn { width: 100%; } }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div id="app">
+            <header>
+                <div class="ht">
+                    <div class="logo" onclick="location.href='/dashboard'">
+                        <div class="logo-icon"><img src="/I-SPICE/logo/logo.png" alt="I-SPICE Logo" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></div>
+                        <span class="logo-text">I-SPICE</span>
+                    </div>
+                    <div class="ua">
+                        <div class="ci" onclick="location.href='/cart'">
+                            <i class="fa-solid fa-shopping-cart" style="font-size:24px;color:#fff"></i>
+                            <span class="cc" th:text="${cartCount?:0}">0</span>
+                        </div>
+                        <div class="up" onclick="location.href='/profile'">
+                            <div class="av" th:text="${#strings.substring(user.username,0,1).toUpperCase()}">U</div>
+                            <span style="color:#fff" class="hide-mobile-name" th:text="${user.username}">User</span>
+                        </div>
+                    </div>
+                    <button class="hbg" id="hamburgerBtn" aria-label="Toggle menu" onclick="toggleMobileNav()"><span></span><span></span><span></span></button>
+                </div>
+                <nav>
+                    <ul class="nl">
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li><a href="/shop">Shop</a></li>
+                        <li><a href="/orders" class="active">My Orders</a></li>
+                        <li><a href="/subscriptions">Subscriptions</a></li>
+                        <li><a href="/wishlist">Wishlist</a></li>
+                        <li><a href="/profile">Profile</a></li>
+                        <li><a href="/support">Support</a></li>
+                    </ul>
+                </nav>
+                <div class="mnav" id="mobileNav">
+                    <ul>
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li><a href="/shop">Shop</a></li>
+                        <li><a href="/orders" class="active">My Orders</a></li>
+                        <li><a href="/subscriptions">Subscriptions</a></li>
+                        <li><a href="/wishlist">Wishlist</a></li>
+                        <li><a href="/profile">Profile</a></li>
+                        <li><a href="/support">Support</a></li>
+                    </ul>
+                </div>
+            </header>
+
+            <div class="pc" th:with="progress=${order.status.name() == 'PENDING' ? 0 : (order.status.name() == 'PROCESSING' ? 33 : (order.status.name() == 'SHIPPED' ? 66 : 100))}">
+                <div class="topbar">
+                    <div>
+                        <a href="/orders" class="back-link"><i class="fas fa-arrow-left"></i> Back to orders</a>
+                        <h1 class="title">Order <span th:text="${order.orderNumber}">ORD-001</span></h1>
+                        <p class="subtitle">Tracking, items, payment and delivery information for this order.</p>
+                    </div>
+                    <span class="status-pill" th:classappend="' s' + ${order.status.name()}" th:text="${order.status.name()}">PENDING</span>
+                </div>
+
+                <div class="summary">
+                    <div class="tile"><div class="tile-label">Order ID</div><div class="tile-value" th:text="${order.id}">1</div></div>
+                    <div class="tile"><div class="tile-label">Placed On</div><div class="tile-value" th:text="${#temporals.format(order.orderDate,'dd MMM yyyy, hh:mm a')}">01 Jan 2026</div></div>
+                    <div class="tile"><div class="tile-label">Products</div><div class="tile-value" th:text="${order.itemCount} + ' items'">0 items</div></div>
+                    <div class="tile"><div class="tile-label">Total Paid</div><div class="tile-value" th:text="'₹'+${#numbers.formatDecimal(order.total,0,'COMMA',2,'POINT')}">₹0</div></div>
+                </div>
+
+                <div class="tracker" th:if="${order.status.name()!='CANCELLED' and order.status.name()!='REFUNDED'}">
+                    <div class="tracker-head">
+                        <div>
+                            <div class="tracker-label"><i class="fas fa-route"></i> Order Progress</div>
+                            <div class="tracker-note">Current stage: <strong th:text="${#strings.capitalize(#strings.toLowerCase(order.status.name().replace('_', ' ')))}">Pending</strong></div>
+                        </div>
+                        <div class="tracker-badge" th:text="${#strings.capitalize(#strings.toLowerCase(order.status.name().replace('_', ' ')))}">Pending</div>
+                    </div>
+                    <div class="ptrack">
+                        <div class="pline"><div class="pline-fill" th:style="'--progress:' + ${progress} + '%;width:' + ${progress} + '%'"></div></div>
+                        <div class="pstep"><div class="picon done-i"><i class="fas fa-check"></i></div><div class="ptext"><div class="plabel2 done-l">Placed</div><div class="pdesc">Order received and confirmed.</div></div></div>
+                        <div class="pstep"><div class="picon" th:classappend="${progress > 33 ? 'done-i' : (progress == 33 ? 'cur-i' : 'pend-i')}"><i class="fas fa-box"></i></div><div class="ptext"><div class="plabel2" th:classappend="${progress > 33 ? 'done-l' : (progress == 33 ? 'cur-l' : '')}">Processing</div><div class="pdesc">Your items are being packed.</div></div></div>
+                        <div class="pstep"><div class="picon" th:classappend="${progress > 66 ? 'done-i' : (progress == 66 ? 'cur-i' : 'pend-i')}"><i class="fas fa-truck"></i></div><div class="ptext"><div class="plabel2" th:classappend="${progress >= 66 ? 'done-l' : (progress == 66 ? 'cur-l' : '')}">Shipped</div><div class="pdesc">On the way to your address.</div></div></div>
+                        <div class="pstep"><div class="picon" th:classappend="${progress == 100 ? 'done-i' : 'pend-i'}"><i class="fas fa-home"></i></div><div class="ptext"><div class="plabel2" th:classappend="${progress == 100 ? 'done-l' : ''}">Delivered</div><div class="pdesc">Delivered successfully to you.</div></div></div>
+                    </div>
+                </div>
+
+                <div class="tracker" th:if="${order.status.name()=='CANCELLED' or order.status.name()=='REFUNDED'}">
+                    <div class="tracker-head">
+                        <div>
+                            <div class="tracker-label"><i class="fas fa-circle-info"></i> Order Status</div>
+                            <div class="tracker-note">This order is currently <strong th:text="${#strings.capitalize(#strings.toLowerCase(order.status.name().replace('_', ' ')))}">Cancelled</strong>.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid">
+                    <div class="panel">
+                        <div class="panel-title"><i class="fas fa-box-open" style="color:var(--gold2)"></i> Items in this order</div>
+                        <div class="items">
+                            <div class="item" th:each="item : ${order.orderItems}">
+                                <div class="item-left">
+                                    <div class="item-icon"><i class="fas fa-pepper-hot"></i></div>
+                                    <div>
+                                        <div class="item-name" th:text="${item.productName != null ? item.productName : 'Product'}">Item</div>
+                                        <div class="item-meta">Quantity: <span th:text="${item.quantity}">1</span><br>Category: <span th:text="${item.productCategory != null ? item.productCategory : 'Spices'}">Spices</span></div>
+                                    </div>
+                                </div>
+                                <div class="item-price">
+                                    <div th:text="'₹'+${#numbers.formatDecimal(item.totalPrice,0,'COMMA',2,'POINT')}">₹0</div>
+                                    <div style="font-size:12px;color:var(--gray);margin-top:4px" th:text="'₹'+${#numbers.formatDecimal(item.unitPrice,0,'COMMA',2,'POINT')} + ' each'">₹0 each</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display:grid;gap:24px">
+                        <div class="panel">
+                            <div class="panel-title"><i class="fas fa-receipt" style="color:var(--gold2)"></i> Order details</div>
+                            <div class="detail-list">
+                                <div class="detail"><div class="detail-label">Order Number</div><div class="detail-value" th:text="${order.orderNumber}">ORD-001</div></div>
+                                <div class="detail"><div class="detail-label">Payment Method</div><div class="detail-value" th:text="${order.paymentMethod != null ? order.paymentMethod.replace('_',' ') : 'Online'}">Online</div></div>
+                                <div class="detail"><div class="detail-label">Payment Status</div><div class="detail-value" th:text="${order.paymentStatus}">PAID</div></div>
+                                <div class="detail" th:if="${order.trackingNumber != null}"><div class="detail-label">Tracking Number</div><div class="detail-value" th:text="${order.trackingNumber}">TRK-001</div></div>
+                                <div class="detail" th:if="${order.estimatedDelivery != null}"><div class="detail-label">Estimated Delivery</div><div class="detail-value" th:text="${#temporals.format(order.estimatedDelivery,'dd MMM yyyy, hh:mm a')}">03 Jan 2026</div></div>
+                                <div class="detail" th:if="${order.deliveredAt != null}"><div class="detail-label">Delivered On</div><div class="detail-value" th:text="${#temporals.format(order.deliveredAt,'dd MMM yyyy, hh:mm a')}">03 Jan 2026</div></div>
+                            </div>
+                            <div class="totals">
+                                <div class="total-row"><span>Subtotal</span><span th:text="'₹'+${#numbers.formatDecimal(order.subtotal,0,'COMMA',2,'POINT')}">₹0</span></div>
+                                <div class="total-row"><span>Shipping</span><span th:text="${order.shipping != null and order.shipping.doubleValue() == 0 ? 'FREE' : '₹' + #numbers.formatDecimal(order.shipping,0,'COMMA',2,'POINT')}">FREE</span></div>
+                                <div class="total-row"><span>Tax</span><span th:text="'₹'+${#numbers.formatDecimal(order.tax,0,'COMMA',2,'POINT')}">₹0</span></div>
+                                <div class="total-row"><strong>Total Paid</strong><strong th:text="'₹'+${#numbers.formatDecimal(order.total,0,'COMMA',2,'POINT')}">₹0</strong></div>
+                            </div>
+                        </div>
+
+                        <div class="panel">
+                            <div class="panel-title"><i class="fas fa-location-dot" style="color:var(--gold2)"></i> Delivery information</div>
+                            <div class="detail-list">
+                                <div class="detail"><div class="detail-label">Shipping Address</div><div class="detail-value" th:text="${order.shippingAddress != null ? order.shippingAddress : 'Address not available'}">Address</div></div>
+                                <div class="detail" th:if="${order.billingAddress != null}"><div class="detail-label">Billing Address</div><div class="detail-value" th:text="${order.billingAddress}">Billing</div></div>
+                                <div class="detail" th:if="${order.deliveryNotes != null}"><div class="detail-label">Delivery Notes</div><div class="detail-value" th:text="${order.deliveryNotes}">Notes</div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-primary" th:data-id="${order.id}" onclick="reorderOrder(this.getAttribute('data-id'))"><i class="fas fa-rotate-right"></i> Reorder</button>
+                    <a href="/support" class="btn btn-secondary"><i class="fas fa-headset"></i> Need Help</a>
+                    <button class="btn btn-danger" th:if="${order.status.name()=='PENDING'}" th:data-id="${order.id}" onclick="cancelOrder(this.getAttribute('data-id'))"><i class="fas fa-ban"></i> Cancel Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function toggleMobileNav() { document.getElementById('hamburgerBtn').classList.toggle('open'); document.getElementById('mobileNav').classList.toggle('open'); }
+        function cancelOrder(id) {
+            if (!confirm('Are you sure you want to cancel this order?')) return;
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+            fetch('/api/orders/' + id + '/cancel', { method: 'POST', headers: { 'Content-Type': 'application/json', [csrfHeader]: csrfToken } })
+                .then(response => response.json())
+                .then(data => { if (data.success) { alert('Order cancelled successfully'); location.reload(); } else { alert('Error cancelling order: ' + (data.message || 'Unknown error')); } })
+                .catch(() => alert('Error cancelling order. Please try again.'));
+        }
+        function reorderOrder(id) {
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+            fetch('/api/orders/' + id + '/reorder', { method: 'POST', headers: { 'Content-Type': 'application/json', [csrfHeader]: csrfToken } })
+                .then(response => response.json())
+                .then(data => { if (data.success) { alert('Order items added to your cart'); location.href = '/cart'; } else { alert('Error reordering: ' + (data.message || 'Unknown error')); } })
+                .catch(() => alert('Error reordering. Please try again.'));
+        }
+    </script>
+</body>
+</html>

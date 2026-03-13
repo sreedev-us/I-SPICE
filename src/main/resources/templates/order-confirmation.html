@@ -28,7 +28,10 @@
         }
 
         body {
-            background: linear-gradient(135deg, #f9f7f0, #fffef9, #f9f7f0);
+            background:
+                radial-gradient(circle at top left, rgba(212, 175, 55, 0.14), transparent 28%),
+                radial-gradient(circle at top right, rgba(46, 125, 50, 0.12), transparent 26%),
+                linear-gradient(135deg, #f9f7f0, #fffef9 45%, #f6f1e3);
             min-height: 100vh;
             color: var(--dark);
         }
@@ -621,90 +624,149 @@
         .tracker {
             width: 100%;
             max-width: 900px;
-            background: #fafaf5;
-            border: 1px solid #f0e6d3;
-            border-radius: 16px;
-            padding: 25px;
+            padding: 24px;
             margin-bottom: 35px;
+            border-radius: 22px;
+            border: 1px solid rgba(212, 175, 55, 0.18);
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 247, 240, 0.92)),
+                linear-gradient(120deg, rgba(46, 125, 50, 0.04), rgba(212, 175, 55, 0.06));
+            box-shadow: 0 16px 32px rgba(120, 98, 39, 0.08);
+        }
+
+        .tracker-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 22px;
         }
 
         .tracker-title {
             font-size: 13px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: .08em;
             color: var(--gray);
-            margin-bottom: 20px;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
             gap: 8px;
+            font-weight: 800;
         }
 
         .tracker-title i {
             color: var(--gold);
         }
 
+        .tracker-sub {
+            font-size: 14px;
+            color: var(--gray);
+            line-height: 1.5;
+        }
+
+        .tracker-badge {
+            flex-shrink: 0;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(46, 125, 50, 0.1);
+            color: var(--green);
+            border: 1px solid rgba(46, 125, 50, 0.14);
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+        }
+
         .ptrack {
-            display: flex;
-            align-items: center;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
+            position: relative;
         }
 
         .pstep {
+            position: relative;
+            z-index: 2;
             display: flex;
             flex-direction: column;
             align-items: center;
-            flex: 1;
-            transition: var(--tr);
-            cursor: default;
+            text-align: center;
+            gap: 10px;
         }
 
-        .pstep:hover {
-            transform: scale(1.1);
+        .ptext {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            align-items: center;
         }
 
         .picon {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 16px;
             z-index: 1;
+            border: 2px solid;
+            background: #fff;
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.05);
         }
 
         .done-i {
-            background: linear-gradient(to right, var(--green), var(--gold));
+            background: linear-gradient(135deg, var(--green), var(--gold));
             color: #fff;
+            border-color: transparent;
         }
 
         .pend-i {
-            background: var(--lgray);
-            color: var(--gray);
+            background: rgba(255, 255, 255, 0.88);
+            color: #b9b29e;
+            border-color: #ddd4bf;
+            box-shadow: none;
         }
 
         .plabel2 {
-            font-size: 11px;
+            font-size: 12px;
             color: var(--gray);
-            margin-top: 6px;
             text-align: center;
+            font-weight: 800;
+        }
+
+        .pdesc {
+            font-size: 11px;
+            color: #7f8a7a;
+            line-height: 1.45;
+            max-width: 120px;
         }
 
         .done-l {
             color: var(--green);
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .pline {
-            flex: 1;
-            height: 2px;
-            background: var(--lgray);
-            margin: 0 -4px;
-            position: relative;
-            top: -18px;
+            position: absolute;
+            top: 23px;
+            left: calc(12.5% + 24px);
+            right: calc(12.5% + 24px);
+            height: 4px;
+            border-radius: 999px;
+            background: linear-gradient(to right, #ece7da, #e3dcc8);
+            overflow: hidden;
+            z-index: 1;
         }
 
-        .pline.filled {
+        .pline-fill {
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: var(--progress, 0%);
+            height: 100%;
+            border-radius: inherit;
             background: linear-gradient(to right, var(--green), var(--gold));
+            transition: width .5s ease-in-out, height .5s ease-in-out;
         }
 
         /* ── Action buttons ── */
@@ -776,6 +838,53 @@
         @media(max-width: 600px) {
             .conf-title {
                 font-size: 26px;
+            }
+
+            .tracker {
+                padding: 18px;
+                border-radius: 18px;
+            }
+
+            .tracker-head {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .ptrack {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .pline {
+                top: 24px;
+                bottom: 24px;
+                left: 22px;
+                right: auto;
+                width: 4px;
+                height: auto;
+            }
+
+            .pline-fill {
+                width: 100% !important;
+                height: var(--progress, 0%);
+            }
+
+            .pstep {
+                display: grid;
+                grid-template-columns: 48px 1fr;
+                align-items: center;
+                justify-items: start;
+                text-align: left;
+                gap: 12px;
+                min-height: 62px;
+            }
+
+            .ptext {
+                align-items: flex-start;
+            }
+
+            .pdesc {
+                max-width: none;
             }
 
             .loyalty-banner {
@@ -965,26 +1074,42 @@
 
                 <!-- Order progress tracker -->
                 <div class="tracker">
-                    <div class="tracker-title"><i class="fas fa-route"></i> Order Progress</div>
+                    <div class="tracker-head">
+                        <div>
+                            <div class="tracker-title"><i class="fas fa-route"></i> Order Progress</div>
+                            <div class="tracker-sub">Your order is confirmed and has entered our preparation queue.</div>
+                        </div>
+                        <div class="tracker-badge">Order Placed</div>
+                    </div>
                     <div class="ptrack">
+                        <div class="pline"><div class="pline-fill" style="--progress:0%;width:0%;"></div></div>
                         <div class="pstep">
                             <div class="picon done-i"><i class="fas fa-check"></i></div>
-                            <div class="plabel2 done-l">Placed</div>
+                            <div class="ptext">
+                                <div class="plabel2 done-l">Placed</div>
+                                <div class="pdesc">We received your order details.</div>
+                            </div>
                         </div>
-                        <div class="pline"></div>
                         <div class="pstep">
                             <div class="picon pend-i"><i class="fas fa-box"></i></div>
-                            <div class="plabel2">Processing</div>
+                            <div class="ptext">
+                                <div class="plabel2">Processing</div>
+                                <div class="pdesc">We will pack your order next.</div>
+                            </div>
                         </div>
-                        <div class="pline"></div>
                         <div class="pstep">
                             <div class="picon pend-i"><i class="fas fa-truck"></i></div>
-                            <div class="plabel2">Shipped</div>
+                            <div class="ptext">
+                                <div class="plabel2">Shipped</div>
+                                <div class="pdesc">Tracking updates will appear once dispatched.</div>
+                            </div>
                         </div>
-                        <div class="pline"></div>
                         <div class="pstep">
                             <div class="picon pend-i"><i class="fas fa-home"></i></div>
-                            <div class="plabel2">Delivered</div>
+                            <div class="ptext">
+                                <div class="plabel2">Delivered</div>
+                                <div class="pdesc">Final delivery confirmation will show here.</div>
+                            </div>
                         </div>
                     </div>
                 </div>
