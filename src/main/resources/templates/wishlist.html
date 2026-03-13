@@ -703,8 +703,11 @@
             }
 
             #app {
-                margin: 10px;
-                border-radius: 14px;
+                margin: 0;
+                border-radius: 0;
+                border: none;
+                box-shadow: none;
+                min-height: 100vh;
             }
 
             .ht {
@@ -856,16 +859,17 @@
                         th:data-id="${product.id}"
                         onclick="window.location.href='/product/' + this.getAttribute('data-id')"
                         style="cursor: pointer;">
+                        <div class="img-box">
                         <th:block th:if="${product.imageUrl!=null and !product.imageUrl.isEmpty()}">
                             <img th:src="${product.imageUrl}" th:alt="${product.name}"
-                                onerror="this.onerror=null; this.src=''; this.parentElement.innerHTML='<i class=&quot;fa-solid fa-pepper-hot&quot; style=&quot;font-size:50px;color:var(--gold-primary);padding:35px;&quot;></i>';">
+                                onerror="this.onerror=null; this.src=''; this.parentElement.innerHTML='<i class=&quot;fa-solid fa-pepper-hot&quot; style=&quot;font-size:50px;color:var(--gold);padding:35px;&quot;></i>';">
                         </th:block>
                         <th:block th:unless="${product.imageUrl!=null and !product.imageUrl.isEmpty()}">
                             <i class="fa-solid fa-pepper-hot"
-                                style="font-size:50px;color:var(--gold-primary);padding:35px;"></i>
+                                style="font-size:50px;color:var(--gold);padding:35px;"></i>
                         </th:block>
-                    </div>
-                    <div class="body">
+                        </div>
+                        <div class="body">
                         <div class="cat" th:text="${product.category?:'Other'}">Category</div>
                         <div class="pname" th:text="${product.name}">Product Name</div>
                         <div class="pdesc"
@@ -886,12 +890,12 @@
                             </th:block>
                         </div>
                         <div class="actions">
-                            <button class="atc" th:disabled="${product.stock!=null and product.stock<=0}"
+                            <button class="atc" type="button" th:disabled="${product.stock!=null and product.stock<=0}"
                                 th:attr="data-id=${product.id},data-name=${product.name}"
                                 th:text="${product.stock!=null and product.stock<=0}?'Out of Stock':'Add to Cart'"
                                 onclick="addToCart(event,this)">Add to Cart</button>
-                            <button class="removebtn" th:data-id="${product.id}"
-                                onclick="removeWishlist(this.getAttribute('data-id'))"><i
+                            <button class="removebtn" type="button" th:data-id="${product.id}"
+                                onclick="event.stopPropagation(); removeWishlist(this.getAttribute('data-id'))"><i
                                     class="fas fa-trash"></i></button>
                         </div>
                     </div>
