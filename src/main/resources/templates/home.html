@@ -33,7 +33,10 @@
         }
 
         body {
-            background: linear-gradient(135deg, #f9f7f0, #fffef9, #f9f7f0);
+            background:
+                radial-gradient(circle at top left, rgba(212, 175, 55, 0.14), transparent 28%),
+                radial-gradient(circle at top right, rgba(46, 125, 50, 0.12), transparent 26%),
+                linear-gradient(135deg, #f9f7f0, #fffef9 45%, #f6f1e3);
             min-height: 100vh;
             color: #333;
         }
@@ -997,6 +1000,23 @@
         @media (max-width: 768px) {
             .hide-mobile-name {
                 display: none !important;
+            }
+        }
+        @media (max-width: 480px) {
+            #dashboard {
+                margin: 0;
+                border-radius: 0;
+                border: none;
+            }
+
+            .hero,
+            .newsletter {
+                border-radius: 20px;
+            }
+
+            .products-grid,
+            .stats-container {
+                gap: 14px;
             }
         }
     </style>
