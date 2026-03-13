@@ -346,6 +346,14 @@ public class HomeController {
             Order order = orderService.createOrderFromCart(
                     user.getId(), fullShipping, billingAddr, paymentMethod);
 
+            // Automatically update user's phone number if it's missing in the database
+            if ((user.getPhoneNumber() == null || user.getPhoneNumber().isBlank()) && 
+                checkoutForm.getPhone() != null && !checkoutForm.getPhone().isBlank()) {
+                System.out.println("[LOG] Automatically updating phone number for user: " + user.getUsername());
+                user.setPhoneNumber(checkoutForm.getPhone());
+                userService.updateUser(user);
+            }
+
             // Send order confirmation email
             try {
                 emailService.sendOrderConfirmationEmail(order);
