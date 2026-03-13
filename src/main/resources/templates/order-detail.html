@@ -11,12 +11,12 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         :root { --gold:#d4af37; --gold2:#b8941f; --green:#2e7d32; --dark:#333; --gray:#666; --lgray:#e8e3d5; --border:#eef2f7; --danger:#dc3545; --sh:0 5px 15px rgba(0,0,0,.08); --tr:all .3s ease; }
         body { background: radial-gradient(circle at top left, rgba(212,175,55,.14), transparent 28%), radial-gradient(circle at top right, rgba(46,125,50,.12), transparent 26%), linear-gradient(135deg, #f9f7f0, #fffef9 45%, #f6f1e3); min-height: 100vh; color: var(--dark); }
-        .wrap { width: 100%; max-width: 1400px; margin: 0 auto; min-height: 100vh; }
-        #app { background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 15px 30px rgba(212,175,55,.1); margin: 20px auto; border: 1px solid #f0e6d3; }
+        .wrap { width: 100%; max-width: 1200px; margin: 0 auto; min-height: 100vh; }
+        #app { background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 15px 30px rgba(212,175,55,.1); margin: 20px auto; border: 1px solid #f0e6d3; min-height: calc(100vh - 40px); }
         header { background: linear-gradient(to right, var(--green), var(--gold)); color: #fff; position: sticky; top: 0; z-index: 1000; box-shadow: var(--sh); }
         .ht { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; }
         .logo { display: flex; align-items: center; gap: 15px; cursor: pointer; }
-        .logo-icon { width: 50px; height: 50px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--gold); overflow: hidden; padding: 2px; }
+        .logo-icon { width: 50px; height: 50px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--gold); overflow: hidden; padding: 0; box-shadow: 0 0 10px rgba(212,175,55,.3); }
         .logo-text { font-size: 24px; font-weight: 700; color: #fff; }
         .ua { display: flex; align-items: center; gap: 20px; }
         .ci { position: relative; cursor: pointer; }

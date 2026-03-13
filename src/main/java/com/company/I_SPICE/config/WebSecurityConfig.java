@@ -58,7 +58,7 @@ public class WebSecurityConfig {
                                                                                 +
                                                                                 "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com/ajax/libs; "
                                                                                 +
-                                                                                "font-src 'self' data: https://cdnjs.cloudflare.com/ajax/libs; "
+                                                                                "font-src 'self' data: https://cdnjs.cloudflare.com/ajax/libs https://r2cdn.perplexity.ai; "
                                                                                 +
                                                                                 "img-src 'self' data: blob: https: http:; " +
                                                                                 "connect-src 'self' https://*.supabase.co https://api.razorpay.com; "

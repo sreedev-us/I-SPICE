@@ -40,7 +40,7 @@
 
         .wrap {
             width: 100%;
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
@@ -56,7 +56,8 @@
             overflow: hidden;
             box-shadow: 0 15px 30px rgba(212, 175, 55, .1);
             margin: 20px auto;
-            border: 1px solid #f0e6d3
+            border: 1px solid #f0e6d3;
+            min-height: calc(100vh - 40px)
         }
 
         header {
@@ -92,7 +93,15 @@
             justify-content: center;
             border: 2px solid var(--gold);
             overflow: hidden;
-            padding: 2px
+            padding: 0;
+            box-shadow: 0 0 10px rgba(212, 175, 55, .3)
+        }
+
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%
         }
 
         .logo-text {
@@ -764,6 +773,18 @@
 </head>
 
 <body>
+    <script>
+        window.toggleMobileNav = function () {
+            const hamburgerBtn = document.getElementById('hamburgerBtn');
+            const mobileNav = document.getElementById('mobileNav');
+            if (hamburgerBtn) {
+                hamburgerBtn.classList.toggle('open');
+            }
+            if (mobileNav) {
+                mobileNav.classList.toggle('open');
+            }
+        };
+    </script>
     <div class="wrap">
         <div id="app">
             <header>
@@ -895,8 +916,6 @@
             </form>
         </div>
     </div>
-    </div>
-    </div>
 
     <script>
         const csrf = {
@@ -940,12 +959,6 @@
             const btns = document.querySelectorAll('.atc:not(:disabled)');
             if (!btns.length) return showToast('No in-stock items to add', 'info');
             btns.forEach(b => b.click());
-        }
-    </script>
-    <script>
-        function toggleMobileNav() {
-            document.getElementById('hamburgerBtn').classList.toggle('open');
-            document.getElementById('mobileNav').classList.toggle('open');
         }
     </script>
 </body>
