@@ -20,19 +20,22 @@ public class OrderService {
     private final UserService userService;
     private final ProductService productService;
     private final EmailService emailService;
+    private final SubscriptionPlanService subscriptionPlanService;
 
     public OrderService(OrderRepository orderRepository,
             OrderItemRepository orderItemRepository,
             CartService cartService,
             UserService userService,
             ProductService productService,
-            EmailService emailService) {
+            EmailService emailService,
+            SubscriptionPlanService subscriptionPlanService) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.cartService = cartService;
         this.userService = userService;
         this.productService = productService;
         this.emailService = emailService;
+        this.subscriptionPlanService = subscriptionPlanService;
     }
 
     // Create order from cart
@@ -68,9 +71,9 @@ public class OrderService {
 
         // Copy totals from cart
         order.setSubtotal(cart.getSubtotal());
-        order.setShipping(cart.getShipping());
-        order.setTax(cart.getSubtotal().multiply(java.math.BigDecimal.valueOf(0.18)));
-        order.setTotal(cart.getTotal());
+        order.setShipping(cartService.calculateShipping(cart));
+        order.setTax(cartService.calculateTax(cart));
+        order.setTotal(cartService.calculateTotal(cart));
 
         // Save order to get ID first
         Order savedOrder = orderRepository.save(order);
@@ -88,15 +91,24 @@ public class OrderService {
             productService.saveProduct(product);
         }
 
-        // Recalculate totals from actual saved items and persist
-        savedOrder.calculateTotals();
+        // Recalculate totals from actual saved items and active subscription benefits
+        BigDecimal subtotal = savedOrder.getOrderItems().stream()
+                .map(OrderItem::getTotalPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal shipping = cartService.calculateShipping(user, subtotal);
+        BigDecimal tax = cartService.calculateTax(subtotal, shipping);
+        savedOrder.setSubtotal(subtotal);
+        savedOrder.setShipping(shipping);
+        savedOrder.setTax(tax);
+        savedOrder.setTotal(subtotal.add(shipping).add(tax));
         savedOrder = orderRepository.save(savedOrder);
 
         // Add loyalty points (10 points per ₹100 spent)
         BigDecimal totalAmount = savedOrder.getTotal();
         if (totalAmount != null) {
+            int multiplier = Math.max(1, subscriptionPlanService.getBenefitsForUser(user).loyaltyMultiplier());
             int loyaltyPoints = totalAmount.divide(BigDecimal.valueOf(100), 0, java.math.RoundingMode.DOWN)
-                    .intValue() * 10;
+                    .intValue() * 10 * multiplier;
             userService.updateLoyaltyPoints(userId, loyaltyPoints);
         }
 
@@ -105,7 +117,6 @@ public class OrderService {
 
         return savedOrder;
     }
-
     // Get all orders for a user
     @Transactional(readOnly = true)
     public List<Order> getUserOrders(Long userId) {

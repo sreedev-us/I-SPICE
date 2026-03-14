@@ -1,9 +1,11 @@
 package com.company.I_SPICE.controller;
 
 import com.company.I_SPICE.model.Cart;
+import com.company.I_SPICE.model.SubscriptionPlan;
 import com.company.I_SPICE.model.User;
 import com.company.I_SPICE.services.CartService;
 import com.company.I_SPICE.services.RazorpayService;
+import com.company.I_SPICE.services.SubscriptionPlanService;
 import com.company.I_SPICE.services.UserService;
 import com.razorpay.Order;
 import com.razorpay.RazorpayException;
@@ -30,6 +32,8 @@ public class PaymentApiController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private SubscriptionPlanService subscriptionPlanService;
 
     /**
      * Endpoint to create a Razorpay order before opening the checkout popup.
@@ -53,8 +57,8 @@ public class PaymentApiController {
             }
 
             BigDecimal subtotal = cart.getSubtotal();
-            BigDecimal tax = subtotal.multiply(BigDecimal.valueOf(0.18));
-            BigDecimal shipping = cart.getShipping();
+            BigDecimal shipping = cartService.calculateShipping(cart);
+            BigDecimal tax = cartService.calculateTax(subtotal, shipping);
             BigDecimal totalAmount = subtotal.add(shipping).add(tax);
 
             // Create Razorpay Order
@@ -147,21 +151,19 @@ public class PaymentApiController {
             User user = userService.getUserFromPrincipal(principal)
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
-            String plan = (String) payload.get("plan");
-            boolean isAnnual = (Boolean) payload.get("annual");
+            String planCode = (String) payload.get("plan");
+            boolean isAnnual = Boolean.TRUE.equals(payload.get("annual"));
 
-            BigDecimal amount;
+            SubscriptionPlan plan = subscriptionPlanService.getPlanByCode(planCode)
+                    .filter(SubscriptionPlan::isActive)
+                    .orElse(null);
 
-            if ("STARTER".equalsIgnoreCase(plan)) {
-                amount = isAnnual ? BigDecimal.valueOf(2868) : BigDecimal.valueOf(299);
-            } else if ("PRO".equalsIgnoreCase(plan)) {
-                amount = isAnnual ? BigDecimal.valueOf(5750) : BigDecimal.valueOf(599);
-            } else if ("ELITE".equalsIgnoreCase(plan)) {
-                amount = isAnnual ? BigDecimal.valueOf(9590) : BigDecimal.valueOf(999);
-            } else {
+            if (plan == null) {
                 response.put("error", "Invalid subscription plan");
                 return ResponseEntity.badRequest().body(response);
             }
+
+            BigDecimal amount = isAnnual ? plan.getAnnualPrice() : plan.getMonthlyPrice();
 
             // Create Razorpay Order
             String tempReceiptId = "sub_" + UUID.randomUUID().toString().substring(0, 8);
@@ -174,6 +176,7 @@ public class PaymentApiController {
             response.put("orderId", razorpayOrder.get("id"));
             response.put("amount", razorpayOrder.get("amount")); // in paise
             response.put("currency", razorpayOrder.get("currency"));
+            response.put("planName", plan.getName());
 
             // Helpful data for the checkout form prefill
             Map<String, String> prefill = new HashMap<>();
@@ -227,10 +230,19 @@ public class PaymentApiController {
             if (isValid) {
                 System.out.println("✅ Subscription Signature Verified for Payment ID: " + razorpayPaymentId);
 
+                SubscriptionPlan subscriptionPlan = subscriptionPlanService.getPlanByCode(plan)
+                        .filter(SubscriptionPlan::isActive)
+                        .orElse(null);
+                if (subscriptionPlan == null) {
+                    response.put("success", false);
+                    response.put("error", "Subscription plan is no longer available.");
+                    return ResponseEntity.badRequest().body(response);
+                }
+
                 User user = userService.getUserFromPrincipal(principal)
                         .orElseThrow(() -> new RuntimeException("User not found"));
 
-                user.setSubscriptionPlan(plan.toUpperCase());
+                user.setSubscriptionPlan(subscriptionPlan.getCode());
                 user.setSubscriptionStatus("ACTIVE");
 
                 int monthsToAdd = isAnnual != null && isAnnual ? 12 : 1;
@@ -244,6 +256,7 @@ public class PaymentApiController {
 
                 user.setSubscriptionEndDate(newEndDate);
                 userService.updateUser(user);
+                cartService.refreshCartPricing(user.getId());
 
                 response.put("success", true);
                 response.put("message", "Subscription activated successfully");
@@ -252,6 +265,12 @@ public class PaymentApiController {
                 subDetails.put("plan", user.getSubscriptionPlan());
                 subDetails.put("status", user.getSubscriptionStatus());
                 subDetails.put("endDate", user.getSubscriptionEndDate().toString());
+                subDetails.put("productDiscountPercent",
+                        subscriptionPlanService.getBenefitsForUser(user).productDiscountPercent());
+                subDetails.put("loyaltyMultiplier",
+                        subscriptionPlanService.getBenefitsForUser(user).loyaltyMultiplier());
+                subDetails.put("alwaysFreeShipping",
+                        subscriptionPlanService.getBenefitsForUser(user).alwaysFreeShipping());
                 response.put("subscription", subDetails);
 
             } else {

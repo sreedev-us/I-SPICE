@@ -7,6 +7,8 @@ import com.company.I_SPICE.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -17,15 +19,18 @@ public class CartService {
     private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
     private final UserService userService;
+    private final SubscriptionPlanService subscriptionPlanService;
 
     public CartService(CartRepository cartRepository,
             CartItemRepository cartItemRepository,
             ProductRepository productRepository,
-            UserService userService) {
+            UserService userService,
+            SubscriptionPlanService subscriptionPlanService) {
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
         this.productRepository = productRepository;
         this.userService = userService;
+        this.subscriptionPlanService = subscriptionPlanService;
     }
 
     // ==================== CART MANAGEMENT ====================
@@ -151,6 +156,7 @@ public class CartService {
                 }
 
                 existingItem.setQuantity(newTotalQuantity);
+                existingItem.setPrice(calculateEffectivePrice(cart.getUser(), product));
                 existingItem.setUpdatedAt(LocalDateTime.now());
 
                 System.out.println("💾 Saving updated cart item...");
@@ -174,7 +180,7 @@ public class CartService {
                 newItem.setQuantity(quantity);
 
                 // FIX: This is the key change - use setPrice() with the discounted price
-                newItem.setPrice(product.getDiscountedPrice());
+                newItem.setPrice(calculateEffectivePrice(cart.getUser(), product));
 
                 newItem.setCreatedAt(LocalDateTime.now());
                 newItem.setUpdatedAt(LocalDateTime.now());
@@ -262,6 +268,7 @@ public class CartService {
                 // Update quantity
                 System.out.println("✏️ Updating item quantity from " + cartItem.getQuantity() + " to " + quantity);
                 cartItem.setQuantity(quantity);
+                cartItem.setPrice(calculateEffectivePrice(cart.getUser(), product));
                 cartItem.setUpdatedAt(LocalDateTime.now());
 
                 CartItem savedItem = cartItemRepository.save(cartItem);
@@ -396,6 +403,7 @@ public class CartService {
 
         try {
             Cart cart = getOrCreateCart(userId);
+            refreshCartPricing(cart);
             cart.getItems().size(); // Explicitly initialize lazy collection
             System.out.println("✅ Returning cart with " + cart.getItems().size() + " items");
             return cart;
@@ -426,7 +434,8 @@ public class CartService {
     public double getCartTotal(Long userId) {
         try {
             Cart cart = getOrCreateCart(userId);
-            return cart.getTotal().doubleValue();
+            refreshCartPricing(cart);
+            return calculateTotal(cart).doubleValue();
         } catch (Exception e) {
             System.out.println("⚠️ Could not get cart total: " + e.getMessage());
             return 0.0;
@@ -508,6 +517,7 @@ public class CartService {
                     // Update quantity
                     CartItem targetItem = existingItem.get();
                     targetItem.setQuantity(targetItem.getQuantity() + sourceItem.getQuantity());
+                    targetItem.setPrice(calculateEffectivePrice(targetCart.getUser(), sourceItem.getProduct()));
                     cartItemRepository.save(targetItem);
                 } else {
                     // Create new item
@@ -517,7 +527,7 @@ public class CartService {
                     newItem.setQuantity(sourceItem.getQuantity());
 
                     // FIX: Use setPrice() instead of setUnitPrice()
-                    newItem.setPrice(sourceItem.getPrice());
+                    newItem.setPrice(calculateEffectivePrice(targetCart.getUser(), sourceItem.getProduct()));
 
                     newItem.setCreatedAt(LocalDateTime.now());
                     newItem.setUpdatedAt(LocalDateTime.now());
@@ -551,6 +561,7 @@ public class CartService {
     public void printCartDetails(Long userId) {
         try {
             Cart cart = getOrCreateCart(userId);
+            refreshCartPricing(cart);
             System.out.println("=== CART DEBUG INFO ===");
             System.out.println("Cart ID: " + cart.getId());
             System.out.println("User ID: " + cart.getUser().getId());
@@ -614,5 +625,69 @@ public class CartService {
             System.out.println("❌ DEBUG ERROR: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    @Transactional
+    public void refreshCartPricing(Long userId) {
+        Cart cart = getOrCreateCart(userId);
+        refreshCartPricing(cart);
+    }
+
+    public BigDecimal calculateShipping(Cart cart) {
+        return calculateShipping(cart.getUser(), cart.getSubtotal());
+    }
+
+    public BigDecimal calculateShipping(User user, BigDecimal subtotal) {
+        if (subtotal == null || subtotal.compareTo(BigDecimal.ZERO) <= 0) {
+            return BigDecimal.ZERO;
+        }
+        SubscriptionPlanService.SubscriptionBenefits benefits = subscriptionPlanService.getBenefitsForUser(user);
+        if (benefits.alwaysFreeShipping()) {
+            return BigDecimal.ZERO;
+        }
+        BigDecimal threshold = benefits.freeShippingThreshold();
+        return subtotal.compareTo(threshold) >= 0 ? BigDecimal.ZERO : new BigDecimal("50");
+    }
+
+    public BigDecimal calculateTax(Cart cart) {
+        return calculateTax(cart.getSubtotal(), calculateShipping(cart));
+    }
+
+    public BigDecimal calculateTax(BigDecimal subtotal, BigDecimal shipping) {
+        if (subtotal == null || subtotal.compareTo(BigDecimal.ZERO) <= 0) {
+            return BigDecimal.ZERO;
+        }
+        BigDecimal taxableAmount = subtotal.add(shipping != null ? shipping : BigDecimal.ZERO);
+        return taxableAmount.multiply(BigDecimal.valueOf(0.18)).setScale(2, RoundingMode.HALF_UP);
+    }
+
+    public BigDecimal calculateTotal(Cart cart) {
+        BigDecimal subtotal = cart.getSubtotal();
+        BigDecimal shipping = calculateShipping(cart);
+        BigDecimal tax = calculateTax(subtotal, shipping);
+        return subtotal.add(shipping).add(tax).setScale(2, RoundingMode.HALF_UP);
+    }
+
+    private void refreshCartPricing(Cart cart) {
+        if (cart == null || cart.getItems() == null || cart.getItems().isEmpty()) {
+            return;
+        }
+        boolean changed = false;
+        for (CartItem item : cart.getItems()) {
+            BigDecimal effectivePrice = calculateEffectivePrice(cart.getUser(), item.getProduct());
+            if (item.getPrice() == null || item.getPrice().compareTo(effectivePrice) != 0) {
+                item.setPrice(effectivePrice);
+                cartItemRepository.save(item);
+                changed = true;
+            }
+        }
+        if (changed) {
+            cart.setUpdatedAt(LocalDateTime.now());
+            cartRepository.save(cart);
+        }
+    }
+
+    private BigDecimal calculateEffectivePrice(User user, Product product) {
+        return subscriptionPlanService.getEffectiveProductPrice(user, product);
     }
 }

@@ -5,6 +5,7 @@ import com.company.I_SPICE.model.SupportTicketReply;
 import com.company.I_SPICE.model.User;
 import com.company.I_SPICE.repository.SupportTicketReplyRepository;
 import com.company.I_SPICE.repository.SupportTicketRepository;
+import com.company.I_SPICE.services.SubscriptionPlanService;
 import com.company.I_SPICE.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -29,6 +30,8 @@ public class SupportController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private SubscriptionPlanService subscriptionPlanService;
 
     private User getAuthenticatedUser(Authentication auth) {
         if (auth == null || !auth.isAuthenticated())
@@ -72,7 +75,7 @@ public class SupportController {
         ticket.setCategory(category);
         ticket.setDescription(description);
         ticket.setStatus("OPEN");
-        ticket.setPriority("MEDIUM");
+        ticket.setPriority(subscriptionPlanService.getBenefitsForUser(user).supportPriority());
         ticket.setTicketNumber("TKT-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
 
         ticketRepository.save(ticket);

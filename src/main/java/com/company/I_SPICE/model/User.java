@@ -265,6 +265,14 @@ public class User {
         this.subscriptionEndDate = subscriptionEndDate;
     }
 
+    @Transient
+    public boolean hasActiveSubscription() {
+        return subscriptionStatus != null
+                && "ACTIVE".equalsIgnoreCase(subscriptionStatus)
+                && subscriptionEndDate != null
+                && subscriptionEndDate.isAfter(LocalDateTime.now());
+    }
+
     // ORDERS GETTERS AND SETTERS
     public List<Order> getOrders() {
         return orders;

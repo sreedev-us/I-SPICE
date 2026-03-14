@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscriptions - Admin</title>
+    <link rel="icon" type="image/png" th:href="@{/I-SPICE/logo/logo.png}">
+    <link rel="stylesheet" href="/fontawesome/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        :root { --sidebar-bg:#1a1f2e; --sidebar-width:250px; --accent:#d4af37; --accent-green:#2e7d32; --danger:#e53935; --text-light:#94a3b8; --card-bg:#fff; --page-bg:#f1f5f9; --dark:#1e293b; --border:#e2e8f0; --muted:#64748b; }
+        body { display:flex; min-height:100vh; background:var(--page-bg); color:var(--dark); }
+        .sidebar { width:var(--sidebar-width); background:var(--sidebar-bg); min-height:100vh; position:fixed; top:0; left:0; z-index:100; display:flex; flex-direction:column; }
+        .sidebar-brand { padding:24px 20px; border-bottom:1px solid rgba(255,255,255,0.08); display:flex; align-items:center; gap:12px; }
+        .brand-icon { width:42px; height:42px; background:#fff; border-radius:10px; display:flex; align-items:center; justify-content:center; padding:4px; overflow:hidden; }
+        .brand-icon img { width:100%; height:100%; object-fit:contain; }
+        .brand-name { color:#fff; font-size:17px; font-weight:700; }
+        .brand-sub { color:var(--text-light); font-size:11px; }
+        .sidebar-nav { flex:1; padding:16px 0; }
+        .nav-item { display:flex; align-items:center; gap:12px; padding:11px 20px; color:var(--text-light); text-decoration:none; font-size:14px; font-weight:500; border-left:3px solid transparent; transition:all 0.2s; }
+        .nav-item:hover, .nav-item.active { background:rgba(255,255,255,0.06); color:#fff; border-left-color:var(--accent); }
+        .nav-item i { width:18px; text-align:center; }
+        .sidebar-footer { padding:16px 20px; border-top:1px solid rgba(255,255,255,0.08); }
+        .sidebar-footer a { color:var(--text-light); text-decoration:none; font-size:13px; display:flex; align-items:center; gap:8px; }
+        .main-content { margin-left:var(--sidebar-width); flex:1; min-width:0; }
+        .topbar { background:#fff; border-bottom:1px solid var(--border); padding:18px 28px; display:flex; align-items:center; justify-content:space-between; gap:16px; position:sticky; top:0; z-index:50; }
+        .topbar h1 { font-size:22px; }
+        .content { padding:28px; }
+        .toolbar { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:22px; flex-wrap:wrap; }
+        .toolbar-copy { max-width:620px; }
+        .toolbar-copy p { color:var(--muted); margin-top:6px; line-height:1.5; }
+        .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px 16px; border-radius:10px; border:none; text-decoration:none; font-size:14px; font-weight:600; cursor:pointer; transition:0.2s ease; }
+        .btn-primary { background:var(--accent); color:#111827; }
+        .btn-outline { background:#fff; border:1px solid var(--border); color:var(--dark); }
+        .btn-danger { background:#fff1f2; border:1px solid #fecdd3; color:var(--danger); }
+        .notice { padding:14px 16px; border-radius:12px; margin-bottom:18px; font-size:14px; }
+        .notice-success { background:#f0fdf4; color:#166534; border:1px solid #bbf7d0; }
+        .notice-error { background:#fef2f2; color:#991b1b; border:1px solid #fecaca; }
+        .plans-grid { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:20px; }
+        .plan-card { background:var(--card-bg); border:1px solid var(--border); border-radius:18px; overflow:hidden; box-shadow:0 12px 30px rgba(15,23,42,0.05); display:flex; flex-direction:column; }
+        .plan-card.popular { border-color:rgba(212,175,55,0.55); box-shadow:0 18px 40px rgba(212,175,55,0.16); }
+        .plan-head { padding:22px; background:linear-gradient(135deg, #ffffff, #f8fafc); border-bottom:1px solid var(--border); }
+        .plan-badge-row { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
+        .plan-badge { display:inline-flex; align-items:center; gap:6px; padding:6px 10px; background:#fff7db; color:#8a6910; border-radius:999px; font-size:12px; font-weight:700; }
+        .plan-status { font-size:12px; font-weight:700; color:var(--accent-green); }
+        .plan-status.inactive { color:var(--danger); }
+        .plan-icon { width:52px; height:52px; border-radius:14px; display:inline-flex; align-items:center; justify-content:center; background:rgba(212,175,55,0.14); color:#8a6910; font-size:20px; margin-bottom:14px; }
+        .plan-name { font-size:22px; font-weight:800; margin-bottom:6px; }
+        .plan-tagline { color:var(--muted); line-height:1.5; min-height:42px; }
+        .price-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:18px; }
+        .price-chip { background:#f8fafc; border:1px solid var(--border); border-radius:12px; padding:12px; }
+        .price-label { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px; }
+        .price-value { font-size:22px; font-weight:800; }
+        .plan-body { padding:22px; display:flex; flex-direction:column; gap:18px; flex:1; }
+        .plan-meta { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px; }
+        .meta-box { background:#f8fafc; border-radius:12px; padding:12px; border:1px solid var(--border); }
+        .meta-label { font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:6px; }
+        .meta-value { font-weight:700; line-height:1.4; }
+        .feature-list { list-style:none; display:flex; flex-direction:column; gap:10px; }
+        .feature-list li { display:flex; align-items:flex-start; gap:10px; color:#334155; line-height:1.45; }
+        .feature-list i { color:var(--accent-green); margin-top:3px; }
+        .actions { margin-top:auto; display:flex; gap:10px; flex-wrap:wrap; }
+        .actions form { margin:0; }
+        .empty-state { background:#fff; border:1px dashed var(--border); border-radius:18px; padding:48px 24px; text-align:center; color:var(--muted); }
+        .mobile-nav { display:none; }
+        @media (max-width:1180px) { .plans-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); } }
+        @media (max-width:820px) {
+            body { display:block; }
+            .sidebar { display:none; }
+            .main-content { margin-left:0; }
+            .mobile-nav { display:flex; flex-wrap:wrap; gap:10px; padding:16px; background:#0f172a; }
+            .mobile-nav a { color:#cbd5e1; text-decoration:none; padding:10px 12px; border-radius:10px; background:rgba(255,255,255,0.06); font-size:13px; font-weight:600; }
+            .mobile-nav a.active { color:#fff; background:rgba(212,175,55,0.24); }
+            .topbar, .content { padding:18px 16px; }
+            .plans-grid { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon"><img th:src="@{/I-SPICE/logo/logo.png}" alt="I-SPICE logo"></div>
+            <div><div class="brand-name">I-SPICE Admin</div><div class="brand-sub">Store management</div></div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="/admin" class="nav-item"><i class="fas fa-chart-line"></i><span>Dashboard</span></a>
+            <a href="/admin/products" class="nav-item"><i class="fas fa-box-open"></i><span>Products</span></a>
+            <a href="/admin/subscriptions" class="nav-item active"><i class="fas fa-crown"></i><span>Subscriptions</span></a>
+            <a href="/admin/users" class="nav-item"><i class="fas fa-users"></i><span>Users</span></a>
+            <a href="/admin/orders" class="nav-item"><i class="fas fa-shopping-bag"></i><span>Orders</span></a>
+            <a href="/admin/support" class="nav-item"><i class="fas fa-headset"></i><span>Support Tickets</span></a>
+        </nav>
+        <div class="sidebar-footer"><a href="/home"><i class="fas fa-arrow-left"></i> Back to Store</a></div>
+    </aside>
+    <div class="main-content">
+        <div class="mobile-nav">
+            <a href="/admin">Dashboard</a>
+            <a href="/admin/products">Products</a>
+            <a href="/admin/subscriptions" class="active">Subscriptions</a>
+            <a href="/admin/users">Users</a>
+            <a href="/admin/orders">Orders</a>
+            <a href="/admin/support">Support</a>
+        </div>
+        <div class="topbar">
+            <h1>Subscription Plans</h1>
+            <a href="/admin/subscriptions/new" class="btn btn-primary"><i class="fas fa-plus"></i> New Plan</a>
+        </div>
+        <main class="content">
+            <div th:if="${success}" class="notice notice-success" th:text="${success}"></div>
+            <div th:if="${error}" class="notice notice-error" th:text="${error}"></div>
+            <div class="toolbar">
+                <div class="toolbar-copy">
+                    <h2>Manage storefront plans</h2>
+                    <p>Create, edit, reorder, or disable subscription plans. Changes here also drive the public subscriptions page and checkout pricing.</p>
+                </div>
+                <a href="/subscriptions" class="btn btn-outline"><i class="fas fa-external-link-alt"></i> View Public Page</a>
+            </div>
+            <div th:if="${#lists.isEmpty(plans)}" class="empty-state">No subscription plans found yet. Create your first plan to start selling memberships.</div>
+            <div th:if="${!#lists.isEmpty(plans)}" class="plans-grid">
+                <article class="plan-card" th:each="plan : ${plans}" th:classappend="${plan.popular} ? ' popular' : ''">
+                    <div class="plan-head">
+                        <div class="plan-badge-row">
+                            <span class="plan-badge" th:if="${plan.badgeText != null and !plan.badgeText.isBlank()}"><i class="fas fa-star"></i><span th:text="${plan.badgeText}">Most Popular</span></span>
+                            <span class="plan-status" th:classappend="${!plan.active} ? ' inactive' : ''" th:text="${plan.active} ? 'Active' : 'Hidden'">Active</span>
+                        </div>
+                        <div class="plan-icon"><i th:class="${plan.iconClass}"></i></div>
+                        <div class="plan-name" th:text="${plan.name}">Spice Pro</div>
+                        <div class="plan-tagline" th:text="${plan.tagline}">Best value for spice lovers</div>
+                        <div class="price-row">
+                            <div class="price-chip"><div class="price-label">Monthly</div><div class="price-value" th:text="|Rs ${#numbers.formatDecimal(plan.monthlyPrice, 1, 0)}|">Rs 599</div></div>
+                            <div class="price-chip"><div class="price-label">Annual</div><div class="price-value" th:text="|Rs ${#numbers.formatDecimal(plan.annualPrice, 1, 0)}|">Rs 5750</div></div>
+                        </div>
+                    </div>
+                    <div class="plan-body">
+                        <div class="plan-meta">
+                            <div class="meta-box"><div class="meta-label">Code</div><div class="meta-value" th:text="${plan.code}">PRO</div></div>
+                            <div class="meta-box"><div class="meta-label">Display Order</div><div class="meta-value" th:text="${plan.displayOrder}">2</div></div>
+                            <div class="meta-box" style="grid-column:1 / -1;"><div class="meta-label">Value Highlight</div><div class="meta-value" th:text="${plan.valueLimitText}">Up to Rs 1,200 of products per month</div></div>
+                        </div>
+                        <ul class="feature-list">
+                            <li th:each="feature : ${plan.features}"><i class="fas fa-check-circle"></i><span th:text="${feature}">Always free delivery</span></li>
+                        </ul>
+                        <div class="actions">
+                            <a th:href="@{'/admin/subscriptions/' + ${plan.id} + '/edit'}" class="btn btn-outline"><i class="fas fa-pen"></i> Edit</a>
+                            <form th:action="@{'/admin/subscriptions/' + ${plan.id} + '/delete'}" method="post" onsubmit="return confirm('Delete this subscription plan?');">
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

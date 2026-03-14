@@ -73,6 +73,12 @@ public class Product {
     @Column(name = "discounted_price", precision = 10, scale = 2)
     private BigDecimal discountedPrice;
 
+    @Column(name = "subscription_tier_required", length = 20)
+    private String subscriptionTierRequired;
+
+    @Column(name = "early_access_only")
+    private Boolean earlyAccessOnly = false;
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
@@ -255,6 +261,22 @@ public class Product {
 
     public void setDiscountedPrice(BigDecimal discountedPrice) {
         this.discountedPrice = discountedPrice;
+    }
+
+    public String getSubscriptionTierRequired() {
+        return subscriptionTierRequired;
+    }
+
+    public void setSubscriptionTierRequired(String subscriptionTierRequired) {
+        this.subscriptionTierRequired = subscriptionTierRequired;
+    }
+
+    public Boolean getEarlyAccessOnly() {
+        return earlyAccessOnly;
+    }
+
+    public void setEarlyAccessOnly(Boolean earlyAccessOnly) {
+        this.earlyAccessOnly = earlyAccessOnly;
     }
 
     public LocalDateTime getCreatedAt() {

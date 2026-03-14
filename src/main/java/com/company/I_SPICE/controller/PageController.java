@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.*;
 
@@ -35,17 +36,20 @@ public class PageController {
     private final CartService cartService;
     private final WishlistService wishlistService;
     private final PasswordEncoder passwordEncoder;
+    private final SubscriptionPlanService subscriptionPlanService;
 
     public PageController(UserService userService,
             OrderService orderService,
             CartService cartService,
             WishlistService wishlistService,
-            PasswordEncoder passwordEncoder) {
+            PasswordEncoder passwordEncoder,
+            SubscriptionPlanService subscriptionPlanService) {
         this.userService = userService;
         this.orderService = orderService;
         this.cartService = cartService;
         this.wishlistService = wishlistService;
         this.passwordEncoder = passwordEncoder;
+        this.subscriptionPlanService = subscriptionPlanService;
     }
 
     // â”€â”€â”€ Shared helper
@@ -61,6 +65,33 @@ public class PageController {
             model.addAttribute("cartCount", cartService.getCartItemCount(user.getId()));
         } else {
             model.addAttribute("cartCount", 0);
+        }
+    }
+
+    private void addSubscriptionModel(Model model, User user) {
+        var benefits = subscriptionPlanService.getBenefitsForUser(user);
+        model.addAttribute("subscriptionBenefits", benefits);
+
+        if (user != null && user.hasActiveSubscription()) {
+            subscriptionPlanService.getPlanByCode(user.getSubscriptionPlan())
+                    .ifPresent(plan -> model.addAttribute("activeSubscriptionPlan", plan));
+
+            List<String> activeBenefitSummary = new ArrayList<>();
+            if (benefits.productDiscountPercent() > 0) {
+                activeBenefitSummary.add(benefits.productDiscountPercent() + "% extra member discount on products");
+            }
+            if (benefits.alwaysFreeShipping()) {
+                activeBenefitSummary.add("Always free shipping on all eligible orders");
+            } else if (benefits.freeShippingThreshold() != null) {
+                activeBenefitSummary.add("Free shipping from Rs " + benefits.freeShippingThreshold().intValue());
+            }
+            if (benefits.loyaltyMultiplier() > 1) {
+                activeBenefitSummary.add(benefits.loyaltyMultiplier() + "x loyalty points on orders");
+            }
+            activeBenefitSummary.add("Support priority: " + benefits.supportPriority());
+            model.addAttribute("activeBenefitSummary", activeBenefitSummary);
+        } else {
+            model.addAttribute("activeBenefitSummary", List.of());
         }
     }
 
@@ -140,6 +171,30 @@ public class PageController {
         return ResponseEntity.ok(response);
     }
 
+    private Map<Long, BigDecimal> buildEffectivePriceMap(List<Product> products, User user) {
+        Map<Long, BigDecimal> prices = new HashMap<>();
+        for (Product product : products) {
+            prices.put(product.getId(), subscriptionPlanService.getEffectiveProductPrice(user, product));
+        }
+        return prices;
+    }
+
+    private Map<Long, BigDecimal> buildBasePriceMap(List<Product> products) {
+        Map<Long, BigDecimal> prices = new HashMap<>();
+        for (Product product : products) {
+            prices.put(product.getId(), subscriptionPlanService.getBaseProductPrice(product));
+        }
+        return prices;
+    }
+
+    private Map<Long, Boolean> buildSubscriptionSavingsMap(List<Product> products, User user) {
+        Map<Long, Boolean> savings = new HashMap<>();
+        for (Product product : products) {
+            savings.put(product.getId(), subscriptionPlanService.hasSubscriptionSavings(user, product));
+        }
+        return savings;
+    }
+
     @PostMapping("/api/orders/{id}/reorder")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> reorderOrder(@PathVariable Long id, Principal principal) {
@@ -191,6 +246,11 @@ public class PageController {
         try {
             List<Product> wishlist = wishlistService.getWishlistProducts(user.getId());
             model.addAttribute("wishlist", wishlist);
+            model.addAttribute("wishlistEffectivePrices", buildEffectivePriceMap(wishlist, user));
+            model.addAttribute("wishlistBasePrices", buildBasePriceMap(wishlist));
+            model.addAttribute("wishlistHasSubscriptionSavings", buildSubscriptionSavingsMap(wishlist, user));
+            model.addAttribute("subscriptionProductDiscountPercent",
+                    subscriptionPlanService.getBenefitsForUser(user).productDiscountPercent());
         } catch (Exception e) {
             System.err.println("Error loading wishlist: " + e.getMessage());
             model.addAttribute("wishlist", new ArrayList<>());
@@ -284,6 +344,8 @@ public class PageController {
             return "redirect:/login";
 
         addCommonModel(model, user);
+        model.addAttribute("plans", subscriptionPlanService.getActivePlans());
+        addSubscriptionModel(model, user);
         return "subscriptions";
     }
 
@@ -299,6 +361,7 @@ public class PageController {
             return "redirect:/login";
 
         addCommonModel(model, user);
+        addSubscriptionModel(model, user);
 
         // Order stats for profile sidebar
         try {

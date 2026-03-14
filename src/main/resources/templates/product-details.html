@@ -1373,7 +1373,7 @@
                     <div class="product-price" id="pPrice"
                         style="display: flex; align-items: baseline; flex-wrap: wrap;">
                         ₹<span
-                            th:text="${#numbers.formatDecimal((product?.discountedPrice != null ? product.discountedPrice : (product?.price != null ? product.price : 0.00)), 1, 2)}">0.00</span>
+                            th:text="${#numbers.formatDecimal((effectiveProductPrice != null ? effectiveProductPrice : (product?.discountedPrice != null ? product.discountedPrice : (product?.price != null ? product.price : 0.00))), 1, 2)}">0.00</span>
 
                         <th:block th:if="${product.discount != null && product.discount > 0}">
                             <span class="price-compare"

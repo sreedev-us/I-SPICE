@@ -338,6 +338,62 @@
             color: var(--gray)
         }
 
+        .sub-card {
+            margin: 18px 0 25px;
+            background: linear-gradient(135deg, rgba(46, 125, 50, .08), rgba(212, 175, 55, .12));
+            border: 1px solid rgba(212, 175, 55, .22);
+            border-radius: 16px;
+            padding: 18px;
+            text-align: left
+        }
+
+        .sub-card h3 {
+            font-size: 16px;
+            color: var(--dark);
+            margin-bottom: 8px
+        }
+
+        .sub-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #fff7db;
+            color: var(--gold2);
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 10px
+        }
+
+        .sub-meta {
+            color: var(--gray);
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 10px
+        }
+
+        .sub-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        .sub-list li {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            font-size: 13px;
+            color: var(--dark);
+            line-height: 1.45
+        }
+
+        .sub-list i {
+            color: var(--green);
+            margin-top: 3px
+        }
+
         .tier-badge {
             background: rgba(212, 175, 55, .15);
             color: var(--gold2);
@@ -936,6 +992,24 @@
                                 <a class="ql ql-danger" href="#"
                                     onclick="document.getElementById('logoutForm').submit()"><i
                                         class="fas fa-sign-out-alt"></i> Sign Out</a>
+                            </div>
+
+                            <div class="sub-card" th:if="${user.subscriptionStatus == 'ACTIVE'}">
+                                <h3>Active Membership Benefits</h3>
+                                <div class="sub-pill">
+                                    <i class="fas fa-crown"></i>
+                                    <span th:text="${activeSubscriptionPlan != null ? activeSubscriptionPlan.name : user.subscriptionPlan}">Spice Pro</span>
+                                </div>
+                                <div class="sub-meta">
+                                    Active until
+                                    <strong th:text="${#temporals.format(user.subscriptionEndDate, 'dd MMM yyyy')}">31 Dec 2026</strong>
+                                </div>
+                                <ul class="sub-list">
+                                    <li th:each="item : ${activeBenefitSummary}">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span th:text="${item}">10% extra member discount on products</span>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>

@@ -26,17 +26,20 @@ public class HomeController {
     private final ProductService productService;
     private final CartService cartService;
     private final EmailService emailService;
+    private final SubscriptionPlanService subscriptionPlanService;
 
     public HomeController(UserService userService,
             OrderService orderService,
             ProductService productService,
             CartService cartService,
-            EmailService emailService) {
+            EmailService emailService,
+            SubscriptionPlanService subscriptionPlanService) {
         this.userService = userService;
         this.orderService = orderService;
         this.productService = productService;
         this.cartService = cartService;
         this.emailService = emailService;
+        this.subscriptionPlanService = subscriptionPlanService;
     }
 
     // ==================== DASHBOARD & PAGES ====================
@@ -73,10 +76,15 @@ public class HomeController {
             model.addAttribute("loyaltyPoints", user.getLoyaltyPoints());
 
             // Add featured products from database
-            List<Product> featuredProducts = productService.getFeaturedProducts();
+            List<Product> featuredProducts = productService.getFeaturedProducts(user);
 
             // Prices are now automatically calculated by Product Entity lifecycle hooks
             model.addAttribute("featuredProducts", featuredProducts);
+            model.addAttribute("featuredProductPrices", buildEffectivePriceMap(featuredProducts, user));
+            model.addAttribute("featuredBasePrices", buildBasePriceMap(featuredProducts));
+            model.addAttribute("featuredHasSubscriptionSavings", buildSubscriptionSavingsMap(featuredProducts, user));
+            model.addAttribute("subscriptionProductDiscountPercent",
+                    subscriptionPlanService.getBenefitsForUser(user).productDiscountPercent());
             System.out.println("[INFO] Featured products count: "
                     + (featuredProducts != null ? featuredProducts.size() : 0));
 
@@ -133,6 +141,30 @@ public class HomeController {
         }
 
         return "home";
+    }
+
+    private Map<Long, BigDecimal> buildEffectivePriceMap(List<Product> products, User user) {
+        Map<Long, BigDecimal> prices = new HashMap<>();
+        for (Product product : products) {
+            prices.put(product.getId(), subscriptionPlanService.getEffectiveProductPrice(user, product));
+        }
+        return prices;
+    }
+
+    private Map<Long, BigDecimal> buildBasePriceMap(List<Product> products) {
+        Map<Long, BigDecimal> prices = new HashMap<>();
+        for (Product product : products) {
+            prices.put(product.getId(), subscriptionPlanService.getBaseProductPrice(product));
+        }
+        return prices;
+    }
+
+    private Map<Long, Boolean> buildSubscriptionSavingsMap(List<Product> products, User user) {
+        Map<Long, Boolean> savings = new HashMap<>();
+        for (Product product : products) {
+            savings.put(product.getId(), subscriptionPlanService.hasSubscriptionSavings(user, product));
+        }
+        return savings;
     }
 
     @GetMapping("/login")
@@ -192,8 +224,8 @@ public class HomeController {
 
                 if (!cart.isEmpty()) {
                     BigDecimal subtotal = cart.getSubtotal();
-                    BigDecimal tax = subtotal.multiply(BigDecimal.valueOf(0.18));
-                    BigDecimal shipping = cart.getShipping();
+                    BigDecimal shipping = cartService.calculateShipping(cart);
+                    BigDecimal tax = cartService.calculateTax(subtotal, shipping);
                     BigDecimal total = subtotal.add(shipping).add(tax);
 
                     model.addAttribute("subtotal", subtotal);
@@ -247,8 +279,8 @@ public class HomeController {
             System.out.println("[LOG] Cart has " + cart.getItems().size() + " items for checkout");
 
             BigDecimal subtotal = cart.getSubtotal();
-            BigDecimal tax = subtotal.multiply(BigDecimal.valueOf(0.18));
-            BigDecimal shipping = cart.getShipping();
+            BigDecimal shipping = cartService.calculateShipping(cart);
+            BigDecimal tax = cartService.calculateTax(subtotal, shipping);
             BigDecimal total = subtotal.add(shipping).add(tax);
 
             model.addAttribute("subtotal", subtotal);
@@ -465,8 +497,8 @@ public class HomeController {
             cartData.put("id", cart.getId());
             cartData.put("totalItems", cart.getTotalItems());
             cartData.put("subtotal", cart.getSubtotal());
-            cartData.put("shipping", cart.getShipping());
-            cartData.put("total", cart.getTotal());
+            cartData.put("shipping", cartService.calculateShipping(cart));
+            cartData.put("total", cartService.calculateTotal(cart));
             cartData.put("isEmpty", cart.isEmpty());
 
             List<Map<String, Object>> itemsData = new ArrayList<>();

@@ -416,13 +416,23 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 14px
+            margin-bottom: 14px;
+            flex-wrap: wrap
         }
 
         .cur {
             font-size: 20px;
             font-weight: 700;
             color: var(--dark)
+        }
+
+        .member-label {
+            width: 100%;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .08em;
+            color: var(--green);
+            text-transform: uppercase
         }
 
         .orig {
@@ -434,6 +444,15 @@
         .disc {
             background: #e53935;
             color: #fff;
+            border-radius: 12px;
+            padding: 2px 8px;
+            font-size: 11px;
+            font-weight: 700
+        }
+
+        .member-disc {
+            background: rgba(46, 125, 50, .12);
+            color: var(--green);
             border-radius: 12px;
             padding: 2px 8px;
             font-size: 11px;
@@ -878,15 +897,20 @@
                             Desc</div>
                         <div class="price-row"
                             style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 12px;">
-                            <span class="cur" style="font-weight: 800; font-size: 1.1rem; color: var(--dark);"
-                                th:text="'₹'+${#numbers.formatDecimal(product.discountedPrice!=null?product.discountedPrice:product.price,0,'COMMA',2,'POINT')}">₹0</span>
-                            <th:block th:if="${product.discount!=null and product.discount>0}">
+                            <span class="member-label"
+                                th:if="${wishlistHasSubscriptionSavings != null && wishlistHasSubscriptionSavings[product.id]}">Member Price</span>
+                            <span class="cur" style="font-weight: 800; font-size: 1.1rem; color: var(--dark);">₹<span
+                                    th:text="${#numbers.formatDecimal((wishlistEffectivePrices != null && wishlistEffectivePrices[product.id] != null ? wishlistEffectivePrices[product.id] : (product.discountedPrice!=null?product.discountedPrice:product.price)),0,'COMMA',2,'POINT')}">0</span></span>
+                            <th:block th:if="${(wishlistHasSubscriptionSavings != null && wishlistHasSubscriptionSavings[product.id]) || (product.discount!=null and product.discount>0)}">
                                 <span class="orig"
-                                    style="text-decoration: line-through; color: #999; font-size: 0.85rem;"
-                                    th:text="'₹'+${#numbers.formatDecimal(product.price,0,'COMMA',2,'POINT')}">₹0</span>
-                                <span class="disc"
+                                    style="text-decoration: line-through; color: #999; font-size: 0.85rem;">₹<span
+                                        th:text="${#numbers.formatDecimal((wishlistHasSubscriptionSavings != null && wishlistHasSubscriptionSavings[product.id] && wishlistBasePrices != null && wishlistBasePrices[product.id] != null ? wishlistBasePrices[product.id] : product.price),0,'COMMA',2,'POINT')}">0</span></span>
+                                <span class="disc" th:if="${product.discount!=null and product.discount>0}"
                                     style="background: #e53935; color: white; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; text-transform: uppercase; box-shadow: 0 2px 4px rgba(229, 57, 53, 0.2);"
                                     th:text="${product.discount}+'% OFF'">10% OFF</span>
+                                <span class="member-disc"
+                                    th:if="${wishlistHasSubscriptionSavings != null && wishlistHasSubscriptionSavings[product.id]}"
+                                    th:text="'+' + ${subscriptionProductDiscountPercent} + '% Member Off'">+10% Member Off</span>
                             </th:block>
                         </div>
                         <div class="actions">

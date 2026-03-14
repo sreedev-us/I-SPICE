@@ -4,6 +4,7 @@ import com.company.I_SPICE.model.*;
 import com.company.I_SPICE.repository.*;
 import com.company.I_SPICE.services.UserService;
 import com.company.I_SPICE.services.OrderService;
+import com.company.I_SPICE.services.SubscriptionPlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,6 +35,8 @@ public class AdminController {
     private UserService userService;
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private SubscriptionPlanService subscriptionPlanService;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -111,6 +114,8 @@ public class AdminController {
         p.setOrigin(form.getOrigin());
         p.setOrganic(form.getOrganic());
         p.setSpicyLevel(form.getSpicyLevel());
+        p.setSubscriptionTierRequired(form.getSubscriptionTierRequired());
+        p.setEarlyAccessOnly(form.getEarlyAccessOnly());
         productRepository.save(p);
         attr.addFlashAttribute("success", "Product updated successfully!");
         return "redirect:/admin/products";
@@ -125,6 +130,80 @@ public class AdminController {
             attr.addFlashAttribute("error", "Cannot delete product: it may have existing order references.");
         }
         return "redirect:/admin/products";
+    }
+
+    @GetMapping("/subscriptions")
+    public String listSubscriptions(Model model) {
+        model.addAttribute("plans", subscriptionPlanService.getAllPlans());
+        return "admin/admin-subscriptions";
+    }
+
+    @GetMapping("/subscriptions/new")
+    public String newSubscriptionForm(Model model) {
+        SubscriptionPlan plan = new SubscriptionPlan();
+        plan.setActive(true);
+        plan.setDisplayOrder(subscriptionPlanService.getAllPlans().size() + 1);
+        plan.setIconClass("fas fa-star");
+        model.addAttribute("plan", plan);
+        model.addAttribute("editing", false);
+        model.addAttribute("formAction", "/admin/subscriptions/new");
+        return "admin/admin-subscription-form";
+    }
+
+    @PostMapping("/subscriptions/new")
+    public String createSubscription(@ModelAttribute("plan") SubscriptionPlan plan, RedirectAttributes attr) {
+        try {
+            subscriptionPlanService.save(plan);
+            attr.addFlashAttribute("success", "Subscription plan created successfully.");
+        } catch (Exception e) {
+            attr.addFlashAttribute("error", "Failed to create subscription plan: " + e.getMessage());
+        }
+        return "redirect:/admin/subscriptions";
+    }
+
+    @GetMapping("/subscriptions/{id}/edit")
+    public String editSubscriptionForm(@PathVariable Long id, Model model, RedirectAttributes attr) {
+        Optional<SubscriptionPlan> opt = subscriptionPlanService.getPlan(id);
+        if (opt.isEmpty()) {
+            attr.addFlashAttribute("error", "Subscription plan not found");
+            return "redirect:/admin/subscriptions";
+        }
+        model.addAttribute("plan", opt.get());
+        model.addAttribute("editing", true);
+        model.addAttribute("formAction", "/admin/subscriptions/" + id + "/edit");
+        return "admin/admin-subscription-form";
+    }
+
+    @PostMapping("/subscriptions/{id}/edit")
+    public String updateSubscription(@PathVariable Long id,
+            @ModelAttribute("plan") SubscriptionPlan form,
+            RedirectAttributes attr) {
+        Optional<SubscriptionPlan> opt = subscriptionPlanService.getPlan(id);
+        if (opt.isEmpty()) {
+            attr.addFlashAttribute("error", "Subscription plan not found");
+            return "redirect:/admin/subscriptions";
+        }
+
+        try {
+            SubscriptionPlan plan = opt.get();
+            copySubscriptionFields(plan, form);
+            subscriptionPlanService.save(plan);
+            attr.addFlashAttribute("success", "Subscription plan updated successfully.");
+        } catch (Exception e) {
+            attr.addFlashAttribute("error", "Failed to update subscription plan: " + e.getMessage());
+        }
+        return "redirect:/admin/subscriptions";
+    }
+
+    @PostMapping("/subscriptions/{id}/delete")
+    public String deleteSubscription(@PathVariable Long id, RedirectAttributes attr) {
+        try {
+            subscriptionPlanService.delete(id);
+            attr.addFlashAttribute("success", "Subscription plan deleted.");
+        } catch (Exception e) {
+            attr.addFlashAttribute("error", "Could not delete subscription plan: " + e.getMessage());
+        }
+        return "redirect:/admin/subscriptions";
     }
 
     // ─── USERS ────────────────────────────────────────────────────────────────
@@ -298,5 +377,21 @@ public class AdminController {
             attr.addFlashAttribute("success", "Ticket closed.");
         }
         return "redirect:/admin/support/" + id;
+    }
+
+    private void copySubscriptionFields(SubscriptionPlan target, SubscriptionPlan source) {
+        target.setCode(source.getCode());
+        target.setName(source.getName());
+        target.setTagline(source.getTagline());
+        target.setMonthlyPrice(source.getMonthlyPrice());
+        target.setAnnualPrice(source.getAnnualPrice());
+        target.setValueLimitText(source.getValueLimitText());
+        target.setIconClass(source.getIconClass());
+        target.setButtonText(source.getButtonText());
+        target.setBadgeText(source.getBadgeText());
+        target.setPopular(source.isPopular());
+        target.setActive(source.isActive());
+        target.setDisplayOrder(source.getDisplayOrder());
+        target.setFeaturesText(source.getFeaturesText());
     }
 }

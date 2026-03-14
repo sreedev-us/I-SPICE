@@ -565,11 +565,26 @@
             gap: 6px;
         }
 
+        .member-price-label {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            color: var(--eco-green);
+            text-transform: uppercase;
+        }
+
         .price-row {
             display: flex;
             align-items: baseline;
             gap: 8px;
             flex-wrap: wrap;
+        }
+
+        .price-note {
+            margin-top: 6px;
+            font-size: 12px;
+            color: var(--eco-green);
+            font-weight: 600;
         }
 
         .original-price {
@@ -588,6 +603,18 @@
             font-weight: 800;
             white-space: nowrap;
             box-shadow: 0 2px 4px rgba(229, 57, 53, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .member-badge {
+            background: rgba(46, 125, 50, 0.12);
+            color: var(--eco-green);
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            white-space: nowrap;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -1251,19 +1278,30 @@
 
                                     <div class="product-price-section">
                                         <div class="price-container">
+                                            <div class="member-price-label"
+                                                th:if="${productHasSubscriptionSavings != null && productHasSubscriptionSavings[product.id]}">
+                                                Member Price
+                                            </div>
                                             <div class="price-row">
                                                 <div class="current-price">
                                                     ₹<span
-                                                        th:text="${product.discountedPrice != null ? #numbers.formatDecimal(product.discountedPrice, 0, 'COMMA', 2, 'POINT') : #numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')}">0.00</span>
+                                                        th:text="${productEffectivePrices != null && productEffectivePrices[product.id] != null ? #numbers.formatDecimal(productEffectivePrices[product.id], 0, 'COMMA', 2, 'POINT') : (product.discountedPrice != null ? #numbers.formatDecimal(product.discountedPrice, 0, 'COMMA', 2, 'POINT') : #numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT'))}">0.00</span>
                                                 </div>
-                                                <th:block th:if="${product.discount != null && product.discount > 0}">
+                                                <th:block th:if="${(productHasSubscriptionSavings != null && productHasSubscriptionSavings[product.id]) || (product.discount != null && product.discount > 0)}">
                                                     <span class="original-price">
                                                         ₹<span
-                                                            th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')}">0.00</span>
+                                                            th:text="${#numbers.formatDecimal((productHasSubscriptionSavings != null && productHasSubscriptionSavings[product.id] && productBasePrices != null && productBasePrices[product.id] != null ? productBasePrices[product.id] : product.price), 0, 'COMMA', 2, 'POINT')}">0.00</span>
                                                     </span>
-                                                    <span class="discount-badge"
+                                                    <span class="discount-badge" th:if="${product.discount != null && product.discount > 0}"
                                                         th:text="${product.discount} + '% OFF'">10% OFF</span>
+                                                    <span class="member-badge"
+                                                        th:if="${productHasSubscriptionSavings != null && productHasSubscriptionSavings[product.id]}"
+                                                        th:text="'+' + ${subscriptionProductDiscountPercent} + '% Member Off'">+10% Member Off</span>
                                                 </th:block>
+                                            </div>
+                                            <div class="price-note"
+                                                th:if="${productHasSubscriptionSavings != null && productHasSubscriptionSavings[product.id]}">
+                                                Subscription discount applied on top of the current product price.
                                             </div>
                                         </div>
 

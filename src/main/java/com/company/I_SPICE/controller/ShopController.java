@@ -5,10 +5,12 @@ import com.company.I_SPICE.model.User;
 import com.company.I_SPICE.model.Review;
 import com.company.I_SPICE.services.ProductService;
 import com.company.I_SPICE.services.CartService;
+import com.company.I_SPICE.services.SubscriptionPlanService;
 import com.company.I_SPICE.services.UserService;
 import com.company.I_SPICE.services.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -21,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.math.BigDecimal;
 
 @Controller
 public class ShopController {
@@ -36,6 +39,8 @@ public class ShopController {
 
     @Autowired
     private ReviewService reviewService;
+    @Autowired
+    private SubscriptionPlanService subscriptionPlanService;
 
     // List of available categories
     private static final List<String> CATEGORIES = Arrays.asList(
@@ -61,12 +66,21 @@ public class ShopController {
         Pageable pageable = PageRequest.of(page - 1, size, sortOption);
 
         try {
+            User user = principal != null ? userService.getUserFromPrincipal(principal).orElse(null) : null;
+
             // Get products
-            Page<Product> productPage = productService.searchProducts(search, category, minPrice, maxPrice, pageable);
+            Page<Product> rawProductPage = productService.searchProducts(search, category, minPrice, maxPrice, pageable);
+            List<Product> visibleProducts = productService.filterAccessibleProducts(rawProductPage.getContent(), user);
+            Page<Product> productPage = new PageImpl<>(visibleProducts, pageable, visibleProducts.size());
 
             // Prices are now automatically calculated by Product Entity lifecycle hooks
 
             model.addAttribute("products", productPage.getContent());
+            model.addAttribute("productEffectivePrices", buildEffectivePriceMap(productPage.getContent(), user));
+            model.addAttribute("productBasePrices", buildBasePriceMap(productPage.getContent()));
+            model.addAttribute("productHasSubscriptionSavings", buildSubscriptionSavingsMap(productPage.getContent(), user));
+            model.addAttribute("subscriptionProductDiscountPercent",
+                    subscriptionPlanService.getBenefitsForUser(user).productDiscountPercent());
             model.addAttribute("currentPage", page);
             model.addAttribute("totalPages", productPage.getTotalPages());
             model.addAttribute("totalItems", productPage.getTotalElements());
@@ -87,16 +101,10 @@ public class ShopController {
             model.addAttribute("maxPriceLimit", dbMaxPrice != null ? dbMaxPrice : 1000);
 
             // User data
-            if (principal != null) {
-                User user = userService.getUserFromPrincipal(principal).orElse(null);
-
-                if (user != null) {
-                    model.addAttribute("user", user);
-                    int cartCount = cartService.getCartItemCount(user.getId());
-                    model.addAttribute("cartCount", cartCount);
-                } else {
-                    model.addAttribute("cartCount", 0);
-                }
+            if (user != null) {
+                model.addAttribute("user", user);
+                int cartCount = cartService.getCartItemCount(user.getId());
+                model.addAttribute("cartCount", cartCount);
             } else {
                 model.addAttribute("cartCount", 0);
             }
@@ -113,7 +121,8 @@ public class ShopController {
     @GetMapping("/product/{id}")
     public String productDetail(@PathVariable Long id, Model model, Principal principal) {
         try {
-            Product product = productService.getProductById(id).orElse(null);
+            User user = principal != null ? userService.getUserFromPrincipal(principal).orElse(null) : null;
+            Product product = productService.getAccessibleProductById(id, user).orElse(null);
             if (product == null) {
                 model.addAttribute("error", "Product not found");
                 return "redirect:/shop";
@@ -122,32 +131,32 @@ public class ShopController {
             // Prices are now automatically calculated by Product Entity lifecycle hooks
 
             model.addAttribute("product", product);
+            model.addAttribute("baseProductPrice", subscriptionPlanService.getBaseProductPrice(product));
+            model.addAttribute("effectiveProductPrice", subscriptionPlanService.getEffectiveProductPrice(user, product));
+            model.addAttribute("hasSubscriptionSavings", subscriptionPlanService.hasSubscriptionSavings(user, product));
+            model.addAttribute("subscriptionProductDiscountPercent",
+                    subscriptionPlanService.getBenefitsForUser(user).productDiscountPercent());
 
             // Get current user
-            if (principal != null) {
-                User user = userService.getUserFromPrincipal(principal).orElse(null);
+            if (user != null) {
+                model.addAttribute("user", user);
 
-                if (user != null) {
-                    model.addAttribute("user", user);
+                // Get cart count
+                int cartCount = cartService.getCartItemCount(user.getId());
+                model.addAttribute("cartCount", cartCount);
 
-                    // Get cart count
-                    int cartCount = cartService.getCartItemCount(user.getId());
-                    model.addAttribute("cartCount", cartCount);
-
-                    // Check if product is in wishlist
-                    boolean inWishlist = productService.isProductInWishlist(user, product);
-                    model.addAttribute("inWishlist", inWishlist);
-                } else {
-                    model.addAttribute("cartCount", 0);
-                }
+                // Check if product is in wishlist
+                boolean inWishlist = productService.isProductInWishlist(user, product);
+                model.addAttribute("inWishlist", inWishlist);
             } else {
                 model.addAttribute("cartCount", 0);
             }
 
             // Get related products
-            List<Product> relatedProducts = productService.getRelatedProducts(product.getCategory(), product.getId());
+            List<Product> relatedProducts = productService.getRelatedProducts(product.getCategory(), product.getId(), user);
             // Prices are now automatically calculated by Product Entity lifecycle hooks
             model.addAttribute("relatedProducts", relatedProducts);
+            model.addAttribute("relatedProductPrices", buildEffectivePriceMap(relatedProducts, user));
 
             // Get product reviews
             List<Review> reviews = reviewService.getProductReviews(id);
@@ -226,5 +235,29 @@ public class ShopController {
             default: // newest - fall back to id DESC if createdAt is NULL for old rows
                 return Sort.by(Sort.Order.desc("id"));
         }
+    }
+
+    private Map<Long, java.math.BigDecimal> buildEffectivePriceMap(List<Product> products, User user) {
+        Map<Long, java.math.BigDecimal> prices = new HashMap<>();
+        for (Product product : products) {
+            prices.put(product.getId(), subscriptionPlanService.getEffectiveProductPrice(user, product));
+        }
+        return prices;
+    }
+
+    private Map<Long, BigDecimal> buildBasePriceMap(List<Product> products) {
+        Map<Long, BigDecimal> prices = new HashMap<>();
+        for (Product product : products) {
+            prices.put(product.getId(), subscriptionPlanService.getBaseProductPrice(product));
+        }
+        return prices;
+    }
+
+    private Map<Long, Boolean> buildSubscriptionSavingsMap(List<Product> products, User user) {
+        Map<Long, Boolean> savings = new HashMap<>();
+        for (Product product : products) {
+            savings.put(product.getId(), subscriptionPlanService.hasSubscriptionSavings(user, product));
+        }
+        return savings;
     }
 }

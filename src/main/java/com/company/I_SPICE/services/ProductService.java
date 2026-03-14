@@ -25,9 +25,11 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final SubscriptionPlanService subscriptionPlanService;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, SubscriptionPlanService subscriptionPlanService) {
         this.productRepository = productRepository;
+        this.subscriptionPlanService = subscriptionPlanService;
     }
 
     @Cacheable("products")
@@ -46,6 +48,10 @@ public class ProductService {
         return productRepository.findByFeaturedTrue();
     }
 
+    public List<Product> getFeaturedProducts(User user) {
+        return filterAccessibleProducts(productRepository.findByFeaturedTrue(), user);
+    }
+
     @Cacheable(value = "products_category", key = "#category")
     public List<Product> getProductsByCategory(String category) {
         return productRepository.findByCategory(category);
@@ -54,6 +60,11 @@ public class ProductService {
     @Cacheable(value = "product", key = "#id")
     public Optional<Product> getProductById(Long id) {
         return productRepository.findById(id);
+    }
+
+    public Optional<Product> getAccessibleProductById(Long id, User user) {
+        return productRepository.findById(id)
+                .filter(product -> canUserAccessProduct(user, product));
     }
 
     @Transactional
@@ -144,6 +155,31 @@ public class ProductService {
                 .filter(p -> !p.getId().equals(excludeId))
                 .limit(4)
                 .collect(Collectors.toList());
+    }
+
+    public List<Product> getRelatedProducts(String category, Long excludeId, User user) {
+        return filterAccessibleProducts(getRelatedProducts(category, excludeId), user);
+    }
+
+    public List<Product> filterAccessibleProducts(List<Product> products, User user) {
+        return products.stream()
+                .filter(product -> canUserAccessProduct(user, product))
+                .collect(Collectors.toList());
+    }
+
+    public boolean canUserAccessProduct(User user, Product product) {
+        if (product == null) {
+            return false;
+        }
+        String requiredPlan = product.getSubscriptionTierRequired();
+        boolean hasRequiredPlan = subscriptionPlanService.userHasRequiredPlan(user, requiredPlan);
+        if (!hasRequiredPlan) {
+            return requiredPlan == null || requiredPlan.isBlank();
+        }
+        if (Boolean.TRUE.equals(product.getEarlyAccessOnly())) {
+            return user != null && user.hasActiveSubscription();
+        }
+        return true;
     }
 
     // Wishlist (Stub)
