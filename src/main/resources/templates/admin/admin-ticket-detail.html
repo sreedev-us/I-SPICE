@@ -608,8 +608,8 @@
                                 th:text="${ticket.user.email}">email</span>)
                         </div>
                     </div>
-                    <span th:text="${ticket.status}" class="badge" th:classappend="${ticket.status == 'OPEN'} ? 'badge-open' :
-                                    ${ticket.status == 'ANSWERED'} ? 'badge-answered' : 'badge-closed'">
+                    <span th:text="${ticket.status}" class="badge"
+                        th:classappend="${ticket.status == 'OPEN' ? 'badge-open' : (ticket.status == 'ANSWERED' ? 'badge-answered' : 'badge-closed')}">
                     </span>
                 </div>
                 <div class="meta-grid">

@@ -547,8 +547,8 @@
                             <td th:text="${t.category}">Category</td>
                             <td th:text="${t.priority}">MEDIUM</td>
                             <td>
-                                <span th:text="${t.status}" class="badge" th:classappend="${t.status == 'OPEN'} ? 'badge-open' :
-                                                ${t.status == 'ANSWERED'} ? 'badge-answered' : 'badge-closed'">
+                                <span th:text="${t.status}" class="badge"
+                                    th:classappend="${t.status == 'OPEN' ? 'badge-open' : (t.status == 'ANSWERED' ? 'badge-answered' : 'badge-closed')}">
                                 </span>
                             </td>
                             <td style="font-size:13px;color:var(--text-light);"

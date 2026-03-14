@@ -1009,8 +1009,7 @@
                                     <td th:text="${ticket.user.username}">user</td>
                                     <td>
                                         <span th:text="${ticket.status}" class="badge"
-                                            th:classappend="${ticket.status == 'OPEN'} ? 'badge-open' :
-                                                        ${ticket.status == 'ANSWERED'} ? 'badge-answered' : 'badge-closed'">
+                                            th:classappend="${ticket.status == 'OPEN' ? 'badge-open' : (ticket.status == 'ANSWERED' ? 'badge-answered' : 'badge-closed')}">
                                         </span>
                                     </td>
                                 </tr>
