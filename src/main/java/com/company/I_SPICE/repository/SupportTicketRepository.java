@@ -2,6 +2,7 @@ package com.company.I_SPICE.repository;
 
 import com.company.I_SPICE.model.SupportTicket;
 import com.company.I_SPICE.model.User;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,13 +11,20 @@ import java.util.Optional;
 
 @Repository
 public interface SupportTicketRepository extends JpaRepository<SupportTicket, Long> {
+    @EntityGraph(attributePaths = "user")
     List<SupportTicket> findByUserOrderByCreatedAtDesc(User user);
 
     Optional<SupportTicket> findByTicketNumber(String ticketNumber);
 
+    @Override
+    @EntityGraph(attributePaths = "user")
+    Optional<SupportTicket> findById(Long id);
+
     // Admin methods
+    @EntityGraph(attributePaths = "user")
     List<SupportTicket> findAllByOrderByCreatedAtDesc();
 
+    @EntityGraph(attributePaths = "user")
     List<SupportTicket> findByStatusOrderByCreatedAtDesc(String status);
 
     long countByStatus(String status);
