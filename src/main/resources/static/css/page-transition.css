@@ -1,0 +1,363 @@
+.page-transition-overlay {
+    --transition-accent: #d4af37;
+    --transition-accent-soft: rgba(212, 175, 55, 0.28);
+    --transition-accent-strong: rgba(46, 125, 50, 0.26);
+    --transition-backdrop-start: rgba(16, 24, 18, 0.96);
+    --transition-backdrop-mid: rgba(36, 56, 24, 0.94);
+    --transition-backdrop-end: rgba(122, 88, 18, 0.92);
+    --transition-card-tint: rgba(255, 252, 244, 0.12);
+    --transition-ring-alt: rgba(46, 125, 50, 0.35);
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        radial-gradient(circle at 20% 20%, var(--transition-accent-soft), transparent 30%),
+        radial-gradient(circle at 80% 25%, var(--transition-accent-strong), transparent 28%),
+        radial-gradient(circle at 50% 80%, color-mix(in srgb, var(--transition-accent) 26%, transparent), transparent 36%),
+        linear-gradient(135deg, var(--transition-backdrop-start), var(--transition-backdrop-mid), var(--transition-backdrop-end));
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.55s ease, visibility 0.55s ease;
+    overflow: hidden;
+}
+
+.page-transition-overlay::before,
+.page-transition-overlay::after {
+    content: "";
+    position: absolute;
+    inset: -20%;
+    background:
+        conic-gradient(from 0deg, rgba(255, 255, 255, 0.04), transparent 25%, rgba(255, 255, 255, 0.08), transparent 55%, rgba(255, 255, 255, 0.04));
+    animation: transitionHalo 7s linear infinite;
+}
+
+.page-transition-overlay::after {
+    animation-direction: reverse;
+    animation-duration: 11s;
+    filter: blur(18px);
+    opacity: 0.8;
+}
+
+.page-transition-overlay.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.page-transition-overlay.is-entering .page-transition-card {
+    animation: transitionCardIn 0.72s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.page-transition-overlay.is-leaving .page-transition-card {
+    animation: transitionCardOut 0.48s ease forwards;
+}
+
+.page-transition-card {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    padding: 34px 28px 30px;
+    width: min(88vw, 360px);
+    border-radius: 28px;
+    background: var(--transition-card-tint);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.32);
+    backdrop-filter: blur(14px);
+    transform: translateY(22px) scale(0.96);
+    opacity: 0;
+}
+
+.page-transition-logo-shell {
+    position: relative;
+    width: 116px;
+    height: 116px;
+    display: grid;
+    place-items: center;
+}
+
+.page-transition-ring,
+.page-transition-ring::before,
+.page-transition-ring::after {
+    content: "";
+    position: absolute;
+    border-radius: 999px;
+}
+
+.page-transition-ring {
+    inset: 0;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.04);
+}
+
+.page-transition-ring::before {
+    inset: 10px;
+    border: 2px solid color-mix(in srgb, var(--transition-accent) 60%, white);
+    animation: transitionPulse 2.2s ease-in-out infinite;
+}
+
+.page-transition-ring::after {
+    inset: -8px;
+    border: 1px solid var(--transition-ring-alt);
+    animation: transitionPulse 2.2s ease-in-out infinite 0.5s;
+}
+
+.page-transition-logo {
+    position: relative;
+    z-index: 1;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.22);
+}
+
+.page-transition-title {
+    color: #fffdf7;
+    font-size: clamp(1.4rem, 2vw, 1.8rem);
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.page-transition-subtitle {
+    color: rgba(255, 248, 228, 0.82);
+    font-size: 0.95rem;
+    text-align: center;
+    line-height: 1.5;
+    max-width: 24ch;
+}
+
+.page-transition-progress {
+    position: relative;
+    width: min(190px, 72%);
+    height: 4px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+}
+
+.page-transition-progress::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    width: 42%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--transition-accent), #fff1a8, color-mix(in srgb, var(--transition-accent) 45%, #2e7d32));
+    animation: transitionProgress 1.15s ease-in-out infinite;
+}
+
+.page-transition-overlay[data-theme="shop"],
+.page-transition-overlay[data-theme="product"] {
+    --transition-accent: #d4af37;
+    --transition-accent-soft: rgba(212, 175, 55, 0.34);
+    --transition-accent-strong: rgba(170, 92, 17, 0.28);
+    --transition-backdrop-start: rgba(36, 24, 10, 0.96);
+    --transition-backdrop-mid: rgba(88, 52, 16, 0.94);
+    --transition-backdrop-end: rgba(157, 104, 18, 0.92);
+    --transition-card-tint: rgba(255, 247, 224, 0.14);
+    --transition-ring-alt: rgba(255, 210, 122, 0.34);
+}
+
+.page-transition-overlay[data-theme="support"] {
+    --transition-accent: #2e7d32;
+    --transition-accent-soft: rgba(46, 125, 50, 0.34);
+    --transition-accent-strong: rgba(76, 175, 80, 0.24);
+    --transition-backdrop-start: rgba(11, 31, 19, 0.96);
+    --transition-backdrop-mid: rgba(18, 64, 32, 0.94);
+    --transition-backdrop-end: rgba(36, 111, 62, 0.9);
+    --transition-card-tint: rgba(238, 255, 244, 0.12);
+    --transition-ring-alt: rgba(149, 241, 168, 0.34);
+}
+
+.page-transition-overlay[data-theme="subscriptions"] {
+    --transition-accent: #f0b429;
+    --transition-accent-soft: rgba(240, 180, 41, 0.34);
+    --transition-accent-strong: rgba(255, 223, 128, 0.24);
+    --transition-backdrop-start: rgba(28, 19, 8, 0.97);
+    --transition-backdrop-mid: rgba(70, 41, 7, 0.94);
+    --transition-backdrop-end: rgba(144, 90, 8, 0.9);
+    --transition-card-tint: rgba(255, 248, 228, 0.14);
+    --transition-ring-alt: rgba(255, 233, 170, 0.34);
+}
+
+.page-transition-overlay[data-theme="wishlist"],
+.page-transition-overlay[data-theme="profile"] {
+    --transition-accent: #d85888;
+    --transition-accent-soft: rgba(216, 88, 136, 0.3);
+    --transition-accent-strong: rgba(255, 174, 203, 0.22);
+    --transition-backdrop-start: rgba(33, 16, 23, 0.97);
+    --transition-backdrop-mid: rgba(84, 28, 53, 0.94);
+    --transition-backdrop-end: rgba(140, 48, 88, 0.9);
+    --transition-card-tint: rgba(255, 241, 246, 0.12);
+    --transition-ring-alt: rgba(255, 196, 219, 0.32);
+}
+
+.page-transition-overlay[data-theme="orders"],
+.page-transition-overlay[data-theme="cart"],
+.page-transition-overlay[data-theme="checkout"] {
+    --transition-accent: #4da3ff;
+    --transition-accent-soft: rgba(77, 163, 255, 0.3);
+    --transition-accent-strong: rgba(102, 209, 255, 0.24);
+    --transition-backdrop-start: rgba(11, 20, 34, 0.97);
+    --transition-backdrop-mid: rgba(17, 44, 83, 0.94);
+    --transition-backdrop-end: rgba(18, 91, 138, 0.9);
+    --transition-card-tint: rgba(240, 248, 255, 0.12);
+    --transition-ring-alt: rgba(176, 225, 255, 0.34);
+}
+
+.page-transition-overlay[data-theme="dashboard"] {
+    --transition-accent: #7cb342;
+    --transition-accent-soft: rgba(124, 179, 66, 0.3);
+    --transition-accent-strong: rgba(212, 175, 55, 0.24);
+    --transition-backdrop-start: rgba(16, 27, 16, 0.97);
+    --transition-backdrop-mid: rgba(37, 74, 31, 0.94);
+    --transition-backdrop-end: rgba(112, 101, 28, 0.9);
+    --transition-card-tint: rgba(245, 255, 240, 0.11);
+    --transition-ring-alt: rgba(212, 175, 55, 0.3);
+}
+
+.page-transition-overlay[data-theme="auth"] {
+    --transition-accent: #7d8cff;
+    --transition-accent-soft: rgba(125, 140, 255, 0.3);
+    --transition-accent-strong: rgba(186, 195, 255, 0.22);
+    --transition-backdrop-start: rgba(18, 19, 39, 0.97);
+    --transition-backdrop-mid: rgba(34, 39, 88, 0.94);
+    --transition-backdrop-end: rgba(77, 73, 145, 0.9);
+    --transition-card-tint: rgba(245, 246, 255, 0.12);
+    --transition-ring-alt: rgba(201, 210, 255, 0.34);
+}
+
+.page-transition-overlay[data-theme="admin"] {
+    --transition-accent: #ff8a3d;
+    --transition-accent-soft: rgba(255, 138, 61, 0.3);
+    --transition-accent-strong: rgba(255, 196, 128, 0.22);
+    --transition-backdrop-start: rgba(29, 18, 12, 0.97);
+    --transition-backdrop-mid: rgba(66, 37, 16, 0.94);
+    --transition-backdrop-end: rgba(112, 63, 18, 0.9);
+    --transition-card-tint: rgba(255, 245, 236, 0.12);
+    --transition-ring-alt: rgba(255, 206, 161, 0.34);
+}
+
+body.page-is-transitioning {
+    overflow: hidden;
+}
+
+body.page-enter-active main,
+body.page-enter-active .container,
+body.page-enter-active #dashboard,
+body.page-enter-active #app,
+body.page-enter-active .wrap {
+    animation: pageReveal 0.58s ease both;
+}
+
+@keyframes transitionCardIn {
+    from {
+        transform: translateY(22px) scale(0.96);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes transitionCardOut {
+    from {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateY(-10px) scale(0.98);
+        opacity: 0;
+    }
+}
+
+@keyframes transitionPulse {
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.65;
+    }
+
+    50% {
+        transform: scale(1.08);
+        opacity: 1;
+    }
+}
+
+@keyframes transitionProgress {
+    0% {
+        transform: translateX(-120%);
+    }
+
+    100% {
+        transform: translateX(320%);
+    }
+}
+
+@keyframes transitionHalo {
+    from {
+        transform: rotate(0deg) scale(1);
+    }
+
+    to {
+        transform: rotate(360deg) scale(1.06);
+    }
+}
+
+@keyframes pageReveal {
+    from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.992);
+        filter: blur(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .page-transition-overlay,
+    .page-transition-card,
+    .page-transition-overlay::before,
+    .page-transition-overlay::after,
+    .page-transition-progress::after,
+    body.page-enter-active main,
+    body.page-enter-active .container,
+    body.page-enter-active #dashboard,
+    body.page-enter-active #app,
+    body.page-enter-active .wrap {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+@media (max-width: 640px) {
+    .page-transition-card {
+        padding: 28px 22px 24px;
+        border-radius: 24px;
+        gap: 14px;
+    }
+
+    .page-transition-logo-shell {
+        width: 98px;
+        height: 98px;
+    }
+
+    .page-transition-logo {
+        width: 62px;
+        height: 62px;
+    }
+}
