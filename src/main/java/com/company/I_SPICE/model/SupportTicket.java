@@ -44,6 +44,9 @@ public class SupportTicket {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String description;
 
+    @Column(name = "attachment_urls", columnDefinition = "TEXT")
+    private String attachmentUrls;
+
     @Column(name = "assigned_to")
     private String assignedTo;
 

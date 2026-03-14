@@ -139,6 +139,24 @@
             margin-bottom: 30px;
         }
 
+        .conversation-card {
+            background: #fff;
+            border: 1px solid var(--lgray);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .conversation-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         /* Original Customer Message */
         .msg-box {
             border: 1px solid var(--lgray);
@@ -172,6 +190,36 @@
             line-height: 1.6;
             color: var(--dark);
             white-space: pre-wrap;
+        }
+
+        .attachment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .attachment-item img,
+        .attachment-item video {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid var(--lgray);
+            display: block;
+            background: #fff;
+        }
+
+        .attachment-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--green);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .attachment-link:hover {
+            text-decoration: underline;
         }
 
         /* Staff Reply */
@@ -236,6 +284,12 @@
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
         }
+
+        .file-help {
+            font-size: 12px;
+            color: var(--gray);
+            margin-top: 8px;
+        }
     </style>
     <link rel="stylesheet" href="/css/page-transition.css">
 </head>
@@ -274,41 +328,77 @@
                 </div>
             </div>
 
-            <div class="message-thread">
-                <!-- Original Ticket Description -->
-                <div class="msg-box customer">
-                    <div class="msg-header">
-                        <div class="msg-author"><i class="fas fa-user-circle"></i> <span
-                                th:text="${ticket.user.fullName ?: ticket.user.username}">You</span></div>
-                        <div class="msg-time" th:text="${#temporals.format(ticket.createdAt, 'MMM dd, yyyy hh:mm a')}">
-                            Time</div>
-                    </div>
-                    <div class="msg-content" th:text="${ticket.description}">Original issue description here...</div>
-                </div>
-
-                <!-- Replies -->
-                <th:block th:each="reply : ${replies}">
-                    <div th:class="${reply.isStaffReply ? 'msg-box staff' : 'msg-box customer'}">
+            <div class="conversation-card">
+                <div class="conversation-title"><i class="fas fa-comments"></i> Conversation</div>
+                <div class="message-thread">
+                    <!-- Original Ticket Description -->
+                    <div class="msg-box customer">
                         <div class="msg-header">
-                            <div class="msg-author">
-                                <i th:class="${reply.isStaffReply ? 'fas fa-headset' : 'fas fa-user-circle'}"></i>
-                                <span
-                                    th:text="${reply.isStaffReply ? 'Support Team' : (reply.user.fullName ?: reply.user.username)}">Author</span>
-                            </div>
+                            <div class="msg-author"><i class="fas fa-user-circle"></i> <span
+                                    th:text="${ticket.user.fullName ?: ticket.user.username}">You</span></div>
                             <div class="msg-time"
-                                th:text="${#temporals.format(reply.createdAt, 'MMM dd, yyyy hh:mm a')}">Time</div>
+                                th:text="${#temporals.format(ticket.createdAt, 'MMM dd, yyyy hh:mm a')}">Time</div>
                         </div>
-                        <div class="msg-content" th:text="${reply.message}">Reply content here...</div>
+                        <div class="msg-content" th:text="${ticket.description}">Original issue description here...</div>
+                        <div class="attachment-grid"
+                            th:if="${ticket.attachmentUrls != null and !#strings.isEmpty(ticket.attachmentUrls)}">
+                            <th:block th:each="url : ${#strings.arraySplit(ticket.attachmentUrls, ',')}">
+                                <div class="attachment-item">
+                                    <img th:if="${#strings.endsWith(#strings.toLowerCase(url), '.png') || #strings.endsWith(#strings.toLowerCase(url), '.jpg') || #strings.endsWith(#strings.toLowerCase(url), '.jpeg') || #strings.endsWith(#strings.toLowerCase(url), '.gif') || #strings.endsWith(#strings.toLowerCase(url), '.webp')}"
+                                        th:src="${url}" alt="Attachment">
+                                    <video th:if="${#strings.endsWith(#strings.toLowerCase(url), '.mp4') || #strings.endsWith(#strings.toLowerCase(url), '.webm') || #strings.endsWith(#strings.toLowerCase(url), '.ogg') || #strings.endsWith(#strings.toLowerCase(url), '.mov')}"
+                                        th:src="${url}" controls></video>
+                                    <a class="attachment-link"
+                                        th:if="${!(#strings.endsWith(#strings.toLowerCase(url), '.png') || #strings.endsWith(#strings.toLowerCase(url), '.jpg') || #strings.endsWith(#strings.toLowerCase(url), '.jpeg') || #strings.endsWith(#strings.toLowerCase(url), '.gif') || #strings.endsWith(#strings.toLowerCase(url), '.webp') || #strings.endsWith(#strings.toLowerCase(url), '.mp4') || #strings.endsWith(#strings.toLowerCase(url), '.webm') || #strings.endsWith(#strings.toLowerCase(url), '.ogg') || #strings.endsWith(#strings.toLowerCase(url), '.mov'))}"
+                                        th:href="${url}" target="_blank"><i class="fas fa-paperclip"></i> View
+                                        attachment</a>
+                                </div>
+                            </th:block>
+                        </div>
                     </div>
-                </th:block>
+
+                    <!-- Replies -->
+                    <th:block th:each="reply : ${replies}">
+                        <div th:class="${reply.isStaffReply ? 'msg-box staff' : 'msg-box customer'}">
+                            <div class="msg-header">
+                                <div class="msg-author">
+                                    <i th:class="${reply.isStaffReply ? 'fas fa-headset' : 'fas fa-user-circle'}"></i>
+                                    <span
+                                        th:text="${reply.isStaffReply ? 'Support Team' : (reply.user.fullName ?: reply.user.username)}">Author</span>
+                                </div>
+                                <div class="msg-time"
+                                    th:text="${#temporals.format(reply.createdAt, 'MMM dd, yyyy hh:mm a')}">Time</div>
+                            </div>
+                            <div class="msg-content" th:text="${reply.message}">Reply content here...</div>
+                            <div class="attachment-grid"
+                                th:if="${reply.attachmentUrls != null and !#strings.isEmpty(reply.attachmentUrls)}">
+                                <th:block th:each="url : ${#strings.arraySplit(reply.attachmentUrls, ',')}">
+                                    <div class="attachment-item">
+                                        <img th:if="${#strings.endsWith(#strings.toLowerCase(url), '.png') || #strings.endsWith(#strings.toLowerCase(url), '.jpg') || #strings.endsWith(#strings.toLowerCase(url), '.jpeg') || #strings.endsWith(#strings.toLowerCase(url), '.gif') || #strings.endsWith(#strings.toLowerCase(url), '.webp')}"
+                                            th:src="${url}" alt="Attachment">
+                                        <video th:if="${#strings.endsWith(#strings.toLowerCase(url), '.mp4') || #strings.endsWith(#strings.toLowerCase(url), '.webm') || #strings.endsWith(#strings.toLowerCase(url), '.ogg') || #strings.endsWith(#strings.toLowerCase(url), '.mov')}"
+                                            th:src="${url}" controls></video>
+                                        <a class="attachment-link"
+                                            th:if="${!(#strings.endsWith(#strings.toLowerCase(url), '.png') || #strings.endsWith(#strings.toLowerCase(url), '.jpg') || #strings.endsWith(#strings.toLowerCase(url), '.jpeg') || #strings.endsWith(#strings.toLowerCase(url), '.gif') || #strings.endsWith(#strings.toLowerCase(url), '.webp') || #strings.endsWith(#strings.toLowerCase(url), '.mp4') || #strings.endsWith(#strings.toLowerCase(url), '.webm') || #strings.endsWith(#strings.toLowerCase(url), '.ogg') || #strings.endsWith(#strings.toLowerCase(url), '.mov'))}"
+                                            th:href="${url}" target="_blank"><i class="fas fa-paperclip"></i> View
+                                            attachment</a>
+                                    </div>
+                                </th:block>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
             </div>
 
             <!-- Add a Reply Form -->
             <div class="reply-form" th:if="${ticket.status != 'CLOSED'}">
                 <h3>Post a Reply</h3>
-                <form th:action="@{/support/ticket/{id}/reply(id=${ticket.id})}" method="POST">
+                <form th:action="@{/support/ticket/{id}/reply(id=${ticket.id})}" method="POST"
+                    enctype="multipart/form-data">
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                     <textarea name="message" placeholder="Type your message here..." required></textarea>
+                    <input type="file" name="attachments" multiple accept="image/*,video/*">
+                    <div class="file-help">Attach photos or videos if needed (optional).</div>
                     <button type="submit" class="submit-btn"><i class="fas fa-paper-plane"></i> Send Reply</button>
                     <p style="font-size:12px;color:var(--gray);margin-top:10px;">Reply to this ticket to alert our
                         support team.</p>

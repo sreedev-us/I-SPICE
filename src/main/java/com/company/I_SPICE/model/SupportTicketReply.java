@@ -30,6 +30,9 @@ public class SupportTicketReply {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String message;
 
+    @Column(name = "attachment_urls", columnDefinition = "TEXT")
+    private String attachmentUrls;
+
     @Column(name = "is_staff_reply", nullable = false)
     private Boolean isStaffReply = false;
 

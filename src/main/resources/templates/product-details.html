@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -262,7 +262,8 @@
             overflow: hidden;
         }
 
-        .main-image img {
+        .main-image img,
+        .main-image video {
             width: 100%;
             height: 100%;
             object-fit: contain;
@@ -270,7 +271,8 @@
             transition: transform 0.35s ease;
         }
 
-        .main-image img:hover {
+        .main-image img:hover,
+        .main-image video:hover {
             transform: scale(1.07);
         }
 
@@ -360,6 +362,7 @@
             border: 2px solid transparent;
             transition: all 0.2s ease;
             background: var(--light-bg);
+            position: relative;
         }
 
         .thumbnail:hover,
@@ -368,10 +371,24 @@
             box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15);
         }
 
-        .thumbnail img {
+        .thumbnail img,
+        .thumbnail video {
             width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+
+        .thumbnail .play-badge {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.35));
+            opacity: 0.95;
+            pointer-events: none;
         }
 
 
@@ -590,6 +607,104 @@
             color: #444;
             line-height: 1.5;
             font-style: italic;
+        }
+
+        .review-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .review-action-btn {
+            padding: 6px 12px;
+            border-radius: 999px;
+            border: 1px solid var(--light-gray);
+            background: white;
+            color: var(--eco-green);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .review-action-btn:hover {
+            border-color: var(--eco-green);
+            background: var(--gold-light);
+        }
+
+        .reply-form {
+            margin-top: 12px;
+            display: none;
+        }
+
+        .reply-form.open {
+            display: block;
+        }
+
+        .reply-textarea {
+            width: 100%;
+            min-height: 70px;
+            padding: 10px 12px;
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            border-radius: 8px;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .reply-submit-btn {
+            margin-top: 8px;
+            padding: 6px 14px;
+            border: none;
+            border-radius: 8px;
+            background: var(--eco-green);
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .reply-list {
+            margin-top: 12px;
+            padding-left: 14px;
+            border-left: 2px solid var(--light-gray);
+        }
+
+        .reply-list.collapsed {
+            display: none;
+        }
+
+        .reply-item {
+            background: #faf8f1;
+            border-radius: 10px;
+            padding: 10px 12px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .reply-meta {
+            display: flex;
+            gap: 10px;
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .reply-author {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .reply-body {
+            color: #444;
+            line-height: 1.4;
+        }
+
+        .reply-empty {
+            color: #777;
+            font-size: 0.85rem;
+            font-style: italic;
+            padding: 6px 0;
         }
 
         .no-reviews {
@@ -1338,14 +1453,23 @@
                 <div class="thumbnail-images" id="thumbnailContainer">
                     <!-- Primary image thumbnail -->
                     <div th:if="${product?.imageUrl}" class="thumbnail active" th:data-index="0"
-                        th:data-image-url="${product?.imageUrl}" onclick="selectThumbnail(this)">
+                        th:data-media-url="${product?.imageUrl}" th:data-media-type="'image'"
+                        onclick="selectThumbnail(this)">
                         <img th:src="${product?.imageUrl}" th:alt="${product?.name}">
                     </div>
                     <!-- Additional image thumbnails -->
                     <div th:each="img, iterStat : ${product.additionalImageList}" class="thumbnail"
-                        th:data-index="${iterStat.index + 1}" th:data-image-url="${img}"
+                        th:data-index="${iterStat.index + 1}" th:data-media-url="${img}"
+                        th:data-media-type="${#strings.endsWith(#strings.toLowerCase(img), '.mp4') || #strings.endsWith(#strings.toLowerCase(img), '.webm') || #strings.endsWith(#strings.toLowerCase(img), '.ogg') || #strings.endsWith(#strings.toLowerCase(img), '.mov') ? 'video' : 'image'}"
                         onclick="selectThumbnail(this)">
-                        <img th:src="${img}" th:alt="${product.name + ' image ' + (iterStat.index + 2)}">
+                        <img th:if="${#strings.endsWith(#strings.toLowerCase(img), '.png') || #strings.endsWith(#strings.toLowerCase(img), '.jpg') || #strings.endsWith(#strings.toLowerCase(img), '.jpeg') || #strings.endsWith(#strings.toLowerCase(img), '.gif') || #strings.endsWith(#strings.toLowerCase(img), '.webp')}"
+                            th:src="${img}" th:alt="${product.name + ' image ' + (iterStat.index + 2)}">
+                        <video th:if="${#strings.endsWith(#strings.toLowerCase(img), '.mp4') || #strings.endsWith(#strings.toLowerCase(img), '.webm') || #strings.endsWith(#strings.toLowerCase(img), '.ogg') || #strings.endsWith(#strings.toLowerCase(img), '.mov')}"
+                            th:src="${img}" muted></video>
+                        <span class="play-badge"
+                            th:if="${#strings.endsWith(#strings.toLowerCase(img), '.mp4') || #strings.endsWith(#strings.toLowerCase(img), '.webm') || #strings.endsWith(#strings.toLowerCase(img), '.ogg') || #strings.endsWith(#strings.toLowerCase(img), '.mov')}">
+                            <i class="fas fa-play"></i>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -1513,8 +1637,8 @@
                     </div>
 
                     <button class="review-submit-btn" id="submitReviewBtn" onclick="submitReview()"
-                        style="width: 100% !important; height: 70px !important; font-size: 1.4rem !important; padding: 10px !important; background-color: #2e7d32 !important; color: white !important; border: 3px solid #1b5e20 !important; border-radius: 10px !important; cursor: pointer !important; font-weight: 800 !important; text-transform: uppercase !important; display: block !important; visibility: visible !important; opacity: 1 !important;">
-                        <i class="fas fa-paper-plane" style="margin-right: 15px;"></i> Send My Review Now
+                        style="width: auto !important; height: 48px !important; font-size: 1rem !important; padding: 8px 18px !important; background-color: #2e7d32 !important; color: white !important; border: 2px solid #1b5e20 !important; border-radius: 10px !important; cursor: pointer !important; font-weight: 700 !important; text-transform: none !important; display: inline-flex !important; align-items: center !important; visibility: visible !important; opacity: 1 !important;">
+                        <i class="fas fa-paper-plane" style="margin-right: 10px;"></i> Submit Review
                     </button>
                     <p
                         style="text-align: center; color: #2e7d32; font-size: 0.9rem; margin-top: 15px; font-weight: bold;">
@@ -1833,26 +1957,25 @@
         // UI Helper Functions
         // --- New Multi-Image Gallery Logic ---
         let currentImageIndex = 0;
-        let galleryImages = [];
+        let galleryItems = [];
 
         document.addEventListener('DOMContentLoaded', () => {
             const thumbs = document.querySelectorAll('.thumbnail-images .thumbnail');
             if (thumbs.length > 0) {
                 thumbs.forEach(t => {
-                    galleryImages.push(t.getAttribute('data-image-url'));
+                    const url = t.getAttribute('data-media-url');
+                    if (!url) return;
+                    const type = t.getAttribute('data-media-type') || 'image';
+                    galleryItems.push({ url, type });
                 });
                 updateGalleryState();
             }
         });
 
         function updateGalleryState() {
-            if (galleryImages.length === 0) return;
+            if (galleryItems.length === 0) return;
 
-            // Update main image
-            const mainImg = document.getElementById('mainImageEl');
-            if (mainImg) {
-                mainImg.src = galleryImages[currentImageIndex];
-            }
+            renderMainMedia(galleryItems[currentImageIndex]);
 
             // Update thumbnails
             const thumbs = document.querySelectorAll('.thumbnail-images .thumbnail');
@@ -1863,8 +1986,8 @@
 
             // Update counter
             const counter = document.getElementById('galleryCounter');
-            if (counter && galleryImages.length > 1) {
-                counter.textContent = `${currentImageIndex + 1} / ${galleryImages.length}`;
+            if (counter && galleryItems.length > 1) {
+                counter.textContent = `${currentImageIndex + 1} / ${galleryItems.length}`;
                 counter.style.display = 'block';
             } else if (counter) {
                 counter.style.display = 'none';
@@ -1874,7 +1997,7 @@
             const prevBtn = document.getElementById('galleryPrev');
             const nextBtn = document.getElementById('galleryNext');
 
-            if (galleryImages.length <= 1) {
+            if (galleryItems.length <= 1) {
                 if (prevBtn) prevBtn.classList.add('hidden');
                 if (nextBtn) nextBtn.classList.add('hidden');
             } else {
@@ -1883,7 +2006,7 @@
                     else prevBtn.classList.remove('hidden');
                 }
                 if (nextBtn) {
-                    if (currentImageIndex === galleryImages.length - 1) nextBtn.classList.add('hidden');
+                    if (currentImageIndex === galleryItems.length - 1) nextBtn.classList.add('hidden');
                     else nextBtn.classList.remove('hidden');
                 }
             }
@@ -1898,11 +2021,11 @@
         }
 
         function galleryNav(direction) {
-            if (galleryImages.length <= 1) return;
+            if (galleryItems.length <= 1) return;
             currentImageIndex += direction;
 
             if (currentImageIndex < 0) currentImageIndex = 0;
-            if (currentImageIndex >= galleryImages.length) currentImageIndex = galleryImages.length - 1;
+            if (currentImageIndex >= galleryItems.length) currentImageIndex = galleryItems.length - 1;
 
             updateGalleryState();
 
@@ -1910,6 +2033,22 @@
             const activeThumb = document.querySelector(`.thumbnail-images .thumbnail[data-index="${currentImageIndex}"]`);
             if (activeThumb) {
                 activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+        }
+
+        function renderMainMedia(item) {
+            if (!item || !item.url) return;
+            const mainWrap = document.getElementById('mainImage');
+            if (!mainWrap) return;
+
+            if (item.type === 'video') {
+                mainWrap.innerHTML = `
+                    <video src="${item.url}" controls style="width:100%;height:100%;object-fit:contain;"></video>
+                `;
+            } else {
+                mainWrap.innerHTML = `
+                    <img src="${item.url}" alt="${product.name}" id="mainImageEl" style="width:100%;height:100%;object-fit:contain;">
+                `;
             }
         }
 
@@ -2144,8 +2283,15 @@
                 return;
             }
 
-            container.innerHTML = reviews.map(r => `
-                <div class="review-item">
+            const replyStore = getReplyStore();
+
+            container.innerHTML = reviews.map((r, index) => {
+                const reviewId = getReviewKey(r, index);
+                const replies = replyStore[reviewId] || [];
+                const replyCount = replies.length;
+                const repliesToggleLabel = replyCount === 0 ? 'Replies (0)' : `Show Replies (${replyCount})`;
+                return `
+                <div class="review-item" data-review-id="${reviewId}">
                     <div class="review-meta">
                         <div class="review-user">${r.fullName || r.username}</div>
                         <div class="review-stars">
@@ -2154,8 +2300,26 @@
                     </div>
                     <div class="review-date">${new Date(r.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
                     <p class="review-comment">${r.comment}</p>
+                    <div class="review-actions">
+                        <button class="review-action-btn" data-action="toggle-reply-form" data-review-id="${reviewId}">
+                            <i class="fas fa-reply"></i> Reply
+                        </button>
+                        <button class="review-action-btn" data-action="toggle-replies" data-review-id="${reviewId}">
+                            ${repliesToggleLabel}
+                        </button>
+                    </div>
+                    <div class="reply-form" data-reply-form="${reviewId}">
+                        <textarea class="reply-textarea" data-reply-input="${reviewId}" placeholder="Write a reply..."></textarea>
+                        <button class="reply-submit-btn" data-action="submit-reply" data-review-id="${reviewId}">Post Reply</button>
+                    </div>
+                    <div class="reply-list collapsed" data-reply-list="${reviewId}" data-reply-count="${replyCount}">
+                        ${renderRepliesList(replies)}
+                    </div>
                 </div>
-            `).join('');
+            `;
+            }).join('');
+
+            bindReviewInteractions();
         }
 
         function getStarsHtml(rating) {
@@ -2172,6 +2336,166 @@
                 }
             }
             return html;
+        }
+
+        function getReviewKey(review, index) {
+            if (review && review.id !== undefined && review.id !== null) {
+                return `review-${review.id}`;
+            }
+            return `review-idx-${index}`;
+        }
+
+        function getReplyStoreKey() {
+            const productId = product && product.id ? product.id : 'unknown';
+            return `reviewReplies:${productId}`;
+        }
+
+        function getReplyStore() {
+            try {
+                const raw = localStorage.getItem(getReplyStoreKey());
+                return raw ? JSON.parse(raw) : {};
+            } catch (e) {
+                console.warn('Failed to read replies from storage:', e);
+                return {};
+            }
+        }
+
+        function saveReplyStore(store) {
+            try {
+                localStorage.setItem(getReplyStoreKey(), JSON.stringify(store));
+            } catch (e) {
+                console.warn('Failed to save replies:', e);
+            }
+        }
+
+        function addReplyToStore(reviewId, reply) {
+            const store = getReplyStore();
+            if (!store[reviewId]) {
+                store[reviewId] = [];
+            }
+            store[reviewId].push(reply);
+            saveReplyStore(store);
+        }
+
+        function escapeHtml(value) {
+            return String(value || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function renderReplyItem(reply) {
+            const author = escapeHtml(reply.author || 'Anonymous');
+            const body = escapeHtml(reply.body || '');
+            const dateText = new Date(reply.createdAt || Date.now()).toLocaleDateString('en-IN', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+            });
+            return `
+                <div class="reply-item">
+                    <div class="reply-meta">
+                        <span class="reply-author">${author}</span>
+                        <span class="reply-date">${dateText}</span>
+                    </div>
+                    <div class="reply-body">${body}</div>
+                </div>
+            `;
+        }
+
+        function renderRepliesList(replies) {
+            if (!replies || replies.length === 0) {
+                return '<div class="reply-empty">No replies yet.</div>';
+            }
+            return replies.map(renderReplyItem).join('');
+        }
+
+        let reviewEventsBound = false;
+
+        function bindReviewInteractions() {
+            if (reviewEventsBound) return;
+            const container = document.getElementById('reviewsContainer');
+            if (!container) return;
+
+            container.addEventListener('click', (event) => {
+                const actionButton = event.target.closest('[data-action]');
+                if (!actionButton) return;
+
+                const action = actionButton.getAttribute('data-action');
+                const reviewId = actionButton.getAttribute('data-review-id');
+                if (!reviewId) return;
+
+                if (action === 'toggle-reply-form') {
+                    const form = document.querySelector(`[data-reply-form="${reviewId}"]`);
+                    if (!form) return;
+                    form.classList.toggle('open');
+                    if (form.classList.contains('open')) {
+                        const input = form.querySelector(`[data-reply-input="${reviewId}"]`);
+                        if (input) input.focus();
+                    }
+                    return;
+                }
+
+                if (action === 'toggle-replies') {
+                    const list = document.querySelector(`[data-reply-list="${reviewId}"]`);
+                    if (!list) return;
+                    const isCollapsed = list.classList.contains('collapsed');
+                    list.classList.toggle('collapsed');
+                    const count = parseInt(list.getAttribute('data-reply-count') || '0', 10);
+                    actionButton.textContent = isCollapsed ? 'Hide Replies' : `Show Replies (${count})`;
+                    return;
+                }
+
+                if (action === 'submit-reply') {
+                    const input = document.querySelector(`[data-reply-input="${reviewId}"]`);
+                    const form = document.querySelector(`[data-reply-form="${reviewId}"]`);
+                    const list = document.querySelector(`[data-reply-list="${reviewId}"]`);
+                    const toggleBtn = document.querySelector(`[data-action="toggle-replies"][data-review-id="${reviewId}"]`);
+
+                    if (!input || !list) return;
+
+                    const message = input.value.trim();
+                    if (!message) {
+                        showError('Please write a reply before posting.');
+                        return;
+                    }
+
+                    const newReply = {
+                        author: 'You',
+                        body: message,
+                        createdAt: new Date().toISOString()
+                    };
+
+                    addReplyToStore(reviewId, newReply);
+                    input.value = '';
+
+                    const emptyState = list.querySelector('.reply-empty');
+                    if (emptyState) emptyState.remove();
+
+                    list.insertAdjacentHTML('beforeend', renderReplyItem(newReply));
+
+                    const newCount = parseInt(list.getAttribute('data-reply-count') || '0', 10) + 1;
+                    list.setAttribute('data-reply-count', String(newCount));
+
+                    if (list.classList.contains('collapsed')) {
+                        list.classList.remove('collapsed');
+                    }
+
+                    if (toggleBtn) {
+                        toggleBtn.textContent = 'Hide Replies';
+                    }
+
+                    if (form) {
+                        form.classList.remove('open');
+                    }
+
+                    showNotification('Reply posted.');
+                }
+            });
+
+            reviewEventsBound = true;
         }
 
         function updateRatingSummary(reviews) {
@@ -2224,7 +2548,7 @@
 
             if (submitBtn) {
                 submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
             }
 
             try {
@@ -2270,7 +2594,7 @@
             } finally {
                 if (submitBtn) {
                     submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right: 10px;"></i> Send My Review';
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right: 10px;"></i> Submit Review';
                 }
             }
         }

@@ -792,11 +792,11 @@
                         </div>
                     </div>
 
-                    <div class="section-label" style="margin-top:20px;">Product Images</div>
+                    <div class="section-label" style="margin-top:20px;">Product Media</div>
                     <p style="font-size:12px;color:var(--text-light);margin-top:6px;margin-bottom:12px;">
-                        Add the primary image and as many additional images as you need using the <strong>+</strong>
+                        Add the primary image and as many additional images or videos as you need using the <strong>+</strong>
                         button.
-                        Images are provided as URLs (links).
+                        Media is provided as URLs (links).
                     </p>
 
                     <div class="form-group" style="margin-top:0;">
@@ -814,7 +814,7 @@
                     </div>
 
                     <div style="margin-top:18px;">
-                        <label style="font-size:13px;font-weight:600;color:var(--dark);">Additional Images</label>
+                        <label style="font-size:13px;font-weight:600;color:var(--dark);">Additional Media</label>
                         <div id="extraImagesContainer"
                             style="display:flex;flex-direction:column;gap:12px;margin-top:10px;">
                             <!-- Additional image rows inserted here by JS / Thymeleaf -->
@@ -824,7 +824,7 @@
                             th:value="${product.additionalImages}">
                         <button type="button" onclick="addImageRow()"
                             style="margin-top:12px;display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;border:1.5px dashed var(--accent);background:transparent;color:var(--dark);font-size:14px;font-weight:600;cursor:pointer;">
-                            <i class="fas fa-plus"></i> Add Image
+                            <i class="fas fa-plus"></i> Add Media
                         </button>
                     </div>
 
@@ -865,17 +865,39 @@
     </div>
     <script>
         // ── Primary image preview ──────────────────────────────────────────────
-        function updatePrimaryPreview(url) {
-            let img = document.getElementById('primaryPreview');
-            if (!img) {
-                img = document.createElement('img');
-                img.id = 'primaryPreview';
-                img.className = 'preview-img';
-                img.alt = 'Primary Preview';
-                document.getElementById('primaryPreviewWrap').appendChild(img);
+        function isVideoUrl(url) {
+            const lower = (url || '').toLowerCase();
+            return lower.endsWith('.mp4') || lower.endsWith('.webm') || lower.endsWith('.ogg') || lower.endsWith('.mov');
+        }
+
+        function buildPreviewElement(url, id) {
+            const isVideo = isVideoUrl(url);
+            if (isVideo) {
+                const video = document.createElement('video');
+                video.controls = true;
+                video.src = url;
+                video.id = id;
+                video.style.cssText = 'max-width:120px;max-height:120px;border-radius:8px;border:1px solid #e2e8f0;object-fit:cover;';
+                return video;
             }
-            if (url) { img.src = url; img.style.display = 'block'; }
-            else { img.style.display = 'none'; }
+            const img = document.createElement('img');
+            img.src = url;
+            img.id = id;
+            img.className = 'preview-img';
+            img.alt = 'Preview';
+            return img;
+        }
+
+        function updatePrimaryPreview(url) {
+            const wrap = document.getElementById('primaryPreviewWrap');
+            if (!wrap) return;
+            const existing = document.getElementById('primaryPreview');
+            if (existing) {
+                wrap.removeChild(existing);
+            }
+            if (!url) return;
+            const preview = buildPreviewElement(url, 'primaryPreview');
+            wrap.appendChild(preview);
         }
 
         // ── Extra image rows ───────────────────────────────────────────────────
@@ -889,27 +911,29 @@
 
             const input = document.createElement('input');
             input.type = 'url';
-            input.placeholder = 'https://example.com/extra-image.jpg';
+            input.placeholder = 'https://example.com/extra-media.jpg';
             input.style.cssText = 'padding:10px 14px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;width:100%;';
             input.className = 'extra-image-input';
             if (url) input.value = url;
 
-            const preview = document.createElement('img');
-            preview.className = 'preview-img';
-            preview.alt = 'Preview';
-            preview.style.cssText = 'display:' + (url ? 'block' : 'none') + ';max-width:90px;max-height:90px;border-radius:8px;object-fit:cover;border:1px solid #e2e8f0;';
-            if (url) preview.src = url;
+            const previewWrap = document.createElement('div');
+            previewWrap.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap;';
+            if (url) {
+                previewWrap.appendChild(buildPreviewElement(url, ''));
+            }
 
             input.addEventListener('input', function () {
-                if (this.value) { preview.src = this.value; preview.style.display = 'block'; }
-                else preview.style.display = 'none';
+                previewWrap.innerHTML = '';
+                if (this.value) {
+                    previewWrap.appendChild(buildPreviewElement(this.value, ''));
+                }
                 syncHiddenField();
             });
 
             input.addEventListener('blur', syncHiddenField);
 
             inner.appendChild(input);
-            inner.appendChild(preview);
+            inner.appendChild(previewWrap);
 
             const removeBtn = document.createElement('button');
             removeBtn.type = 'button';

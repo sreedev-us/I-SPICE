@@ -12,9 +12,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/admin")
@@ -340,6 +347,7 @@ public class AdminController {
     @PostMapping("/support/{id}/reply")
     public String adminReplyToTicket(@PathVariable Long id,
             @RequestParam String message,
+            @RequestParam(value = "attachments", required = false) MultipartFile[] attachments,
             org.springframework.security.core.Authentication auth,
             RedirectAttributes attr) {
         Optional<SupportTicket> opt = ticketRepository.findById(id);
@@ -350,12 +358,26 @@ public class AdminController {
 
         User adminUser = userService.getUserFromPrincipal(auth).orElse(null);
         SupportTicket ticket = opt.get();
+        if ("CLOSED".equalsIgnoreCase(ticket.getStatus())) {
+            attr.addFlashAttribute("error", "This ticket is closed. Reopen it before replying.");
+            return "redirect:/admin/support/" + id;
+        }
 
         SupportTicketReply reply = new SupportTicketReply();
         reply.setTicket(ticket);
         reply.setUser(adminUser);
         reply.setMessage(message);
         reply.setIsStaffReply(true); // Admin/staff reply
+
+        try {
+            List<String> attachmentUrls = storeAttachments(attachments);
+            if (!attachmentUrls.isEmpty()) {
+                reply.setAttachmentUrls(String.join(",", attachmentUrls));
+            }
+        } catch (IllegalArgumentException | IOException ex) {
+            attr.addFlashAttribute("error", ex.getMessage());
+            return "redirect:/admin/support/" + id;
+        }
 
         replyRepository.save(reply);
 
@@ -393,5 +415,34 @@ public class AdminController {
         target.setActive(source.isActive());
         target.setDisplayOrder(source.getDisplayOrder());
         target.setFeaturesText(source.getFeaturesText());
+    }
+
+    private List<String> storeAttachments(MultipartFile[] attachments) throws IOException {
+        List<String> urls = new ArrayList<>();
+        if (attachments == null || attachments.length == 0) {
+            return urls;
+        }
+
+        Path uploadDir = Paths.get(System.getProperty("user.dir"), "src", "main", "resources", "static",
+                "uploads", "support");
+        Files.createDirectories(uploadDir);
+
+        for (MultipartFile file : attachments) {
+            if (file == null || file.isEmpty()) {
+                continue;
+            }
+            String contentType = file.getContentType();
+            if (contentType == null || (!contentType.startsWith("image/") && !contentType.startsWith("video/"))) {
+                throw new IllegalArgumentException("Only image and video files are allowed for support attachments.");
+            }
+
+            String originalName = file.getOriginalFilename() == null ? "attachment" : file.getOriginalFilename();
+            String safeName = UUID.randomUUID().toString() + "-" + originalName.replaceAll("[^a-zA-Z0-9._-]", "_");
+            Path target = uploadDir.resolve(safeName);
+            Files.copy(file.getInputStream(), target);
+            urls.add("/uploads/support/" + safeName);
+        }
+
+        return urls;
     }
 }

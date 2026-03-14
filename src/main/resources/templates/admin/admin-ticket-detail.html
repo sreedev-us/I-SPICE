@@ -293,6 +293,36 @@
             margin-top: 8px;
         }
 
+        .attachment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .attachment-item img,
+        .attachment-item video {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            display: block;
+            background: #fff;
+        }
+
+        .attachment-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .attachment-link:hover {
+            text-decoration: underline;
+        }
+
         /* Reply box */
         .reply-box {
             background: var(--card-bg);
@@ -306,6 +336,12 @@
             font-weight: 700;
             margin-bottom: 14px;
             color: var(--dark);
+        }
+
+        .file-help {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 8px;
         }
 
         textarea {
@@ -633,6 +669,20 @@
                     <div style="font-size:12px;font-weight:700;color:var(--text-light);margin-bottom:6px;">ORIGINAL
                         MESSAGE</div>
                     <span th:text="${ticket.description}">Description</span>
+                    <div class="attachment-grid"
+                        th:if="${ticket.attachmentUrls != null and !#strings.isEmpty(ticket.attachmentUrls)}">
+                        <th:block th:each="url : ${#strings.arraySplit(ticket.attachmentUrls, ',')}">
+                            <div class="attachment-item">
+                                <img th:if="${#strings.endsWith(#strings.toLowerCase(url), '.png') || #strings.endsWith(#strings.toLowerCase(url), '.jpg') || #strings.endsWith(#strings.toLowerCase(url), '.jpeg') || #strings.endsWith(#strings.toLowerCase(url), '.gif') || #strings.endsWith(#strings.toLowerCase(url), '.webp')}"
+                                    th:src="${url}" alt="Attachment">
+                                <video th:if="${#strings.endsWith(#strings.toLowerCase(url), '.mp4') || #strings.endsWith(#strings.toLowerCase(url), '.webm') || #strings.endsWith(#strings.toLowerCase(url), '.ogg') || #strings.endsWith(#strings.toLowerCase(url), '.mov')}"
+                                    th:src="${url}" controls></video>
+                                <a class="attachment-link"
+                                    th:if="${!(#strings.endsWith(#strings.toLowerCase(url), '.png') || #strings.endsWith(#strings.toLowerCase(url), '.jpg') || #strings.endsWith(#strings.toLowerCase(url), '.jpeg') || #strings.endsWith(#strings.toLowerCase(url), '.gif') || #strings.endsWith(#strings.toLowerCase(url), '.webp') || #strings.endsWith(#strings.toLowerCase(url), '.mp4') || #strings.endsWith(#strings.toLowerCase(url), '.webm') || #strings.endsWith(#strings.toLowerCase(url), '.ogg') || #strings.endsWith(#strings.toLowerCase(url), '.mov'))}"
+                                    th:href="${url}" target="_blank"><i class="fas fa-paperclip"></i> View attachment</a>
+                            </div>
+                        </th:block>
+                    </div>
                 </div>
             </div>
 
@@ -651,6 +701,21 @@
                         <div>
                             <div class="bubble" th:classappend="${reply.isStaffReply} ? ' staff' : ' user'"
                                 th:text="${reply.message}">message</div>
+                            <div class="attachment-grid"
+                                th:if="${reply.attachmentUrls != null and !#strings.isEmpty(reply.attachmentUrls)}">
+                                <th:block th:each="url : ${#strings.arraySplit(reply.attachmentUrls, ',')}">
+                                    <div class="attachment-item">
+                                        <img th:if="${#strings.endsWith(#strings.toLowerCase(url), '.png') || #strings.endsWith(#strings.toLowerCase(url), '.jpg') || #strings.endsWith(#strings.toLowerCase(url), '.jpeg') || #strings.endsWith(#strings.toLowerCase(url), '.gif') || #strings.endsWith(#strings.toLowerCase(url), '.webp')}"
+                                            th:src="${url}" alt="Attachment">
+                                        <video th:if="${#strings.endsWith(#strings.toLowerCase(url), '.mp4') || #strings.endsWith(#strings.toLowerCase(url), '.webm') || #strings.endsWith(#strings.toLowerCase(url), '.ogg') || #strings.endsWith(#strings.toLowerCase(url), '.mov')}"
+                                            th:src="${url}" controls></video>
+                                        <a class="attachment-link"
+                                            th:if="${!(#strings.endsWith(#strings.toLowerCase(url), '.png') || #strings.endsWith(#strings.toLowerCase(url), '.jpg') || #strings.endsWith(#strings.toLowerCase(url), '.jpeg') || #strings.endsWith(#strings.toLowerCase(url), '.gif') || #strings.endsWith(#strings.toLowerCase(url), '.webp') || #strings.endsWith(#strings.toLowerCase(url), '.mp4') || #strings.endsWith(#strings.toLowerCase(url), '.webm') || #strings.endsWith(#strings.toLowerCase(url), '.ogg') || #strings.endsWith(#strings.toLowerCase(url), '.mov'))}"
+                                            th:href="${url}" target="_blank"><i class="fas fa-paperclip"></i> View
+                                            attachment</a>
+                                    </div>
+                                </th:block>
+                            </div>
                             <div class="bubble-meta">
                                 <span th:if="${reply.isStaffReply}">🛡️ Support Staff</span>
                                 <span th:if="${!reply.isStaffReply}"
@@ -667,9 +732,12 @@
             <div class="reply-box" th:if="${ticket.status != 'CLOSED'}">
                 <h3><i class="fas fa-reply" style="color:var(--accent);margin-right:8px;"></i>Send Reply as Support
                     Staff</h3>
-                <form th:action="@{'/admin/support/' + ${ticket.id} + '/reply'}" method="POST">
+                <form th:action="@{'/admin/support/' + ${ticket.id} + '/reply'}" method="POST"
+                    enctype="multipart/form-data">
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                     <textarea name="message" required placeholder="Type your reply to the customer..."></textarea>
+                    <input type="file" name="attachments" multiple accept="image/*,video/*">
+                    <div class="file-help">Attach photos or videos to clarify the response (optional).</div>
                     <div style="margin-top:12px;display:flex;gap:10px;">
                         <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Send
                             Reply</button>
